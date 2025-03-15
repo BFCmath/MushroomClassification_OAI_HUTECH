@@ -1,4 +1,4 @@
-# Deep Learning and Neural Architecture Search for Optimizing Binary Neural Network Image Super Resolution
+# Deep Learning and Neural Architecture Search for Optimizing Binary Neural Network Image Super Resolution (SRBNAS)
 
 ## Source
 
