@@ -1,0 +1,301 @@
+image name|class|new class
+LC001||lc 2 dau
+LC002||lc 3 dau
+LC003||lc 2 dau
+LC004||lc 3 dau
+LC005||lc to
+LC006||lc nhieuf dau nen den
+LC007||lc 1 cuc to nen den
+LC008||lc 1 cuc to nen den
+LC009||lc 3 dau
+LC010||lc 2 dau
+LC011||lc nhieuf dau nen den
+LC012||lc nhieuf dau nen den
+LC013||lc nhieuf dau nen den
+LC014||lc nhieu dau nho
+LC015||lc nhieu dau nho
+LC016||lc nhieuf dau nen den
+LC017||lc nhieu dau nho
+LC018||lc ao
+LC019||lc nhieu dau nho
+LC020||lc nhieuf dau nen den
+LC021||lc nhieuf dau nen den
+LC022||lc nhieu dau nho
+LC023||lc nhieu dau nho
+LC024||lc nhieu dau nho
+LC025||lc nhieu dau nho
+LC026||lc nhieu dau nho
+LC027||lc nhieu dau nho
+LC028||lc 2 dau
+LC029||lc 2 dau
+LC030||lc 2 dau
+LC031||lc 2 dau
+LC032||lc 2 dau
+LC033||lc 1 cuc to nen den
+LC034||lc 1 cuc to nen den
+LC035||lc 1 cuc to nen den
+LC036||lc 1 cuc to nen den
+LC037||lc 1 nho nen sang
+LC038||lc 3 dau
+LC039||lc 1 nho nen sang
+LC040||lc 1 nho nen sang
+LC041||lc 1 nho nen sang
+LC042||lc 1 nho nen sang
+LC043||lc 1 nho nen sang
+LC044||lc nhieu dau nen sang
+LC045||lc nhieu dau nen sang
+LC046||lc nhieu dau nen sang
+LC047||lc nhieu dau nen sang
+LC048||lc 1 cuc to nen trang
+LC049||lc 1 cuc to nen trang
+LC050||lc 1 cuc to nen trang
+LC051||lc 1 cuc to nen trang
+LC052||lc 1 cuc to nen trang
+LC053||lc 3 dau
+LC054||lc 3 dau
+LC055||lc 1 cuc to nen trang
+LC056||lc 4 dau thang dung nen sang
+LC057||lc 4 dau thang dung nen sang
+LC058||lc 4 dau thang dung nen sang
+LC059||lc 4 dau thang dung nen sang
+LC060||lc 2 lon xung quanh 1 nho
+LC061||lc 2 lon xung quanh 1 nho
+LC062||lc 2 lon xung quanh 1 nho
+LC063||lc 2 lon xung quanh 1 nho
+LC064||lc 2 lon xung quanh 1 nho
+LC065||lc 2 lon xung quanh 1 nho
+LC066||lc 2 lon xung quanh 1 nho
+LC067||lc 2 lon xung quanh 1 nho
+LC068||lc 2 lon xung quanh 1 nho
+LC069||lc 2 lon xung quanh 1 nho
+LC070||lc toa ra
+LC071||lc toa ra
+LC072||lc toa ra
+LC073||lc 1 to 2 nho xung quanh
+LC074||lc 1 to 2 nho xung quanh
+LC075||lc 1 to 2 nho xung quanh
+LC076||lc ao
+LC077||lc cao deu cong
+LC078||lc cao deu cong
+LC079||lc cao deu cong
+LC080||lc cao deu cong
+LC081||lc nho chum
+LC082||lc nho chum
+LC083||lc nho chum
+LC084||lc cao chum
+LC085||lc cao chum
+LC086||lc cao chum
+LC087||lc cao chum
+LC088||lc cao chum
+LC090||lc 2 lon xung quanh 1 nho
+LC091||lc 2 lon xung quanh 1 nho
+LC092||lc 2 lon xung quanh 1 nho
+LC093||lc 2 lon xung quanh 1 nho
+LC094||lc 2 lon xung quanh 1 nho
+LC095||lc 2 lon xung quanh 1 nho
+LC089||lc nho chum
+LC096||lc den dung
+LC097||lc den dung
+LC098||lc den dung
+LC099||lc den dung
+LC100||lc den dung
+LC101||lc den dung
+LC102||lc hong vang dung
+LC103||lc hong vang dung
+LC104||lc hong vang dung
+LC105||lc hong vang dung
+LC106||lc hong vang dung
+LC107||lc hong vang dung
+LC108||lc ao
+LC109||lc 1 cay cao con lai nho
+LC110||lc 1 cay cao con lai nho
+LC111||lc 1 cay cao con lai nho
+LC112||lc 1 cay cao con lai nho
+LC113||lc 1 cay cao con lai nho
+LC114||lc 1 cay cao con lai nho
+LC115||lc 1 cay cao con lai nho
+LC116||lc 2 cay ne sang
+LC117||lc 2 cay ne sang
+LC118||lc 2 cay ne sang
+LC119||lc 2 cay ne sang
+LC120||lc 2 cay ne sang
+LC121||lc 2 cay ne sang
+LC122||lc 2 cay ne sang
+LC123||lc 2 cay ne sang
+LC124||lc vang uong luon
+LC125||lc vang uong luon
+LC126||lc 2 cay ne sang
+LC127||lc 2 cay ne sang
+LC128||lc vang uong luon
+LC129||lc ao
+LC130||lc vang uong luon
+LC131||lc vang uong luon
+LC132||lc vang lun uong
+LC133||lc vang lun uong
+LC134||lc vang lun uong
+LC135||lc vang lun uong
+LC136||lc vang lun uong
+LC137||lc nhieu cay nen sang deu
+LC138||lc nhieu cay nen sang deu
+LC139||lc nhieu cay nen sang deu
+LC140||lc nhieu cay nen sang deu
+LC141||lc nhieu cay nen sang deu
+LC142||lc den toi nhieu
+LC143||lc den toi nhieu
+LC145||lc nhieu cay nen sang deu
+LC144||lc den toi nhieu
+LC147||lc den toi nhieu
+LC146||lc nhieu cay nen sang deu
+LC148||lc den toi nhieu
+LC149||lc den toi nhieu
+LC152||lc den toi nhieu
+LC150||lc qua sang
+LC151||lc qua sang
+LC153||lc nam nhieu kha toi
+LC154||lc nam nhieu kha toi
+LC155||lc nam nhieu kha toi
+LC156||lc nam nhieu kha toi
+LC157||lc nam nhieu kha toi
+LC158||lc nam nhieu kha toi
+LC159||lc nam nhieu kha toi
+LC160||lc nam nhieu kha toi
+LC161||lc nam nhieu kha toi
+LC163||lc nam nhieu kha toi
+LC162||lc nam nhieu kha toi
+LC164||lc 2 cay sang toi
+LC165||lc 2 cay sang toi
+LC166||lc 2 cay sang toi
+LC167||lc 2 cay sang toi
+LC168||lc 2 cay sang toi
+LC169||lc 2 cay sang toi
+LC170||lc 2 cay sang toi
+LC171||lc 2 cay sang toi
+LC172||lc 2 cay sang toi
+LC173||lc 2 cay sang toi
+LC178||lc 2 cay sang toi
+LC179||lc 2 cay sang toi
+LC174||lc nen xanh 3 cay
+LC175||lc nen xanh 3 cay
+LC176||lc nen xanh 3 cay
+LC177||lc nen xanh 3 cay
+LC180||lc nen xanh 3 cay
+LC181||lc 2 cay sang toi
+LC182||lc 2 cay sang toi
+LC183||lc 2 cay sang toi
+LC184||lc 2 cay sang toi
+LC185||lc 2 cay sang toi
+LC186||lc 2 cay sang toi
+LC187||lc 2 cay sang toi
+LC188||lc 2 cay sang toi
+LC189||lc 2 cay sang toi
+LC190||lc 2 cay sang toi
+LC191||lc 2 cay sang toi
+LC192||lc 2 cay sang toi
+LC193||lc 1 cuc vang nen xanh
+LC194||lc 1 cuc vang nen xanh
+LC195||lc 1 cuc vang nen xanh
+LC196||lc 1 cuc vang nen xanh
+LC197||lc 1 cay nhuom xanh
+LC198||lc 1 cay nhuom xanh
+LC199||lc 1 cay nhuom xanh
+LC200||lc 1 cay nhuom xanh
+LC201||lc 1 cay nhuom xanh
+LC202||lc 3 cay nhuom xanh
+LC203||lc 3 cay nhuom xanh
+LC204||lc 3 cay nhuom xanh
+LC205||lc 3 cay nhuom xanh
+LC206||lc 3 cay nhuom xanh
+LC207||lc 3 cay nhuom xanh
+LC208||lc 3 cay nhuom xanh
+LC209||lc 3 cay nhuom xanh
+LC210||lc 2 cay nhuom xanh
+LC211||lc 2 cay nhuom xanh
+LC212||lc 2 cay nhuom xanh
+LC213||lc 2 cay nhuom xanh
+LC214||lc 2 cay nhuom xanh
+LC215||lc 2 cay nhuom xanh
+LC216||lc 2 cay nhuom xanh
+LC217||lc 3 cay tach ra nhuom xanh
+LC218||lc 3 cay tach ra nhuom xanh
+LC219||lc 3 cay tach ra nhuom xanh
+LC220||lc 3 cay tach ra nhuom xanh
+LC221||lc 3 cay tach ra nhuom xanh
+LC222||lc 3 cay tach ra nhuom xanh
+LC223||lc 3 cay tach ra nhuom xanh
+LC224||lc 3 cay tach ra nhuom xanh
+LC225||lc 2 dau to nhuom xanh
+LC226||lc ao
+LC227||lc 2 dau to nhuom xanh
+LC228||lc 2 dau to nhuom xanh
+LC229||lc 2 dau to nhuom xanh
+LC230||lc 2 dau to nhuom xanh
+LC231||lc 2 dau to nhuom xanh
+LC232||lc 3 dau nhom xanh hep
+LC233||lc 3 dau nhom xanh hep
+LC234||lc 3 dau nhom xanh hep
+LC235||lc 3 dau nhom xanh hep
+LC236||lc 3 dau nhom xanh hep
+LC237||lc 3 dau nhom xanh hep
+LC238||lc dat tren men
+LC244||lc dat tren men
+LC245||lc dat tren men
+LC239||lc dat tren men
+LC240||lc 3 dau nhom xanh hep
+LC241||lc 3 dau nhom xanh hep
+LC242||lc 3 dau nhom xanh hep
+LC243||lc 3 dau nhom xanh hep
+LC246||lc 3 dau nhom xanh hep
+LC247||lc dat tren men
+LC248||lc dat tren men
+LC249||lc dat tren men
+LC250||lc 1 cay dung nen toi
+LC251||lc 1 cay dung nen toi
+LC252||lc 1 cay dung nen toi
+LC253||lc 1 cay dung nen toi
+LC254||lc 3 cay dung nen toi
+LC255||lc 3 cay dung nen toi
+LC256||lc 3 cay dung nen toi
+LC257||lc 3 cay dung nen toi
+LC258||lc 3 cay dung nen toi
+LC259||lc 1 chum dung nen toi
+LC260||lc 1 chum dung nen toi
+LC261||lc 1 chum dung nen toi
+LC262||lc 1 chum dung nen toi
+LC263||lc 3 dau chup nen sang
+LC264||lc 3 dau chup nen sang
+LC265||lc 3 dau chup nen sang
+LC266||lc 3 dau chup nen sang
+LC267||lc 3 dau chup nen sang
+LC268||lc 3 dau chup nen sang
+LC269||lc 3 dau chup nen sang
+LC270||lc 3 dau chup nen sang
+LC271||lc 3 dau chup nen sang
+LC272||lc 3 dau chup nen sang
+LC276||lc 3 dau chup nen sang
+LC277||lc 3 dau chup nen sang
+LC273||lc 2 dau chup nen sang
+LC274||lc 2 dau chup nen sang
+LC275||lc 2 dau chup nen sang
+LC278||lc 2 dau chup nen sang
+LC281||lc 2 dau chup nen sang
+LC282||lc 2 dau chup nen sang
+LC279||lc 3 cay nen am dam
+LC280||lc 3 cay nen am dam
+LC283||lc 3 cay nen am dam
+LC284||lc 3 cay nen am dam
+LC285||lc 3 cay nen am dam
+LC286||lc 2 dau co anh sang
+LC287||lc 2 dau co anh sang
+LC288||lc 2 dau co anh sang
+LC289||lc 2 dau co anh sang
+LC290||lc 1 dau co anh sang
+LC291||lc 1 dau co anh sang
+LC292||lc 3 dau nen tuong
+LC293||lc 3 dau nen tuong
+LC294||lc chumgnhieu sang
+LC295||lc chumgnhieu sang
+LC296||lc chumgnhieu sang
+LC297||lc chum it sang
+LC298||lc chum it sang
+LC299||lc chum it sang
+LC300||lc chum it sang

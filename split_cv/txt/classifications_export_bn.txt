@@ -1,0 +1,301 @@
+image name||new class
+BN001||bn den
+BN002||bn den
+BN003||bn nền đen
+BN004||bn nền đen
+BN005||bn nền đen
+BN006||bn nền đen
+BN007||bn nền đen
+BN008||bn nền đen
+BN009||bn đặt trên mền
+BN010||bn đặt trên mền
+BN011||bn đặt trên mền
+BN012||bn đặt trên mền
+BN014||bn đặt trên mền
+BN015||bn đặt trên mền
+BN016||bn cánh quạt
+BN017||bn cánh quạt
+BN018||bn trên mền đuôi dài
+BN019||bn cánh quạt
+BN013||bn den
+BN024||bào ngư nền trắng
+BN020||bn cánh quạt
+BN021||bn trên mền đuôi dài
+BN022||bn trên mền đuôi dài
+BN023||bn trên mền đuôi dài
+BN025||bn đặt trên mền
+BN026||bn đặt trên mền
+BN027||bn đặt trên mền
+BN028||bn đặt trên mền
+BN029||bn đặt trên mền
+BN030||bn cánh quạt
+BN031||bn đặt trên mền
+BN032||bn nền trắng có  vòi
+BN033||bn nền trắng có  vòi
+BN035||bn nền trắng có  vòi
+BN034||bn nền xanh
+BN037||bn nền xanh
+BN036||bn nền trắng có  vòi
+BN038||bn nhuq nấm
+BN039||bn nhuq nấm
+BN040||bn nhuq nấm
+BN041||bn nhuq nấm
+BN042||bn nhuq nấm
+BN043||bn nền trắng có  vòi
+BN044||bn nền xanh
+BN045||bn nền xanh
+BN046||bn den
+BN047||bn nhu dau
+BN048||bn nhu dau
+BN049||bn nhu dau
+BN050||bn nhu dau
+BN051||bn nhu dau
+BN052||bn nhu dau
+BN053||bn nhu dau
+BN054||bn nhu dau
+BN055||bn nhu dau
+BN056||bn nhu dau
+BN058||bn nhu dau
+BN059||bn nhu dau
+BN057||bn den
+BN060||bn den
+BN061||bn den
+BN062||bn den
+BN063||bn nền trắng có  vòi
+BN064||bn nhu dau
+BN065||bn la thu
+BN066||bn la thu
+BN067||bn la thu
+BN069||bn la thu
+BN070||bn la thu
+BN068||bn den
+BN071||bn nen xam
+BN072||bn nen xam
+BN073||bn nen xam
+BN074||bn nen xam
+BN075||bn nen xam
+BN076||bn nen xam
+BN077||bn nen xam
+BN078||bn nen xam
+BN079||bn den
+BN080||bn nen xam
+BN081||bn nen xam
+BN082||bn nen xam
+BN083||bn nen xam
+BN084||bn nen xam
+BN085||bn nen xam
+BN086||bn nen xam
+BN087||bn nen xam
+BN090||bn den
+BN101||bn den
+BN088||bn xanh tren ban
+BN089||bn xanh tren ban
+BN091||bn xanh tren ban
+BN092||bn xanh tren ban
+BN093||bn xanh tren ban
+BN094||bn xanh tren ban
+BN095||bn xanh tren ban
+BN096||bn xanh tren ban
+BN097||bn xanh tren ban
+BN098||bn xanh tren ban
+BN099||bn vang nen den
+BN100||bn vang nen den
+BN102||bn vang nen den
+BN103||bn vang nen den
+BN104||bn vang nen den
+BN105||bn vang nen den
+BN106||bn vang nen den
+BN113||bn den
+BN107||bn vang nen den
+BN108||bn vang nen den
+BN124||bn den
+BN109||bn xanh duong
+BN110||bn xanh duong
+BN111||bn xanh duong
+BN112||bn den
+BN114||bn nền xanh
+BN115||bn nền xanh
+BN116||bn nền xanh
+BN117||bn nền xanh
+BN118||bn nền xanh
+BN119||bn nền xanh
+BN120||bn nền xanh
+BN121||bn nền xanh
+BN122||bn nền xanh
+BN123||bn nền xanh
+BN125||bn xanh duong
+BN126||bn nhu ngo
+BN127||bn nhu ngo
+BN128||bn nhu ngo
+BN129||bn nhu ngo
+BN130||bn nhu ngo
+BN131||bn bi xe nat
+BN132||bn bi xe nat
+BN133||bn bi xe nat
+BN134||bn bi xe nat
+BN135||bn bi xe nat
+BN136||bn bi xe nat
+BN137||bn vang
+BN138||bn vang
+BN139||bn vang
+BN140||bn vang
+BN141||bn vang
+BN142||bn vang
+BN143||bn vang
+BN144||bn vang
+BN145||bn vang
+BN146||bn den
+BN147||bn vang
+BN148||bn vang
+BN149||bn vang
+BN150||bn vang
+BN151||bn vang
+BN152||bn vang
+BN157||bn den
+BN153||bn 1 quat nen den
+BN154||bn 1 quat nen den
+BN155||bn 1 quat nen den
+BN156||bn 1 quat nen den
+BN158||bn 1 quat nen den
+BN159||bn 1 quat nen den
+BN160||bn nen den 2
+BN161||bn 1 quat nen den
+BN162||bn 1 quat nen den
+BN163||bn 1 quat nen den
+BN164||bn 1 quat nen den
+BN165||bn nen den 2
+BN166||bn nen den 2
+BN167||bn 1 quat nen den
+BN168||bn den
+BN169||bn 1 quat nen den
+BN170||bn 2 canh nen den
+BN171||bn 2 canh nen den
+BN172||bn 2 canh nen den
+BN173||bn 2 canh nen den
+BN174||bn 2 canh nen den
+BN175||bn 2 canh nen den
+BN176||bn 2 canh nen den
+BN177||bn nen den 2
+BN178||bn nen den 2
+BN179||bn den
+BN180||bn nen den 2
+BN181||bn nen den 2
+BN182||bn 2 canh nen den
+BN183||bn 2 canh nen den
+BN184||bn 2 canh nen den
+BN185||bn 2 canh nen den
+BN186||bn 2 canh nen den
+BN187||bn 2 canh nen den
+BN190||la
+BN201||la
+BN188||bn 1 quat nen den
+BN189||bn 1 quat nen den
+BN191||bn 1 quat nen den
+BN192||bn 1 quat nen den
+BN193||bn 1 quat nen den
+BN194||bn nhu la nen den
+BN195||bn nhu la nen den
+BN196||bn nhu la nen den
+BN197||bn nhu la nen den
+BN198||bn nhu la nen den
+BN199||bn nhu la nen den
+BN200||bn nhu la nen den
+BN212||la
+BN202||bn ban chan
+BN203||bn ban chan
+BN205||bn nhu la nen den
+BN204||bn 1 quat nen den
+BN206||bn có nón
+BN207||bn có nón
+BN208||bn có nón
+BN209||bn có nón
+BN210||bn có nón
+BN211||bn có nón
+BN213||bn có nón
+BN214||bn có nón
+BN223||bn den
+BN215||bn rong
+BN216||bn rong
+BN217||bn rong
+BN218||bn rong
+BN219||bn rong
+BN220||bn rong
+BN221||bn có nón
+BN222||bn có nón
+BN224||la
+BN225||bn rong
+BN226||bn rong
+BN227||bn rong
+BN228||bn rong
+BN229||bn rong
+BN230||bn rong
+BN235||la
+BN231||bn co non nen vang
+BN232||bn co non nen vang
+BN233||bn co non nen vang
+BN234||bn co non nen vang
+BN236||bn co non nen vang
+BN237||bn rong nen vang
+BN238||bn rong nen vang
+BN239||bn dai
+BN240||bn dai
+BN241||bn dai
+BN242||bn rong nen vang
+BN243||bn rong nen vang
+BN244||bn rong nen vang
+BN245||bn rong nen vang
+BN246||la
+BN247||bn rong nen vang
+BN248||bn rong nen vang
+BN249||bn rong nen vang
+BN250||bn rong nen vang
+BN251||bn rong nen vang
+BN252||bn rong nen vang
+BN253||bn to
+BN254||bn to
+BN255||bn to
+BN256||bn to
+BN257||la
+BN258||bn to
+BN259||bn to
+BN261||bn to
+BN260||bn to
+BN262||bn dep
+BN263||bn dep
+BN264||bn dep
+BN265||bn dep
+BN266||bn dep
+BN267||bn dep
+BN268||la
+BN269||bn dep
+BN270||bn dep
+BN271||bn dep
+BN272||bn dep
+BN273||bn dep
+BN274||bn dep
+BN275||bn dep
+BN276||bn dep
+BN277||bn 2 co 1 dau
+BN278||bn 2 co 1 dau
+BN279||la
+BN280||bn 2 co 1 dau
+BN281||bn 2 co 1 dau
+BN282||bn 2 co 1 dau
+BN283||bn 2 co 1 dau
+BN284||bn 2 co 1 dau
+BN285||bn 2 co 1 dau
+BN286||bn 2 co 1 dau
+BN287||bn 2 co 1 dau
+BN290||la
+BN288||bn 2 co 1 dau
+BN289||bn 2 co 1 dau
+BN291||bn 2 co 1 dau
+BN292||bn 2 co 1 dau
+BN293||bn thoi
+BN294||bn thoi
+BN300||bn rong nen vang
+BN299||bn rong nen vang
+BN298||bn rong nen vang
+BN297||bn thoi
+BN296||bn thoi
+BN295||bn thoi
