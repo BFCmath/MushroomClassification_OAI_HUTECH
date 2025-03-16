@@ -27,10 +27,10 @@ LC025||lc nhieu dau nho
 LC026||lc nhieu dau nho
 LC027||lc nhieu dau nho
 LC028||lc 2 dau
-LC029||lc 2 dau
-LC030||lc 2 dau
-LC031||lc 2 dau
-LC032||lc 2 dau
+LC029||lc 2 dau ngang
+LC030||lc 2 dau ngang
+LC031||lc 2 dau ngang
+LC032||lc 2 dau ngang
 LC033||lc 1 cuc to nen den
 LC034||lc 1 cuc to nen den
 LC035||lc 1 cuc to nen den
@@ -87,13 +87,13 @@ LC085||lc cao chum
 LC086||lc cao chum
 LC087||lc cao chum
 LC088||lc cao chum
+LC089||lc nho chum
 LC090||lc 2 lon xung quanh 1 nho
 LC091||lc 2 lon xung quanh 1 nho
 LC092||lc 2 lon xung quanh 1 nho
 LC093||lc 2 lon xung quanh 1 nho
 LC094||lc 2 lon xung quanh 1 nho
 LC095||lc 2 lon xung quanh 1 nho
-LC089||lc nho chum
 LC096||lc den dung
 LC097||lc den dung
 LC098||lc den dung
@@ -142,15 +142,15 @@ LC140||lc nhieu cay nen sang deu
 LC141||lc nhieu cay nen sang deu
 LC142||lc den toi nhieu
 LC143||lc den toi nhieu
-LC145||lc nhieu cay nen sang deu
 LC144||lc den toi nhieu
-LC147||lc den toi nhieu
+LC145||lc nhieu cay nen sang deu
 LC146||lc nhieu cay nen sang deu
+LC147||lc den toi nhieu
 LC148||lc den toi nhieu
 LC149||lc den toi nhieu
-LC152||lc den toi nhieu
 LC150||lc qua sang
 LC151||lc qua sang
+LC152||lc den toi nhieu
 LC153||lc nam nhieu kha toi
 LC154||lc nam nhieu kha toi
 LC155||lc nam nhieu kha toi
@@ -160,8 +160,8 @@ LC158||lc nam nhieu kha toi
 LC159||lc nam nhieu kha toi
 LC160||lc nam nhieu kha toi
 LC161||lc nam nhieu kha toi
-LC163||lc nam nhieu kha toi
 LC162||lc nam nhieu kha toi
+LC163||lc nam nhieu kha toi
 LC164||lc 2 cay sang toi
 LC165||lc 2 cay sang toi
 LC166||lc 2 cay sang toi
@@ -172,25 +172,25 @@ LC170||lc 2 cay sang toi
 LC171||lc 2 cay sang toi
 LC172||lc 2 cay sang toi
 LC173||lc 2 cay sang toi
-LC178||lc 2 cay sang toi
-LC179||lc 2 cay sang toi
 LC174||lc nen xanh 3 cay
 LC175||lc nen xanh 3 cay
 LC176||lc nen xanh 3 cay
 LC177||lc nen xanh 3 cay
+LC178||lc 2 cay sang toi
+LC179||lc 2 cay sang toi
 LC180||lc nen xanh 3 cay
-LC181||lc 2 cay sang toi
+LC181||lc 2 cay sang toi co vang
 LC182||lc 2 cay sang toi
 LC183||lc 2 cay sang toi
-LC184||lc 2 cay sang toi
+LC184||lc 2 cay sang toi co vang
 LC185||lc 2 cay sang toi
 LC186||lc 2 cay sang toi
-LC187||lc 2 cay sang toi
+LC187||lc 2 cay sang toi co vang
 LC188||lc 2 cay sang toi
 LC189||lc 2 cay sang toi
-LC190||lc 2 cay sang toi
+LC190||lc 2 cay sang toi co vang
 LC191||lc 2 cay sang toi
-LC192||lc 2 cay sang toi
+LC192||lc 2 cay sang toi co vang
 LC193||lc 1 cuc vang nen xanh
 LC194||lc 1 cuc vang nen xanh
 LC195||lc 1 cuc vang nen xanh
@@ -198,8 +198,8 @@ LC196||lc 1 cuc vang nen xanh
 LC197||lc 1 cay nhuom xanh
 LC198||lc 1 cay nhuom xanh
 LC199||lc 1 cay nhuom xanh
-LC200||lc 1 cay nhuom xanh
-LC201||lc 1 cay nhuom xanh
+LC200||lc 1 cau nhuom xanh ngang
+LC201||lc 1 cau nhuom xanh ngang
 LC202||lc 3 cay nhuom xanh
 LC203||lc 3 cay nhuom xanh
 LC204||lc 3 cay nhuom xanh
@@ -228,22 +228,22 @@ LC226||lc ao
 LC227||lc 2 dau to nhuom xanh
 LC228||lc 2 dau to nhuom xanh
 LC229||lc 2 dau to nhuom xanh
-LC230||lc 2 dau to nhuom xanh
-LC231||lc 2 dau to nhuom xanh
-LC232||lc 3 dau nhom xanh hep
+LC230||lc 2 dau nhuom xanh dinh
+LC231||lc 2 dau nhuom xanh dinh
+LC232||lc 2 dau nhuom xanh dinh
 LC233||lc 3 dau nhom xanh hep
 LC234||lc 3 dau nhom xanh hep
 LC235||lc 3 dau nhom xanh hep
 LC236||lc 3 dau nhom xanh hep
 LC237||lc 3 dau nhom xanh hep
 LC238||lc dat tren men
-LC244||lc dat tren men
-LC245||lc dat tren men
 LC239||lc dat tren men
 LC240||lc 3 dau nhom xanh hep
 LC241||lc 3 dau nhom xanh hep
 LC242||lc 3 dau nhom xanh hep
 LC243||lc 3 dau nhom xanh hep
+LC244||lc dat tren men
+LC245||lc dat tren men
 LC246||lc 3 dau nhom xanh hep
 LC247||lc dat tren men
 LC248||lc dat tren men
@@ -262,25 +262,25 @@ LC260||lc 1 chum dung nen toi
 LC261||lc 1 chum dung nen toi
 LC262||lc 1 chum dung nen toi
 LC263||lc 3 dau chup nen sang
-LC264||lc 3 dau chup nen sang
+LC264||lc 3 dau chup nen sang dinh
 LC265||lc 3 dau chup nen sang
-LC266||lc 3 dau chup nen sang
+LC266||lc 3 dau chup nen sang dinh
 LC267||lc 3 dau chup nen sang
 LC268||lc 3 dau chup nen sang
 LC269||lc 3 dau chup nen sang
-LC270||lc 3 dau chup nen sang
+LC270||lc 3 dau chup nen sang dinh
 LC271||lc 3 dau chup nen sang
 LC272||lc 3 dau chup nen sang
+LC273||lc 2 dau chup nen sang
+LC274||lc 3 dau chup nen sang dinh
+LC275||lc 2 dau chup nen sang
 LC276||lc 3 dau chup nen sang
 LC277||lc 3 dau chup nen sang
-LC273||lc 2 dau chup nen sang
-LC274||lc 2 dau chup nen sang
-LC275||lc 2 dau chup nen sang
 LC278||lc 2 dau chup nen sang
-LC281||lc 2 dau chup nen sang
-LC282||lc 2 dau chup nen sang
 LC279||lc 3 cay nen am dam
 LC280||lc 3 cay nen am dam
+LC281||lc 2 dau chup nen sang
+LC282||lc 2 dau chup nen sang
 LC283||lc 3 cay nen am dam
 LC284||lc 3 cay nen am dam
 LC285||lc 3 cay nen am dam

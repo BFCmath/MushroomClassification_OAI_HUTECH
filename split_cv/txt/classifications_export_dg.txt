@@ -2,81 +2,81 @@ image name|class|new class
 DG001||dg nen xam nam ngang
 DG002||dg nen xam nam ngang
 DG003||dg nen xam nam ngang
-DG004||dg nen xam nam ngang
-DG005||dg nen xam nam ngang
-DG007||dg nen xam nam ngang
+DG004||dg nen xam nam thang
+DG005||dg nen xam nam thang
 DG006||dg nen xam dung
+DG007||dg nen xam nam thang
 DG008||dg nen xam dung
-DG009||dg nen xam dung
+DG009||dg nen xam dung phai
 DG010||dg nen xam dung
 DG011||dg nen xam dung
 DG012||dg nen xam dung
 DG013||dg nen xam dung
-DG014||dg nen xam dung
-DG015||dg nen xam dung
-DG016||dg nen xam dung
+DG014||dg nen xam dung phai
+DG015||dg nen xam dung phai
+DG016||dg nen xam dung phai
 DG017||dg nen xam dung
-DG018||dg nen xam dung
-DG019||dg nen xam dung
+DG018||dg nen xam dung phai
+DG019||dg nen xam dung phai
 DG020||dg nen xam dung
-DG021||dg nen xam dung
+DG021||dg nen xam dung phai
 DG022||dg nen xam dung
-DG023||dg nen xam dung
+DG023||dg nen xam dung phai
 DG024||dg nen xam dung
 DG025||dg nen xam dung
 DG026||dg nen xam dung
-DG027||dg nen xam nam ngang
-DG028||dg nen xam nam ngang
-DG029||dg nen xam nam ngang
-DG030||dg nen xam nam ngang
-DG031||dg nen xam nam ngang
-DG032||dg nen xam nam ngang
+DG027||dg nen xam nam thang
+DG028||dg nen xam nam thang
+DG029||dg nen xam nam thang
+DG030||dg nen xam nam thang
+DG031||dg nen xam nam thang
+DG032||dg nen xam nam thang
 DG033||dg nen xam nam ngang
 DG034||dg nen xam nam ngang
 DG035||dg nen xam nam ngang
-DG036||dg nen xam nam ngang
-DG037||dg nen xam nam ngang
-DG038||dg nen xam nam ngang
+DG036||dg nen xam nam thang
+DG037||dg nen xam nam thang
+DG038||dg nen xam nam thang
 DG039||dg nen xam nam ngang
-DG040||dg nen vang dung
-DG041||dg nen vang dung
+DG040||dg nen vang dung trai
+DG041||dg nen vang dung trai
 DG042||dg nen vang dung
 DG043||dg nen vang dung
-DG050||dg nen vang dung
-DG044||dg nen vang dung
+DG044||dg nen vang dung trai
 DG045||dg nen vang dung
-DG046||dg nen vang dung
+DG046||dg nen vang dung trai
 DG047||dg nen vang dung
 DG048||dg nen vang dung
 DG049||dg nen vang dung
+DG050||dg nen vang dung
 DG051||dg nen vang dung
 DG052||dg nen vang dung
 DG053||dg nen vang nam
 DG054||dg nen vang nam
 DG055||dg nen vang nam
-DG056||dg nen vang nam
-DG057||dg nen vang nam
+DG056||dg nen vang nam ngang
+DG057||dg nen vang nam ngang
 DG058||dg nen vang nam
 DG059||dg nen vang nam
 DG060||dg nen vang nam
 DG061||dg nen vang nam
-DG062||dg nen vang nam
+DG062||dg nen vang nam ngang
 DG063||dg nen vang dung
-DG064||dg nen vang nam
+DG064||dg nen vang nam ngang
 DG065||dg nen vang dung
 DG066||dg nen vang dung
 DG067||dg nen vang dung
 DG068||dg nen vang dung
 DG069||dg nen vang dung
-DG070||dg nen vang dung
-DG071||dg nen vang dung
-DG072||dg nen vang dung
-DG073||dg nen vang dung
-DG074||dg nen vang dung
+DG070||dg nen cam dung
+DG071||dg nen cam dung
+DG072||dg nen cam dung
+DG073||dg nen cam dung
+DG074||dg nen cam dung
 DG075||dg nen sang dung
 DG076||dg nen sang dung
-DG078||dg nen sang dung
 DG077||dg nen sang toi nam
+DG078||dg nen sang dung
 DG079||dg nen sang toi nam
 DG080||dg nen sang toi nam
 DG081||dg nen sang toi nam
@@ -94,16 +94,16 @@ DG092||dg dau vang men dung
 DG093||dg dau vang men dung
 DG094||dg dau vang men dung
 DG095||dg dau vang men dung
-DG096||dg dau vang men dung
-DG097||dg dau vang men dung
-DG098||dg dau vang men dung
-DG099||dg dau vang men dung
-DG100||dg dau vang men dung
-DG101||dg dau vang men dung
-DG102||dg dau vang men dung
-DG103||dg dau vang men dung
-DG104||dg dau vang men dung
-DG105||dg dau vang men dung
+DG096||dg dau vang men dung cao
+DG097||dg dau vang men dung cao
+DG098||dg dau vang men dung cao
+DG099||dg dau vang men dung cao
+DG100||dg dau vang men dung cao
+DG101||dg dau vang men dung cao
+DG102||dg dau vang men dung cao
+DG103||dg dau vang men dung cao
+DG104||dg dau vang men dung cao
+DG105||dg dau vang men dung cao
 DG106||dg dau vang men dung
 DG107||dg dau vang men dung
 DG108||dg dau vang men dung
@@ -121,39 +121,39 @@ DG119||dg nen xam nam ngang
 DG120||dg nen xam dung
 DG121||dg dau vang men dung
 DG122||dg dau vang men dung
-DG123||dg dau vang men dung
-DG124||dg dau vang men dung
+DG123||dg dau vang men dung nho
+DG124||dg dau vang men dung nho
 DG125||dg dau vang men dung
-DG126||dg nen xam nam ngang
+DG126||dg dau vang men dung nho
 DG127||dg nen xam nam ngang
-DG128||dg nen xam nam ngang
-DG129||dg nen xam nam ngang
+DG128||dg dau vang men dung nho
+DG129||dg dau vang men dung nho
 DG130||dg dai nen xam
-DG131||dg nen xam nam ngang
+DG131||dg dau vang men dung nho
 DG132||dg dai nen xam
 DG133||dg dai nen xam
 DG134||dg dai nen xam
 DG135||dg dai nen xam
-DG136||dg dai nen xam
+DG136||dg bi cat nen xam
+DG137||dg nen xam nam ngang
 DG138||dg dai nen xam
 DG139||dg dai nen xam
 DG140||dg dai nen xam
-DG137||dg nen xam nam ngang
 DG141||dg nen xam nam ngang
-DG142||dg nen xam nam ngang
+DG142||dg bi cat nen xam
 DG143||dg dai nen xam
 DG144||dg dai nen xam
 DG145||dg dai nen xam
-DG146||dg nen xam nam ngang
+DG146||dg bi cat nen xam
 DG147||dg dai nen xam
-DG148||dg dai nen xanh
-DG149||dg dai nen xanh
-DG150||dg dai nen xanh
-DG151||dg dai nen xanh
-DG152||dg dai nen xanh
-DG153||dg dai nen xanh
-DG154||dg dai nen xanh
-DG155||dg dai nen xanh
+DG148||dg dai nen xanh thon
+DG149||dg dai nen xanh thon
+DG150||dg dai nen xanh thon
+DG151||dg dai nen xanh thon
+DG152||dg dai nen xanh thon
+DG153||dg dai nen xanh thon
+DG154||dg dai nen xanh thon
+DG155||dg ghe den dung
 DG156||dg dai nen xanh
 DG157||dg dai nen xanh
 DG158||dg dai nen xanh
@@ -169,14 +169,14 @@ DG167||dg dai nen xanh
 DG168||dg dai nen xanh
 DG169||dg nen xanh dung
 DG170||dg nen xanh dung
-DG171||dg nen xanh dung
-DG172||dg nen xanh dung
+DG171||dg dai nen xanh
+DG172||dg dai nen xanh
 DG173||dg nen xanh dung
 DG174||dg nen xanh dung
 DG175||dg nen xanh dung
 DG176||dg nen xanh dung
 DG177||dg nen xanh dung
-DG178||dg nen xanh dung
+DG178||dg dai nen xanh
 DG179||dg nam nen trang
 DG180||dg nam nen trang
 DG181||dg nam nen trang
@@ -185,8 +185,8 @@ DG183||dg nam nen trang
 DG184||dg nam nen trang
 DG185||dg nam nen trang
 DG186||dg dung nen trang
-DG188||dg dung nen trang
 DG187||dg dung nen trang
+DG188||dg dung nen trang
 DG189||dg dung nen trang
 DG190||dg dung nen trang
 DG191||dg dung nen trang
@@ -199,14 +199,14 @@ DG197||dg dung nen trang
 DG198||dg dung nen vang
 DG199||dg dung nen vang
 DG200||dg dung nen vang
-DG202||dg dung nen vang
 DG201||dg dung nen trang
+DG202||dg dung nen vang
 DG203||dg dung nen vang
 DG204||dg dung nen vang
 DG205||dg dung nen vang
-DG206||dg dung tren ghe
-DG207||dg dung tren ghe
-DG208||dg dung tren ghe
+DG206||dg dung tren ghe top
+DG207||dg dung tren ghe top
+DG208||dg dung tren ghe top
 DG209||dg dung tren ghe
 DG210||dg dung tren ghe
 DG211||dg dung tren ghe
@@ -230,10 +230,10 @@ DG228||dg nen bong nam
 DG229||dg nen bong nam
 DG230||dg nen bong nam
 DG231||dg nen bong nam
-DG232||dg nen bong nam
-DG233||dg nen bong nam
-DG234||dg nen bong nam
-DG235||dg nen bong nam
+DG232||dg nen bong nam thon
+DG233||dg nen bong nam thon
+DG234||dg nen bong nam thon
+DG235||dg nen bong nam thon
 DG236||df nen bong dung
 DG237||df nen bong dung
 DG238||df nen bong dung
@@ -251,10 +251,6 @@ DG249||dg nen bong nam
 DG250||dg nen bong nam
 DG251||dg nen bong nam
 DG252||dg nen bong nam
-DG262||dg dung nen vang
-DG261||dg dung nen vang
-DG260||dg dung nen vang
-DG264||dg dung nen trang
 DG253||dg nam nen vang
 DG254||dg nam nen vang
 DG255||dg nam nen vang
@@ -262,29 +258,33 @@ DG256||dg nen da dung
 DG257||dg nen da dung
 DG258||dg nen da dung
 DG259||dg nen da dung
+DG260||dg dung nen vang
+DG261||dg dung nen vang
+DG262||dg dung nen vang
 DG263||dg ghe nam
+DG264||dg dung nen trang
 DG265||dg ghe nam
-DG266||dg ghe nam
-DG267||dg ghe nam
-DG268||dg ghe nam
-DG269||dg ghe nam
-DG270||dg ghe nam
+DG266||dg ghe nam thang
+DG267||dg ghe nam thang
+DG268||dg ghe nam thang
+DG269||dg ghe nam thang
+DG270||dg ghe nam thang
 DG271||dg ghe nam
 DG272||dg ghe nam
 DG273||dg ghe nam
 DG274||dg ghe nam
 DG275||dg ghe nam
-DG276||dg ghe nam
-DG277||dg ghe nam
-DG278||dg ghe nam
-DG279||dg ghe nam
-DG280||dg ghe nam
-DG281||dg ghe nam
-DG282||dg ghe nam
-DG283||dg ghe nam
-DG284||dg ghe nam
-DG285||dg ghe nam
-DG286||dg ghe nam
+DG276||gh dep ghe nam
+DG277||gh dep ghe nam
+DG278||gh dep ghe nam
+DG279||gh dep ghe nam
+DG280||gh dep ghe nam
+DG281||gh dep ghe nam
+DG282||gh dep ghe nam
+DG283||gh dep ghe nam
+DG284||gh dep ghe nam
+DG285||gh dep ghe nam
+DG286||gh dep ghe nam
 DG287||dg ghe den dung
 DG288||dg ghe den dung
 DG289||dg ghe den dung
@@ -293,9 +293,9 @@ DG291||dg ghe den dung
 DG292||dg ghe den dung
 DG293||dg ghe den dung
 DG294||dg ghe den dung
-DG300||dg ghe den dung
-DG296||dg ghe den dung
 DG295||dg ghe nam
+DG296||dg ghe den dung
 DG297||dg ghe nam
 DG298||dg ghe nam
 DG299||dg ghe nam
+DG300||dg ghe den dung

@@ -12,8 +12,9 @@ from pathlib import Path
 # Define paths and configuration
 TRAIN_DIR = 'train'
 OUTPUT_CSV = 'split_cv/train_group_cv.csv'
-CV_FOLDS = 6
-RANDOM_SEED = 41
+CV_FOLDS = 5
+# 15 21 31 40 42 49
+RANDOM_SEED = 15
 PREFIX = '/kaggle/input/aio-hutech/train'
 
 # Define class names
@@ -298,4 +299,7 @@ def main():
         print("\nWarning: Group-based cross-validation completed with violations.")
     
 if __name__ == "__main__":
+    # for i in range(30,50):
+    #     print(f"Run {i}")
+    #     RANDOM_SEED = i
     main()
