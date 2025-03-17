@@ -105,6 +105,9 @@ def index():
     # Get all categories (folders)
     categories = sorted(list(category_images.keys()))
     
+    # Calculate category counts - fix for the undefined variable error
+    category_counts = {category: len(images) for category, images in category_images.items()}
+    
     # Get any existing classifications
     classifications = get_classifications()
     
@@ -120,7 +123,8 @@ def index():
                           categories=categories,
                           category_images=category_images,
                           classifications=classifications,
-                          available_classes=available_classes)
+                          available_classes=available_classes,
+                          category_counts=category_counts)  # Added this variable
 
 @app.route('/image/<path:filename>')
 def serve_image(filename):
