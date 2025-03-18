@@ -1,0 +1,1201 @@
+image_path,class_name,fold,split,class_id
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN001.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN002.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN003.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN004.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN005.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN006.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN007.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN008.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN009.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN010.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN011.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN012.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN013.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN014.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN015.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN016.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN017.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN018.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN019.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN020.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN021.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN022.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN023.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN024.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN025.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN026.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN027.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN028.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN029.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN030.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN031.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN032.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN033.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN034.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN035.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN036.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN037.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN038.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN039.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN040.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN041.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN042.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN043.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN044.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN045.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN046.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN047.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN048.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN049.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN050.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN051.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN052.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN053.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN054.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN055.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN056.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN057.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN058.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN059.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN060.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN061.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN062.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN063.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN064.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN065.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN066.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN067.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN068.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN069.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN070.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN071.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN072.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN073.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN074.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN075.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN076.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN077.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN078.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN079.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN080.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN081.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN082.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN083.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN084.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN085.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN086.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN087.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN088.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN089.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN090.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN091.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN092.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN093.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN094.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN095.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN096.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN097.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN098.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN099.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN100.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN101.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN102.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN103.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN104.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN105.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN106.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN107.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN108.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN109.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN110.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN111.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN112.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN113.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN114.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN115.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN116.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN117.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN118.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN119.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN120.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN121.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN122.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN123.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN124.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN125.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN126.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN127.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN128.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN129.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN130.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN131.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN132.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN133.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN134.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN135.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN136.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN137.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN138.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN139.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN140.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN141.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN142.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN143.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN144.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN145.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN146.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN147.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN148.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN149.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN150.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN151.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN152.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN153.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN154.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN155.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN156.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN157.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN158.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN159.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN160.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN161.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN162.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN163.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN164.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN165.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN166.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN167.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN168.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN169.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN170.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN171.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN172.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN173.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN174.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN175.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN176.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN177.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN178.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN179.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN180.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN181.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN182.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN183.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN184.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN185.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN186.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN187.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN188.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN189.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN190.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN191.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN192.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN193.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN194.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN195.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN196.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN197.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN198.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN199.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN200.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN201.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN202.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN203.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN204.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN205.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN206.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN207.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN208.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN209.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN210.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN211.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN212.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN213.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN214.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN215.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN216.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN217.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN218.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN219.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN220.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN221.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN222.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN223.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN224.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN225.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN226.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN227.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN228.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN229.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN230.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN231.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN232.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN233.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN234.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN235.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN236.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN237.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN238.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN239.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN240.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN241.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN242.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN243.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN244.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN245.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN246.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN247.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN248.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN249.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN250.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN251.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN252.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN253.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN254.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN255.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN256.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN257.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN258.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN259.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN260.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN261.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN262.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN263.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN264.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN265.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN266.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN267.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN268.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN269.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN270.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN271.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN272.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN273.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN274.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN275.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN276.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN277.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN278.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN279.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN280.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN281.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN282.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN283.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN284.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN285.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN286.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN287.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN288.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN289.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN290.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN291.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN292.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN293.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN294.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN295.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN296.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN297.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN298.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN299.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/bào ngư xám + trắng/BN300.jpg,bn,1,train,1
+/kaggle/input/aio-hutech/train/linh chi trắng/LC001.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC002.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC003.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC004.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC005.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC006.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC007.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC008.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC009.jpg,bn,0,val,1
+/kaggle/input/aio-hutech/train/linh chi trắng/LC010.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC011.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC012.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC013.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC014.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC015.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC016.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC017.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC018.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC019.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC020.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC021.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC022.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC023.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC024.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC025.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC026.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC027.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC028.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC029.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC030.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC031.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC032.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC033.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC034.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC035.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC036.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC037.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC038.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC039.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC040.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC041.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC042.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC043.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC044.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC045.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC046.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC047.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC048.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC049.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC050.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC051.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC052.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC053.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC054.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC055.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC056.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC057.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC058.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC059.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC060.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC061.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC062.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC063.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC064.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC065.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC066.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC067.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC068.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC069.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC070.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC071.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC072.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC073.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC074.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC075.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC076.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC077.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC078.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC079.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC080.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC081.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC082.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC083.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC084.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC085.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC086.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC087.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC088.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC089.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC090.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC091.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC092.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC093.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC094.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC095.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC096.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC097.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC098.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC099.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC100.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC101.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC102.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC103.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC104.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC105.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC106.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC107.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC108.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC109.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC110.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC111.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC112.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC113.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC114.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC115.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC116.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC117.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC118.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC119.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC120.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC121.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC122.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC123.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC124.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC125.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC126.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC127.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC128.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC129.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC130.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC131.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC132.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC133.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC134.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC135.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC136.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC137.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC138.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC139.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC140.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC141.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC142.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC143.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC144.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC145.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC146.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC147.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC148.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC149.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC150.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC151.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC152.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC153.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC154.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC155.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC156.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC157.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC158.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC159.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC160.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC161.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC162.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC163.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC164.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC165.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC166.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC167.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC168.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC169.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC170.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC171.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC172.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC173.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC174.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC175.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC176.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC177.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC178.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC179.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC180.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC181.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC182.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC183.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC184.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC185.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC186.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC187.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC188.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC189.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC190.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC191.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC192.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC193.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC194.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC195.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC196.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC197.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC198.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC199.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC200.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC201.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC202.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC203.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC204.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC205.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC206.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC207.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC208.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC209.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC210.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC211.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC212.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC213.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC214.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC215.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC216.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC217.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC218.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC219.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC220.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC221.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC222.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC223.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC224.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC225.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC226.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC227.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC228.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC229.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC230.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC231.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC232.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC233.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC234.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC235.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC236.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC237.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC238.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC239.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC240.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC241.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC242.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC243.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC244.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC245.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC246.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC247.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC248.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC249.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC250.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC251.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC252.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC253.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC254.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC255.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC256.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC257.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC258.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC259.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC260.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC261.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC262.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC263.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC264.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC265.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC266.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC267.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC268.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC269.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC270.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC271.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC272.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC273.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC274.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC275.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC276.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC277.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC278.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC279.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC280.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC281.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC282.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC283.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC284.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC285.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC286.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC287.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC288.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC289.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC290.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC291.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC292.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC293.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC294.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC295.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC296.jpg,lc,1,train,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC297.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC298.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC299.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/linh chi trắng/LC300.jpg,lc,0,val,3
+/kaggle/input/aio-hutech/train/nấm mỡ/NM001.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM002.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM003.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM004.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM005.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM006.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM007.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM008.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM009.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM010.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM011.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM012.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM013.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM014.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM015.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM016.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM017.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM018.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM019.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM020.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM021.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM022.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM023.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM024.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM025.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM026.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM027.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM028.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM029.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM030.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM031.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM032.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM033.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM034.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM035.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM036.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM037.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM038.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM039.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM040.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM041.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM042.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM043.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM044.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM045.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM046.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM047.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM048.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM049.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM050.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM051.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM052.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM053.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM054.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM055.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM056.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM057.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM058.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM059.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM060.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM061.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM062.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM063.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM064.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM065.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM066.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM067.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM068.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM069.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM070.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM071.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM072.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM073.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM074.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM075.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM076.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM077.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM078.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM079.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM080.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM081.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM082.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM083.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM084.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM085.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM086.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM087.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM088.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM089.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM090.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM091.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM092.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM093.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM094.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM095.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM096.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM097.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM098.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM099.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM100.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM101.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM102.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM103.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM104.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM105.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM106.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM107.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM108.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM109.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM110.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM111.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM112.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM113.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM114.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM115.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM116.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM117.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM118.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM119.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM120.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM121.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM122.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM123.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM124.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM125.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM126.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM127.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM128.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM129.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM130.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM131.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM132.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM133.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM134.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM135.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM136.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM137.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM138.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM139.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM140.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM141.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM142.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM143.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM144.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM145.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM146.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM147.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM148.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM149.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM150.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM151.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM152.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM153.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM154.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM155.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM156.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM157.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM158.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM159.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM160.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM161.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM162.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM163.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM164.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM165.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM166.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM167.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM168.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM169.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM170.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM171.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM172.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM173.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM174.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM175.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM176.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM177.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM178.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM179.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM180.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM181.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM182.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM183.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM184.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM185.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM186.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM187.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM188.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM189.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM190.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM191.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM192.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM193.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM194.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM195.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM196.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM197.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM198.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM199.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM200.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM201.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM202.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM203.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM204.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM205.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM206.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM207.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM208.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM209.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM210.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM211.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM212.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM213.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM214.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM215.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM216.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM217.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM218.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM219.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM220.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM221.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM222.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM223.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM224.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM225.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM226.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM227.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM228.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM229.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM230.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM231.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM232.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM233.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM234.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM235.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM236.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM237.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM238.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM239.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM240.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM241.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM242.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM243.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM244.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM245.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM246.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM247.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM248.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM249.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM250.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM251.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM252.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM253.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM254.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM255.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM256.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM257.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM258.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM259.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM260.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM261.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM262.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM263.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM264.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM265.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM266.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM267.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM268.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM269.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM270.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM271.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM272.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM273.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM274.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM275.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM276.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM277.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM278.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM279.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM280.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM281.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM282.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM283.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM284.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM285.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM286.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM287.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM288.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM289.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM290.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM291.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM292.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM293.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM294.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM295.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM296.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM297.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM298.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM299.jpg,nm,1,train,0
+/kaggle/input/aio-hutech/train/nấm mỡ/NM300.jpg,nm,0,val,0
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG001.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG002.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG003.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG004.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG005.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG006.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG007.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG008.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG009.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG010.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG011.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG012.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG013.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG014.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG015.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG016.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG017.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG018.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG019.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG020.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG021.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG022.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG023.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG024.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG025.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG026.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG027.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG028.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG029.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG030.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG031.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG032.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG033.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG034.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG035.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG036.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG037.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG038.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG039.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG040.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG041.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG042.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG043.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG044.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG045.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG046.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG047.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG048.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG049.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG050.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG051.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG052.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG053.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG054.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG055.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG056.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG057.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG058.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG059.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG060.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG061.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG062.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG063.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG064.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG065.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG066.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG067.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG068.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG069.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG070.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG071.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG072.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG073.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG074.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG075.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG076.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG077.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG078.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG079.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG080.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG081.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG082.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG083.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG084.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG085.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG086.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG087.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG088.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG089.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG090.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG091.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG092.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG093.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG094.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG095.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG096.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG097.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG098.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG099.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG100.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG101.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG102.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG103.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG104.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG105.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG106.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG107.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG108.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG109.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG110.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG111.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG112.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG113.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG114.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG115.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG116.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG117.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG118.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG119.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG120.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG121.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG122.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG123.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG124.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG125.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG126.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG127.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG128.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG129.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG130.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG131.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG132.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG133.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG134.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG135.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG136.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG137.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG138.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG139.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG140.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG141.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG142.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG143.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG144.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG145.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG146.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG147.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG148.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG149.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG150.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG151.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG152.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG153.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG154.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG155.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG156.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG157.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG158.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG159.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG160.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG161.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG162.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG163.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG164.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG165.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG166.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG167.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG168.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG169.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG170.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG171.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG172.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG173.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG174.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG175.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG176.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG177.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG178.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG179.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG180.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG181.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG182.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG183.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG184.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG185.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG186.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG187.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG188.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG189.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG190.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG191.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG192.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG193.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG194.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG195.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG196.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG197.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG198.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG199.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG200.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG201.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG202.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG203.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG204.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG205.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG206.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG207.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG208.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG209.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG210.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG211.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG212.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG213.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG214.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG215.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG216.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG217.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG218.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG219.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG220.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG221.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG222.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG223.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG224.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG225.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG226.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG227.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG228.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG229.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG230.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG231.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG232.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG233.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG234.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG235.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG236.jpg,dg,0,val,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG237.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG238.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG239.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG240.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG241.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG242.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG243.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG244.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG245.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG246.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG247.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG248.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG249.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG250.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG251.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG252.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG253.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG254.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG255.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG256.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG257.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG258.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG259.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG260.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG261.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG262.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG263.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG264.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG265.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG266.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG267.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG268.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG269.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG270.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG271.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG272.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG273.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG274.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG275.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG276.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG277.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG278.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG279.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG280.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG281.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG282.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG283.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG284.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG285.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG286.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG287.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG288.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG289.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG290.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG291.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG292.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG293.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG294.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG295.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG296.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG297.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG298.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG299.jpg,dg,1,train,2
+/kaggle/input/aio-hutech/train/Đùi gà Baby (cắt ngắn)/DG300.jpg,dg,1,train,2
