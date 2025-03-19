@@ -9,8 +9,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import json
 from sklearn.metrics import confusion_matrix
-import seaborn as sns # type: ignore
-
+import seaborn as sns
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -142,37 +141,228 @@ def get_transforms():
     return train_transform, val_transform
 
 # ### Model Definition ###
+class ResidualBlock(nn.Module):
+    """Basic residual block with two 7x7 convolutions and a skip connection."""
+    def __init__(self, in_channels, out_channels, stride=1):
+        super(ResidualBlock, self).__init__()
+        
+        # First convolution and batch norm
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=7, 
+                              stride=stride, padding=3, bias=False)
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        
+        # Second convolution and batch norm
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=7, 
+                              stride=1, padding=3, bias=False)
+        self.bn2 = nn.BatchNorm2d(out_channels)
+        
+        # Skip connection (if dimensions change)
+        self.shortcut = nn.Identity()
+        if stride != 1 or in_channels != out_channels:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels, kernel_size=1, 
+                         stride=stride, bias=False),
+                nn.BatchNorm2d(out_channels)
+            )
+        
+        self.relu = nn.ReLU(inplace=True)
+    
+    def forward(self, x):
+        # Store input for skip connection
+        identity = x
+        
+        # First convolution block
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu(out)
+        
+        # Second convolution block
+        out = self.conv2(out)
+        out = self.bn2(out)
+        
+        # Skip connection
+        out += self.shortcut(identity)
+        out = self.relu(out)
+        
+        return out
+
+class SmallResNet(nn.Module):
+    """Custom ResNet architecture for small 32x32 images with 7x7 kernels."""
+    def __init__(self, num_classes=10, dropout_rate=0.2):
+        super(SmallResNet, self).__init__()
+        
+        # Initial convolution
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=7, stride=1, padding=3, bias=False)
+        self.bn1 = nn.BatchNorm2d(32)
+        self.relu = nn.ReLU(inplace=True)
+        
+        # Residual blocks with increasing channels
+        self.res_block1 = ResidualBlock(32, 64, stride=2)  # 16x16
+        self.res_block2 = ResidualBlock(64, 64, stride=1)
+        self.res_block3 = ResidualBlock(64, 128, stride=2)  # 8x8
+        self.res_block4 = ResidualBlock(128, 128, stride=1)
+        self.res_block5 = ResidualBlock(128, 256, stride=2)  # 4x4
+        self.res_block6 = ResidualBlock(256, 256, stride=1)
+        
+        # Global average pooling and fully connected layers
+        self.avg_pool = nn.AdaptiveAvgPool2d((1, 1))
+        self.dropout1 = nn.Dropout(dropout_rate)
+        self.fc1 = nn.Linear(256, 512)
+        self.dropout2 = nn.Dropout(dropout_rate)
+        self.fc2 = nn.Linear(512, num_classes)
+    
+    def forward(self, x):
+        # Initial convolution
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        
+        # Residual blocks
+        x = self.res_block1(x)
+        x = self.res_block2(x)
+        x = self.res_block3(x)
+        x = self.res_block4(x)
+        x = self.res_block5(x)
+        x = self.res_block6(x)
+        
+        # Global average pooling
+        x = self.avg_pool(x)
+        x = torch.flatten(x, 1)
+        
+        # Fully connected layers
+        x = self.dropout1(x)
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.dropout2(x)
+        x = self.fc2(x)
+        
+        return x
+
+# ### DenseNet with 7x7 Kernels Implementation ###
+class DenseLayer(nn.Module):
+    """Single layer in a DenseNet block with larger 7x7 kernels."""
+    def __init__(self, in_channels, growth_rate):
+        super(DenseLayer, self).__init__()
+        # BN-ReLU-Conv structure
+        self.bn = nn.BatchNorm2d(in_channels)
+        self.relu = nn.ReLU(inplace=True)
+        # Using 7x7 kernels instead of standard 3x3
+        self.conv = nn.Conv2d(in_channels, growth_rate, kernel_size=7, 
+                             stride=1, padding=3, bias=False)
+        
+    def forward(self, x):
+        out = self.bn(x)
+        out = self.relu(out)
+        out = self.conv(out)
+        return torch.cat([x, out], 1)  # Dense connection
+
+
+class DenseBlock(nn.Module):
+    """Block containing multiple densely connected layers with 7x7 kernels."""
+    def __init__(self, in_channels, growth_rate, num_layers):
+        super(DenseBlock, self).__init__()
+        self.layers = nn.ModuleList()
+        
+        for i in range(num_layers):
+            self.layers.append(DenseLayer(in_channels + i * growth_rate, growth_rate))
+            
+    def forward(self, x):
+        for layer in self.layers:
+            x = layer(x)
+        return x
+
+
+class TransitionLayer(nn.Module):
+    """Transition layer between DenseBlocks to reduce spatial dimensions."""
+    def __init__(self, in_channels, out_channels):
+        super(TransitionLayer, self).__init__()
+        self.bn = nn.BatchNorm2d(in_channels)
+        self.relu = nn.ReLU(inplace=True)
+        # Use 1x1 conv to reduce channels
+        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False)
+        self.pool = nn.AvgPool2d(kernel_size=2, stride=2)
+        
+    def forward(self, x):
+        x = self.bn(x)
+        x = self.relu(x)
+        x = self.conv(x)
+        x = self.pool(x)
+        return x
+
+
+class DenseNet7x7(nn.Module):
+    """DenseNet implementation with 7x7 kernels instead of standard 3x3."""
+    def __init__(self, growth_rate=32, block_config=(6, 12, 24, 16), 
+                 num_classes=10, dropout_rate=0.2):
+        super(DenseNet7x7, self).__init__()
+        
+        # Initial convolution with larger 7x7 kernel
+        self.features = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        )
+        
+        # Current number of channels
+        num_channels = 64
+        
+        # Add dense blocks and transition layers
+        for i, num_layers in enumerate(block_config):
+            # Add dense block
+            block = DenseBlock(num_channels, growth_rate, num_layers)
+            self.features.add_module(f'denseblock{i+1}', block)
+            
+            # Update number of channels after dense block
+            num_channels += num_layers * growth_rate
+            
+            # Add transition layer except after the last block
+            if i != len(block_config) - 1:
+                # Reduce number of channels by half in transition
+                trans = TransitionLayer(num_channels, num_channels // 2)
+                self.features.add_module(f'transition{i+1}', trans)
+                num_channels = num_channels // 2
+        
+        # Final batch norm
+        self.features.add_module('norm_final', nn.BatchNorm2d(num_channels))
+        self.features.add_module('relu_final', nn.ReLU(inplace=True))
+        
+        # Global average pooling and classifier
+        self.avg_pool = nn.AdaptiveAvgPool2d((1, 1))
+        self.dropout = nn.Dropout(dropout_rate)
+        self.classifier = nn.Linear(num_channels, num_classes)
+        
+        # Initialize weights
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight)
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.Linear):
+                nn.init.constant_(m.bias, 0)
+    
+    def forward(self, x):
+        features = self.features(x)
+        out = self.avg_pool(features)
+        out = torch.flatten(out, 1)
+        out = self.dropout(out)
+        out = self.classifier(out)
+        return out
+
+
+# Update the get_model function to include the DenseNet option
 def get_model(num_classes, config):
     """
-    Use a model better suited for small images instead of MobileNetV3
-    which is designed for 224x224 inputs.
+    Use a model suited for the image size with residual connections or DenseNet for better learning.
     """
     if config.image_size <= 32:
-        # Custom smaller model for tiny images
-        model = nn.Sequential(
-            # Input: 32x32x3
-            nn.Conv2d(3, 32, kernel_size=3, padding=1),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.MaxPool2d(2),  # 16x16
-            
-            nn.Conv2d(32, 64, kernel_size=3, padding=1),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-            nn.MaxPool2d(2),  # 8x8
-            
-            nn.Conv2d(64, 128, kernel_size=3, padding=1),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            nn.MaxPool2d(2),  # 4x4
-            
-            nn.Flatten(),  # 4x4x128 = 2048
-            nn.Dropout(p=config.dropout_rate),
-            nn.Linear(2048, 512),
-            nn.ReLU(),
-            nn.Dropout(p=config.dropout_rate),
-            nn.Linear(512, num_classes)
-        )
+        # Use DenseNet for tiny images with growth_rate=16 and simplified block config for smaller data
+        print("Creating DenseNet7x7 model with 7x7 kernels...")
+        model = DenseNet7x7(growth_rate=16, 
+                            block_config=(3, 6, 12, 8),  # Reduced block size for tiny images 
+                            num_classes=num_classes, 
+                            dropout_rate=config.dropout_rate)
         return model
     else:
         # Use original MobileNetV3 model for larger images
@@ -984,7 +1174,7 @@ def analyze_false_predictions(true_labels, predicted_labels, class_names):
     if hasattr(true_labels, 'tolist'):
         true_labels = true_labels.tolist()
     if hasattr(predicted_labels, 'tolist'):
-        predicted_labels = predicted_labels.tolist()
+        predicted_labels.tolist()
     
     # Create confusion matrix
     cm = confusion_matrix(true_labels, predicted_labels)

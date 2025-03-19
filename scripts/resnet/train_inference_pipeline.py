@@ -9,7 +9,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import json
 from sklearn.metrics import confusion_matrix
-import seaborn as sns # type: ignore
+import seaborn as sns
 
 import torch
 import torch.nn as nn
@@ -44,7 +44,7 @@ class Config:
     image_size: int = 32
     batch_size: int = 256  # Reduced from 512 for better generalization
     num_epochs: int = 500 if not debug else 2
-    learning_rate: float = 0.005  # Reduced from 0.005
+    learning_rate: float = 0.001  # Reduced from 0.005
     dropout_rate: float = 0.2  # Increased from 0.2 for better regularization
     l2_reg: float = 0.0001  # Increased from 0.0001
     num_folds: int = 6  # Folds 0 to 6
@@ -60,7 +60,7 @@ class Config:
     pin_memory: bool = True        # Pin memory for faster GPU transfer
     use_amp: bool = False           # Use automatic mixed precision
     grad_clip_val: float = 10.0     # Gradient clipping value
-    scheduler_type: str = "plateau" # "plateau" or "cosine"
+    scheduler_type: str = "cosine" # "plateau" or "cosine"
     seed: int = 42                 # Random seed
     run_inference_after_training: bool = True  # Whether to run inference after training
     inference_batch_size: int = 16  # Batch size for inference
@@ -68,9 +68,22 @@ class Config:
     logits_path: str = None  # Will be auto-set to output_dir/logits.csv if None
     ensemble_method: str = "mean"  # How to combine multiple model predictions: "mean" or "vote"
     save_per_fold_results: bool = True  # Save results for each fold separately
-    use_class_weights: bool = True  # Whether to use class weights in loss function
+    use_class_weights: bool = False  # Whether to use class weights in loss function
     weight_multiplier: float = 2.0  # How much extra weight to give to the prioritized class
     prioritized_class: str = "Đùi gà Baby (cắt ngắn)"  # Class to prioritize
+
+
+# Update Config class with new parameters
+@dataclass
+class EnhancedConfig(Config):
+    """Enhanced configuration with additional parameters for advanced techniques."""
+    model_type: str = "dual_branch"  # Options: dual_branch, densenet, smallresnet, mobilenet
+    use_multi_scale: bool = True  # Whether to use multi-scale training
+    use_knowledge_distillation: bool = False  # Whether to use knowledge distillation (disabled for now)
+    teacher_model_path: str = None  # Path to pre-trained teacher model
+    distillation_temperature: float = 3.0  # Temperature for softening probability distributions
+    distillation_alpha: float = 0.5  # Weight between distillation and CE loss (0-1)
+    use_space_to_depth: bool = True  # Whether to use space-to-depth convolutions
 
 # ### Custom Dataset with Error Handling ###
 class MushroomDataset(Dataset):
@@ -121,20 +134,34 @@ class MushroomDataset(Dataset):
 
 # ### Enhanced Transformations ###
 def get_transforms():
-    # Change resize dimensions to match the actual image size
+    # More aggressive data augmentation for better generalization
     train_transform = transforms.Compose([
-        transforms.Resize((32, 32)),  # Changed from 224x224 to 32x32
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomRotation(15),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
-        transforms.RandomAffine(degrees=0.1, translate=(0.1, 0.1), scale=(0.9, 1.1)),
+        transforms.Resize((32, 32)),
+        # More aggressive horizontal flip (kept same)
+        transforms.RandomHorizontalFlip(p=0.7),
+        # Add vertical flip with probability
+        transforms.RandomVerticalFlip(p=0.3),
+        # Increased rotation angle
+        transforms.RandomRotation(30),
+        # More aggressive color jitter
+        transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.2),
+        # More aggressive affine transformations
+        transforms.RandomAffine(degrees=20, translate=(0.2, 0.2), scale=(0.8, 1.2), shear=10),
+        # Add perspective transformation
+        transforms.RandomPerspective(distortion_scale=0.2, p=0.5),
+        # Convert to tensor
         transforms.ToTensor(),
-        transforms.RandomErasing(p=0.5),
+        # Stronger random erasing
+        transforms.RandomErasing(p=0.7, scale=(0.02, 0.2), ratio=(0.3, 3.3)),
+        # Add occasional grayscale conversion
+        transforms.RandomGrayscale(p=0.1),
+        # Standard normalization
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
 
+    # Keep validation transform unchanged
     val_transform = transforms.Compose([
-        transforms.Resize((32, 32)),  # Changed from 224x224 to 32x32
+        transforms.Resize((32, 32)),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
@@ -142,37 +169,111 @@ def get_transforms():
     return train_transform, val_transform
 
 # ### Model Definition ###
+class ResidualBlock(nn.Module):
+    """Basic residual block with two 3x3 convolutions and a skip connection."""
+    def __init__(self, in_channels, out_channels, stride=1):
+        super(ResidualBlock, self).__init__()
+        
+        # First convolution and batch norm
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, 
+                              stride=stride, padding=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        
+        # Second convolution and batch norm
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, 
+                              stride=1, padding=1, bias=False)
+        self.bn2 = nn.BatchNorm2d(out_channels)
+        
+        # Skip connection (if dimensions change)
+        self.shortcut = nn.Identity()
+        if stride != 1 or in_channels != out_channels:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels, kernel_size=1, 
+                         stride=stride, bias=False),
+                nn.BatchNorm2d(out_channels)
+            )
+        
+        self.relu = nn.ReLU(inplace=True)
+    
+    def forward(self, x):
+        # Store input for skip connection
+        identity = x
+        
+        # First convolution block
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu(out)
+        
+        # Second convolution block
+        out = self.conv2(out)
+        out = self.bn2(out)
+        
+        # Skip connection
+        out += self.shortcut(identity)
+        out = self.relu(out)
+        
+        return out
+
+class SmallResNet(nn.Module):
+    """Custom ResNet architecture for small 32x32 images."""
+    def __init__(self, num_classes=10, dropout_rate=0.2):
+        super(SmallResNet, self).__init__()
+        
+        # Initial convolution
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(32)
+        self.relu = nn.ReLU(inplace=True)
+        
+        # Residual blocks with increasing channels
+        self.res_block1 = ResidualBlock(32, 64, stride=2)  # 16x16
+        self.res_block2 = ResidualBlock(64, 64, stride=1)
+        self.res_block3 = ResidualBlock(64, 128, stride=2)  # 8x8
+        self.res_block4 = ResidualBlock(128, 128, stride=1)
+        self.res_block5 = ResidualBlock(128, 256, stride=2)  # 4x4
+        self.res_block6 = ResidualBlock(256, 256, stride=1)
+        
+        # Global average pooling and fully connected layers
+        self.avg_pool = nn.AdaptiveAvgPool2d((1, 1))
+        self.dropout1 = nn.Dropout(dropout_rate)
+        self.fc1 = nn.Linear(256, 512)
+        self.dropout2 = nn.Dropout(dropout_rate)
+        self.fc2 = nn.Linear(512, num_classes)
+    
+    def forward(self, x):
+        # Initial convolution
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        
+        # Residual blocks
+        x = self.res_block1(x)
+        x = self.res_block2(x)
+        x = self.res_block3(x)
+        x = self.res_block4(x)
+        x = self.res_block5(x)
+        x = self.res_block6(x)
+        
+        # Global average pooling
+        x = self.avg_pool(x)
+        x = torch.flatten(x, 1)
+        
+        # Fully connected layers
+        x = self.dropout1(x)
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.dropout2(x)
+        x = self.fc2(x)
+        
+        return x
+
 def get_model(num_classes, config):
     """
-    Use a model better suited for small images instead of MobileNetV3
-    which is designed for 224x224 inputs.
+    Use a model suited for the image size with residual connections for better learning.
     """
     if config.image_size <= 32:
-        # Custom smaller model for tiny images
-        model = nn.Sequential(
-            # Input: 32x32x3
-            nn.Conv2d(3, 32, kernel_size=3, padding=1),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.MaxPool2d(2),  # 16x16
-            
-            nn.Conv2d(32, 64, kernel_size=3, padding=1),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-            nn.MaxPool2d(2),  # 8x8
-            
-            nn.Conv2d(64, 128, kernel_size=3, padding=1),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            nn.MaxPool2d(2),  # 4x4
-            
-            nn.Flatten(),  # 4x4x128 = 2048
-            nn.Dropout(p=config.dropout_rate),
-            nn.Linear(2048, 512),
-            nn.ReLU(),
-            nn.Dropout(p=config.dropout_rate),
-            nn.Linear(512, num_classes)
-        )
+        # Custom ResNet model for tiny images
+        print("Creating SmallResNet model with residual connections...")
+        model = SmallResNet(num_classes=num_classes, dropout_rate=config.dropout_rate)
         return model
     else:
         # Use original MobileNetV3 model for larger images

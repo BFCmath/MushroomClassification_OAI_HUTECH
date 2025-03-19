@@ -1,0 +1,482 @@
+import numpy as np
+import random
+from PIL import Image
+import cv2
+from PIL import ImageOps, ImageEnhance
+from torchvision import models, transforms
+from torch.utils.data import DataLoader, Dataset, Subset
+import torch.nn as nn
+import torch
+# Add Albumentations for advanced augmentations
+try:
+    import albumentations as A
+    from albumentations.pytorch import ToTensorV2
+    ALBUMENTATIONS_AVAILABLE = True
+except ImportError:
+    print("Albumentations not available. Using torchvision transforms only.")
+    ALBUMENTATIONS_AVAILABLE = False
+ 
+# Add new custom color transforms
+class AdvancedColorTransforms:
+    """Collection of advanced color transformation techniques."""
+    
+    class RandomColorDrop(object):
+        """Randomly zero out a color channel with given probability."""
+        def __init__(self, p=0.2):
+            self.p = p
+            
+        def __call__(self, img):
+            if random.random() < self.p:
+                img_array = np.array(img)
+                channel = random.randint(0, 2)  # Choose R, G, or B channel
+                img_array[:, :, channel] = 0
+                return Image.fromarray(img_array)
+            return img
+    
+    class RandomChannelSwap(object):
+        """Randomly swap color channels."""
+        def __init__(self, p=0.2):
+            self.p = p
+            
+        def __call__(self, img):
+            if random.random() < self.p:
+                img_array = np.array(img)
+                # Generate a random permutation of [0,1,2]
+                perm = list(range(3))
+                random.shuffle(perm)
+                img_array = img_array[:, :, perm]
+                return Image.fromarray(img_array)
+            return img
+    
+    class RandomGamma(object):
+        """Apply random gamma correction."""
+        def __init__(self, gamma_range=(0.5, 1.5), p=0.3):
+            self.gamma_range = gamma_range
+            self.p = p
+            
+        def __call__(self, img):
+            if random.random() < self.p:
+                gamma = random.uniform(*self.gamma_range)
+                # Convert to numpy for gamma correction
+                img_array = np.array(img).astype(np.float32) / 255.0
+                img_array = np.power(img_array, gamma)
+                img_array = (img_array * 255).clip(0, 255).astype(np.uint8)
+                return Image.fromarray(img_array)
+            return img
+    
+    class SimulateHSVNoise(object):
+        """Simulate HSV space noise by shifting H, S, V channels slightly."""
+        def __init__(self, hue_shift=0.05, sat_shift=0.1, val_shift=0.1, p=0.3):
+            self.hue_shift = hue_shift
+            self.sat_shift = sat_shift
+            self.val_shift = val_shift
+            self.p = p
+            
+        def __call__(self, img):
+            if random.random() < self.p:
+                # Convert PIL to cv2 image (RGB to BGR)
+                img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+                # Convert to HSV
+                img_hsv = cv2.cvtColor(img_cv, cv2.COLOR_BGR2HSV).astype(np.float32)
+                
+                # Apply random shifts to each channel
+                h_shift = random.uniform(-self.hue_shift, self.hue_shift) * 180
+                s_shift = random.uniform(-self.sat_shift, self.sat_shift) * 255
+                v_shift = random.uniform(-self.val_shift, self.val_shift) * 255
+                
+                img_hsv[:, :, 0] = np.mod(img_hsv[:, :, 0] + h_shift, 180)
+                img_hsv[:, :, 1] = np.clip(img_hsv[:, :, 1] + s_shift, 0, 255)
+                img_hsv[:, :, 2] = np.clip(img_hsv[:, :, 2] + v_shift, 0, 255)
+                
+                # Convert back to RGB
+                img_cv = cv2.cvtColor(img_hsv.astype(np.uint8), cv2.COLOR_HSV2BGR)
+                img_rgb = cv2.cvtColor(img_cv, cv2.COLOR_BGR2RGB)
+                return Image.fromarray(img_rgb)
+            return img
+    
+    class SimulateLightingCondition(object):
+        """Simulate different lighting conditions."""
+        def __init__(self, p=0.3):
+            self.p = p
+            
+        def __call__(self, img):
+            if random.random() < self.p:
+                # Randomly choose a lighting simulation effect
+                effect = random.choice(['warm', 'cool', 'bright', 'dark'])
+                
+                if effect == 'warm':
+                    # Add warm/yellowish tint
+                    enhancer = ImageEnhance.Color(img)
+                    img = enhancer.enhance(1.2)
+                    r, g, b = img.split()
+                    r = ImageEnhance.Brightness(r).enhance(1.1)
+                    g = ImageEnhance.Brightness(g).enhance(1.0)
+                    b = ImageEnhance.Brightness(b).enhance(0.9)
+                    return Image.merge('RGB', (r, g, b))
+                
+                elif effect == 'cool':
+                    # Add cool/bluish tint
+                    enhancer = ImageEnhance.Color(img)
+                    img = enhancer.enhance(1.2)
+                    r, g, b = img.split()
+                    r = ImageEnhance.Brightness(r).enhance(0.9)
+                    g = ImageEnhance.Brightness(g).enhance(1.0)
+                    b = ImageEnhance.Brightness(b).enhance(1.1)
+                    return Image.merge('RGB', (r, g, b))
+                    
+                elif effect == 'bright':
+                    # Increase brightness
+                    enhancer = ImageEnhance.Brightness(img)
+                    return enhancer.enhance(1.2)
+                    
+                else:  # dark
+                    # Decrease brightness
+                    enhancer = ImageEnhance.Brightness(img)
+                    return enhancer.enhance(0.8)
+            return img
+    
+    class RandomGrayscale(object):
+        """Convert image to grayscale with probability p, but keep 3 channels."""
+        def __init__(self, p=0.2):
+            self.p = p
+            
+        def __call__(self, img):
+            if random.random() < self.p:
+                img_gray = ImageOps.grayscale(img)
+                # Convert back to 3 channels properly
+                # The current approach is incorrect - you can't merge the same image object 3 times
+                # Using numpy for proper channel stacking instead:
+                img_array = np.array(img_gray)
+                img_array_3channel = np.stack([img_array, img_array, img_array], axis=-1)
+                return Image.fromarray(img_array_3channel)
+            return img
+        
+# ### Enhanced Transformations ###
+def get_transforms(image_size=32, aug_strength="standard"):
+    """
+    Standard transforms with configurable parameters for consistency.
+    
+    Args:
+        image_size: Target image size
+        aug_strength: Ignored but included for API consistency
+    """
+    train_transform = transforms.Compose([
+        transforms.Resize((image_size, image_size)),  # Now uses parameter
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomRotation(15),
+        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
+        transforms.RandomAffine(degrees=0.1, translate=(0.1, 0.1), scale=(0.9, 1.1)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        transforms.RandomErasing(p=0.5),
+    ])
+
+    val_transform = transforms.Compose([
+        transforms.Resize((image_size, image_size)),  # Now uses parameter
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+    
+    return train_transform, val_transform
+
+# Create a wrapper class to make Albumentations compatible with our dataset
+class AlbumentationsWrapper:
+    """Wrapper for Albumentations transforms to make them compatible with PIL images and PyTorch."""
+    def __init__(self, transform):
+        self.transform = transform
+        
+    def __call__(self, img):
+        # Convert PIL Image to numpy array
+        if isinstance(img, Image.Image):
+            img_np = np.array(img)
+            augmented = self.transform(image=img_np)
+            return augmented['image']  # Returns a tensor directly
+        
+        # If it's already a numpy array
+        elif isinstance(img, np.ndarray):
+            augmented = self.transform(image=img)
+            return augmented['image']
+        
+        # If it's already a tensor, just apply normalization and return
+        elif isinstance(img, torch.Tensor):
+            return img  # Not ideal, but a fallback
+        
+        else:
+            raise TypeError(f"Unsupported image type: {type(img)}")
+
+
+# Helper class for multi-scale training
+class MultiScaleTransform:
+    def __init__(self, transforms_list):
+        self.transforms_list = transforms_list
+    
+    def __call__(self, img):
+        # Randomly select one transformation from the list
+        transform = random.choice(self.transforms_list)
+        return transform(img)
+
+
+# ### Enhanced Data Augmentations for Low-Resolution ###
+def get_enhanced_transforms(multi_scale=False, image_size=32, aug_strength="high"):
+    """
+    Creates enhanced transforms specifically designed for low-resolution images
+    with options for multi-scale training and advanced color augmentation.
+    """
+    # Base transformations for low-resolution images
+    base_transforms = [
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomRotation(20),
+        
+        # Basic color jitter - keep this as it works well with other transforms
+        transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1),
+        
+        # Advanced color transformations
+        AdvancedColorTransforms.RandomGrayscale(p=0.1),
+        AdvancedColorTransforms.RandomColorDrop(p=0.1),
+        AdvancedColorTransforms.RandomChannelSwap(p=0.1),
+        AdvancedColorTransforms.RandomGamma(gamma_range=(0.7, 1.3), p=0.2),
+        AdvancedColorTransforms.SimulateLightingCondition(p=0.2),
+        AdvancedColorTransforms.SimulateHSVNoise(p=0.2),
+        
+        # Other transformations
+        transforms.RandomAffine(degrees=10, translate=(0.1, 0.1), scale=(0.9, 1.1), shear=5),
+    ]
+    
+    # Add random erasing to simulate occlusions
+    post_tensor_transforms = [
+        transforms.RandomErasing(p=0.5, scale=(0.02, 0.2), ratio=(0.3, 3.3)),
+        # Add Gaussian noise
+        transforms.Lambda(lambda x: x + 0.05 * torch.randn_like(x) if random.random() < 0.3 else x),
+    ]
+    
+    if multi_scale:
+        # For multi-scale training, we'll create transforms for different scales
+        scales = [0.8, 1.0, 1.2]  # 80%, 100%, and 120% of original size
+        train_transforms_list = []
+        
+        for scale in scales:
+            scaled_size = max(8, int(image_size * scale))  # Ensure minimum size of 8
+            transforms_for_scale = transforms.Compose([
+                transforms.Resize((scaled_size, scaled_size)),
+                *base_transforms,
+                transforms.Resize((image_size, image_size)),  # Resize back to model's input size
+                transforms.ToTensor(),
+                transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+                *post_tensor_transforms
+            ])
+            train_transforms_list.append(transforms_for_scale)
+        
+        # This will randomly select one of the scales for each batch
+        train_transform = MultiScaleTransform(train_transforms_list)
+    else:
+        train_transform = transforms.Compose([
+            transforms.Resize((image_size, image_size)),
+            *base_transforms,
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            *post_tensor_transforms
+        ])
+    
+    # Validation transform remains simpler
+    val_transform = transforms.Compose([
+        transforms.Resize((image_size, image_size)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+    
+    return train_transform, val_transform
+
+            
+# Add new function to get advanced augmentations with Albumentations
+def get_albumentation_transforms(aug_strength="high", image_size=32, multi_scale=False):
+    """
+    Creates advanced image augmentations using Albumentations library.
+    
+    Args:
+        aug_strength: Strength of augmentation ('low', 'medium', 'high')
+        image_size: Target image size
+        multi_scale: Whether to use multi-scale transforms when falling back
+    """
+    if not ALBUMENTATIONS_AVAILABLE:
+        print("Warning: Albumentations not available. Falling back to enhanced transforms.")
+        # Pass through the same parameters instead of hardcoding multi_scale=True
+        return get_enhanced_transforms(multi_scale=multi_scale, image_size=image_size, aug_strength=aug_strength)
+    
+    # Configure strength parameters based on aug_strength
+    if aug_strength == "low":
+        p_general = 0.15
+        p_optical = 0.25
+        p_affine = 0.4
+        distort_limit = 0.5
+        p_color = 0.1
+    elif aug_strength == "medium":
+        p_general = 0.3
+        p_optical = 0.4
+        p_affine = 0.5
+        distort_limit = 0.6
+        p_color = 0.15
+    else:  # high
+        p_general = 0.5
+        p_optical = 0.7
+        p_affine = 0.85
+        distort_limit = 0.7
+        p_color = 0.2
+    
+    # Custom function for color channel drop (no direct equivalent in Albumentations)
+    def random_channel_drop(img, **kwargs):
+        if np.random.random() < p_color:
+            channel = np.random.randint(0, 3)  # Choose R, G, or B channel
+            img[:, :, channel] = 0
+        return img
+    
+    # Custom function for simulating different lighting conditions
+    def simulate_lighting_condition(img, **kwargs):
+        if np.random.random() < p_color:
+            effect = np.random.choice(['warm', 'cool', 'bright', 'dark'])
+            
+            if effect == 'warm':
+                # Add warm/yellowish tint
+                img = np.copy(img)
+                # Increase red, decrease blue slightly
+                img[:, :, 0] = np.clip(img[:, :, 0] * 1.1, 0, 255).astype(np.uint8)
+                img[:, :, 2] = np.clip(img[:, :, 2] * 0.9, 0, 255).astype(np.uint8)
+            elif effect == 'cool':
+                # Add cool/bluish tint
+                img = np.copy(img)
+                # Decrease red, increase blue slightly
+                img[:, :, 0] = np.clip(img[:, :, 0] * 0.9, 0, 255).astype(np.uint8)
+                img[:, :, 2] = np.clip(img[:, :, 2] * 1.1, 0, 255).astype(np.uint8)
+            elif effect == 'bright':
+                # Increase brightness
+                img = np.clip(img * 1.2, 0, 255).astype(np.uint8)
+            else:  # dark
+                # Decrease brightness
+                img = np.clip(img * 0.8, 0, 255).astype(np.uint8)
+        return img
+    
+    # Equivalent to SimulateHSVNoise from enhanced transforms
+    def simulate_hsv_noise(img, **kwargs):
+        if np.random.random() < p_color:
+            # Convert to HSV
+            img_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV).astype(np.float32)
+            
+            # Apply random shifts to each channel
+            h_shift = np.random.uniform(-0.05, 0.05) * 180
+            s_shift = np.random.uniform(-0.1, 0.1) * 255
+            v_shift = np.random.uniform(-0.1, 0.1) * 255
+            
+            img_hsv[:, :, 0] = np.mod(img_hsv[:, :, 0] + h_shift, 180)
+            img_hsv[:, :, 1] = np.clip(img_hsv[:, :, 1] + s_shift, 0, 255)
+            img_hsv[:, :, 2] = np.clip(img_hsv[:, :, 2] + v_shift, 0, 255)
+            
+            # Convert back to RGB
+            img = cv2.cvtColor(img_hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
+        return img
+    
+    # Function to add Gaussian noise (post-processing)
+    def add_gaussian_noise(img, **kwargs):
+        if np.random.random() < 0.3:  # Same probability as in enhanced transforms
+            noise = np.random.normal(0, 0.05, img.shape).astype(np.float32)
+            img = img + noise
+            img = np.clip(img, 0, 1)
+        return img
+    
+    # Full training transforms with both Albumentations and custom transforms
+    train_transform = A.Compose([
+        # Spatial transforms
+        A.Transpose(p=p_general),
+        A.HorizontalFlip(p=p_general),
+        A.VerticalFlip(p=p_general),  # Keep this as it's not in the enhanced transforms
+        
+        # Color transforms (integrating successful ones from enhanced transforms)
+        A.OneOf([
+            # Standard albumentations color transforms
+            A.RandomBrightnessContrast(limit=0.2, p=0.5),
+            A.HueSaturationValue(hue_shift_limit=10, sat_shift_limit=20, val_shift_limit=10, p=0.5),
+            # Alternative to RandomGamma from AdvancedColorTransforms
+            A.RandomGamma(gamma_limit=(70, 130), p=0.5),
+            # Alternative to RandomGrayscale from AdvancedColorTransforms
+            A.ToGray(p=1.0),
+            # Alternative to RandomChannelSwap from AdvancedColorTransforms
+            A.ChannelShuffle(p=1.0),
+        ], p=p_color),
+        
+        # Custom Lambda transforms for effects not covered by Albumentations
+        A.Lambda(image=random_channel_drop, p=p_color),  # Custom impl. of RandomColorDrop
+        A.Lambda(image=simulate_lighting_condition, p=p_color),  # Custom impl. of SimulateLightingCondition
+        A.Lambda(image=simulate_hsv_noise, p=p_color),  # Custom impl. of SimulateHSVNoise
+        
+        # Blur and noise (similar to what's in current Albumentations pipeline)
+        A.OneOf([
+            A.MedianBlur(p=0.5),
+            A.GaussianBlur(p=0.5),
+            A.GaussNoise(var_limit=(5.0, 30.0)),
+        ], p=p_general),
+
+        # Optical distortions (similar to what's in current Albumentations pipeline)
+        A.OneOf([
+            A.OpticalDistortion(distort_limit=distort_limit),
+            A.GridDistortion(num_steps=5, distort_limit=distort_limit),
+            A.ElasticTransform(alpha=3),
+        ], p=p_optical),
+
+        # Enhanced color adaptations
+        A.CLAHE(clip_limit=4.0, p=p_general),
+        
+        # Equivalent to ShiftScaleRotate in current Albumentations pipeline
+        A.ShiftScaleRotate(shift_limit=0.1, scale_limit=0.1, rotate_limit=15, border_mode=0, p=p_affine),
+        
+        # Resize to target image size
+        A.Resize(image_size, image_size),
+        
+        # Equivalent to RandomErasing in enhanced transforms
+        A.CoarseDropout(max_holes=8, max_height=8, max_width=8, p=p_general),
+        
+        # Add Gaussian noise (after normalization for correct range matching)
+        A.Lambda(image=add_gaussian_noise, p=0.3, always_apply=False),
+        
+        # Normalize and convert to tensor (always at the end)
+        A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ToTensorV2(),
+    ])
+    
+    # Validation transforms - just resize and normalize
+    val_transform = A.Compose([
+        A.Resize(image_size, image_size),
+        A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ToTensorV2(),
+    ])
+    
+    return AlbumentationsWrapper(train_transform), AlbumentationsWrapper(val_transform)
+
+# ### Helper class for applying transforms to subsets ###
+class CustomSubset(Dataset):
+    """Custom subset that applies transform to the original dataset."""
+    def __init__(self, subset, transform=None):
+        self.subset = subset
+        self.transform = transform
+        
+    def __getitem__(self, idx):
+        x, y = self.subset[idx]
+        if self.transform:
+            x = self.transform(x)
+        return x, y
+        
+    def __len__(self):
+        return len(self.subset)
+    
+    @property
+    def classes(self):
+        """Access classes attribute from the underlying dataset."""
+        if hasattr(self.subset, 'dataset') and hasattr(self.subset.dataset, 'classes'):
+            return self.subset.dataset.classes
+        elif hasattr(self.subset, 'classes'):
+            return self.subset.classes
+        raise AttributeError("Could not find 'classes' attribute in the underlying dataset")
+    
+    @property
+    def dataset(self):
+        """Access the original dataset for compatibility."""
+        if hasattr(self.subset, 'dataset'):
+            return self.subset.dataset
+        return self.subset
