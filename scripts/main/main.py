@@ -30,8 +30,9 @@ from SmallResNet import *
 from DualBranch import *
 from InceptionFSD import *
 from DenseNet7x7 import *
-from AdaptedLowNet import *
+from scripts.main.AdaptedLowNet import *
 from SPDResNet import *
+from SPDDualBranch import SPDDualBranchNetwork  # Import the new model
 
 # Add Albumentations for advanced augmentations
 try:
@@ -96,6 +97,8 @@ class Config:
     use_class_weights: bool = False  # Whether to use class weights in loss function
     weight_multiplier: float = 2.0  # How much extra weight to give to the prioritized class
     prioritized_class: str = "Đùi gà Baby (cắt ngắn)"  # Class to prioritize
+    ensemble_methods: list = None  # List of methods to combine predictions: "mean", "vote", "weighted"
+    # Backward compatibility - will be set to ["mean"] if None
 
 # Update Config class with new parameters
 @dataclass
@@ -118,6 +121,12 @@ if Config.train_folds is None:
     Config.train_folds = list(range(Config.num_folds))
     print(f"No train_folds specified, using all {Config.num_folds} folds")
 
+# Ensure ensemble_methods is a list and has valid values
+if Config.ensemble_methods is None:
+    Config.ensemble_methods = ["mean"]  # Default to mean if not specified
+elif isinstance(Config.ensemble_methods, str):
+    Config.ensemble_methods = [Config.ensemble_methods]  # Convert string to list for backward compatibility
+
 # Fix the get_model function which was corrupted
 def get_model(num_classes, config):
     """
@@ -139,6 +148,11 @@ def get_model(num_classes, config):
         print("Creating InceptionFSD model with multi-scale feature extraction...")
         model = InceptionFSD(num_classes=num_classes, 
                             dropout_rate=config.dropout_rate)
+        return model
+    elif model_type == 'spddualbranch':
+        print("Creating SPDDualBranch model with Space-to-Depth downsampling in both branches...")
+        model = SPDDualBranchNetwork(num_classes=num_classes,
+                                   dropout_rate=config.dropout_rate)
         return model
     elif model_type == 'dilatedgroupconv':
         print("Creating DilatedGroupConvNet with dilated convolutions...")
@@ -1404,40 +1418,73 @@ def main():
                     else:
                         print(f"No valid results from fold {fold+1}, skipping in ensemble")
                 
-                # Combine predictions from all folds (if enabled and we have multiple folds with results)
-                if all_fold_results:  # Make sure we have at least some results
-                    if config.ensemble_method and len(all_fold_results) > 1:
-                        print(f"\n--- Creating ensemble using method: {config.ensemble_method} ---")
+                # Combine predictions from all folds using multiple ensemble methods
+                if all_fold_results and len(all_fold_results) > 1:  # Make sure we have at least some results from multiple folds
+                    # Get ensemble methods (ensure it's a list)
+                    ensemble_methods = config.ensemble_methods if isinstance(config.ensemble_methods, list) else [config.ensemble_methods]
+                    
+                    # Create results for each ensemble method
+                    for method in ensemble_methods:
+                        if not method:  # Skip empty/None methods
+                            continue
+                            
+                        print(f"\n--- Creating ensemble using method: {method} ---")
                         
                         combined_results = combine_fold_predictions(
                             all_fold_results, 
                             class_names,
-                            ensemble_method=config.ensemble_method
+                            ensemble_method=method
                         )
                         
                         if combined_results:  # Make sure ensemble produced valid results
-                            # Create ensemble directory
-                            ensemble_dir = os.path.join(version_dir, "ensemble")
+                            # Create ensemble directory with method name
+                            ensemble_dir = os.path.join(version_dir, f"ensemble_{method}")
                             os.makedirs(ensemble_dir, exist_ok=True)
                             
                             # Save combined results
                             try:
                                 combined_json_path = os.path.join(ensemble_dir, "inference_results.json")
                                 combined_submission_path = os.path.join(ensemble_dir, "submission.csv")
-                                combined_version_submission_path = os.path.join(version_dir, "submission.csv")
-
+                                
+                                # Save ensemble results
                                 save_inference_results(combined_results, combined_json_path)
                                 save_submission_csv(combined_results, combined_submission_path)
-                                save_submission_csv(combined_results, combined_version_submission_path)  # Also at version level
                                 
-                                print(f"Ensemble predictions from {len(all_fold_results)} models saved to {ensemble_dir}")
-                                print(f"Ensemble submission also saved to {combined_version_submission_path}")
+                                # If this is the primary method (first in list), also save at version level
+                                if method == ensemble_methods[0]:
+                                    combined_version_submission_path = os.path.join(version_dir, "submission.csv")
+                                    save_submission_csv(combined_results, combined_version_submission_path)
+                                    print(f"Primary ensemble (method={method}) also saved to {combined_version_submission_path}")
+                                
+                                print(f"Ensemble '{method}' predictions from {len(all_fold_results)} models saved to {ensemble_dir}")
                             except Exception as e:
-                                print(f"Error saving ensemble results: {str(e)}")
+                                print(f"Error saving ensemble ({method}) results: {str(e)}")
                         else:
-                            print("Error: Ensemble produced no valid results")
-                    elif not config.ensemble_method and len(config.train_folds) > 1:
-                        print("Ensemble is disabled. Each fold's predictions are saved separately.")
+                            print(f"Error: Ensemble method '{method}' produced no valid results")
+                    
+                    # Generate comparison report of ensemble methods if multiple methods used
+                    if len(ensemble_methods) > 1:
+                        try:
+                            # Create comparison directory
+                            comparison_dir = os.path.join(version_dir, "ensemble_comparison")
+                            os.makedirs(comparison_dir, exist_ok=True)
+                            
+                            # Generate and save comparison report
+                            comparison_path = os.path.join(comparison_dir, "methods_comparison.json")
+                            with open(comparison_path, 'w') as f:
+                                json.dump({
+                                    "methods": ensemble_methods,
+                                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                    "config": {k: str(v) if not isinstance(v, (int, float, bool, str, type(None), list, dict)) else v 
+                                             for k, v in config.__dict__.items()}
+                                }, f, indent=4)
+                            
+                            print(f"\nEnsemble methods comparison saved to {comparison_path}")
+                        except Exception as e:
+                            print(f"Error generating ensemble comparison: {str(e)}")
+                            
+                elif not config.ensemble_methods or (len(config.ensemble_methods) == 1 and not config.ensemble_methods[0]):
+                    print("Ensemble is disabled. Each fold's predictions are saved separately.")
                 else:
                     print("No valid inference results from any fold, skipping ensemble")
                 
