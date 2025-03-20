@@ -33,6 +33,12 @@ from DenseNet7x7 import *
 from scripts.main.AdaptedLowNet import *
 from SPDResNet import *
 from SPDDualBranch import SPDDualBranchNetwork  # Import the new model
+from MiniXception import MiniXception  # Import the new models
+from MixModel1 import MixModel1
+from MixModel2 import MixModel2
+from DilatedGroup import DilatedGroupConvNet
+from MixModel3 import MixModel3  # Import the new MixModel3
+
 
 # Add Albumentations for advanced augmentations
 try:
@@ -97,7 +103,7 @@ class Config:
     use_class_weights: bool = False  # Whether to use class weights in loss function
     weight_multiplier: float = 2.0  # How much extra weight to give to the prioritized class
     prioritized_class: str = "Đùi gà Baby (cắt ngắn)"  # Class to prioritize
-    ensemble_methods: list = None  # List of methods to combine predictions: "mean", "vote", "weighted"
+    ensemble_methods: list = ["mean", "vote"]  # List of methods to combine predictions: "mean", "vote", "weighted"
     # Backward compatibility - will be set to ["mean"] if None
 
 # Update Config class with new parameters
@@ -120,12 +126,6 @@ if Config.csv_path in ['/kaggle/input/oai-cv/train_group_cv.csv']:
 if Config.train_folds is None:
     Config.train_folds = list(range(Config.num_folds))
     print(f"No train_folds specified, using all {Config.num_folds} folds")
-
-# Ensure ensemble_methods is a list and has valid values
-if Config.ensemble_methods is None:
-    Config.ensemble_methods = ["mean"]  # Default to mean if not specified
-elif isinstance(Config.ensemble_methods, str):
-    Config.ensemble_methods = [Config.ensemble_methods]  # Convert string to list for backward compatibility
 
 # Fix the get_model function which was corrupted
 def get_model(num_classes, config):
@@ -156,13 +156,7 @@ def get_model(num_classes, config):
         return model
     elif model_type == 'dilatedgroupconv':
         print("Creating DilatedGroupConvNet with dilated convolutions...")
-        try:
-            from DilatedGroup import DilatedGroupConvNet
-            model = DilatedGroupConvNet(num_classes=num_classes, 
-                                dropout_rate=config.dropout_rate)
-        except ImportError:
-            print("DilatedGroupConvNet not available, falling back to InceptionFSD")
-            model = InceptionFSD(num_classes=num_classes, 
+        model = DilatedGroupConvNet(num_classes=num_classes, 
                                 dropout_rate=config.dropout_rate)
         return model
     elif model_type == 'dual_branch':
@@ -182,6 +176,26 @@ def get_model(num_classes, config):
         print("Creating SmallResNet model...")
         model = SmallResNet(num_classes=num_classes, 
                            dropout_rate=config.dropout_rate)
+        return model
+    elif model_type == 'minixception':
+        print("Creating MiniXception model with SPD downsampling and separable convolutions...")
+        model = MiniXception(num_classes=num_classes, 
+                           dropout_rate=config.dropout_rate)
+        return model
+    elif model_type == 'mixmodel1':
+        print("Creating MixModel1 with SPDConv, Residual Inception blocks, and SE attention...")
+        model = MixModel1(num_classes=num_classes, 
+                         dropout_rate=config.dropout_rate)
+        return model
+    elif model_type == 'mixmodel2':
+        print("Creating MixModel2 with multi-pathways and skip connections...")
+        model = MixModel2(num_classes=num_classes, 
+                         dropout_rate=config.dropout_rate)
+        return model
+    elif model_type == 'mixmodel3':
+        print("Creating MixModel3 that maintains 32x32 resolution throughout the network...")
+        model = MixModel3(num_classes=num_classes, 
+                         dropout_rate=config.dropout_rate)
         return model
     else:
         print("Unknown model type, stop to save your time")

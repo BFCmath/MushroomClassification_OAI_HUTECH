@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from SPDDualBranch import SPDConv  # Import SPDConv for downsampling
 
 # Custom ReLU with variable slopes
 class VariableReLU(nn.Module):
@@ -20,6 +21,7 @@ class AdaptedLowNet(nn.Module):
     - Allows configurable number of output classes
     - Adds configurable dropout rate
     - Uses padding to maintain spatial dimensions compatibility
+    - Uses SPDConv for downsampling instead of pooling to preserve information
     """
     def __init__(self, num_classes=10, dropout_rate=0.3):
         super(AdaptedLowNet, self).__init__()
@@ -33,9 +35,12 @@ class AdaptedLowNet(nn.Module):
         self.relu3 = VariableReLU(slope=1)  # Slope = 1 for Layer 3
         self.dropout_conv = nn.Dropout(p=dropout_rate)  # Configurable dropout rate
         
-        # Add pooling to make feature map size manageable
-        # For 32x32 input, we need to reduce dimensions for efficiency
-        self.pool = nn.MaxPool2d(kernel_size=4, stride=4)  # 32x32 -> 8x8
+        # Replace pooling with SPDConv for downsampling (32x32 -> 8x8)
+        # This uses two consecutive SPDConv operations, equivalent to a scale=4 downsampling
+        self.downsample = nn.Sequential(
+            SPDConv(in_channels=128, out_channels=128, kernel_size=3, scale=2, padding=1),  # 32x32 -> 16x16
+            SPDConv(in_channels=128, out_channels=128, kernel_size=3, scale=2, padding=1)   # 16x16 -> 8x8
+        )
         
         # Classifier (3 Fully-Connected Layers)
         self.fc1 = nn.Linear(128 * 8 * 8, 256)
@@ -49,7 +54,7 @@ class AdaptedLowNet(nn.Module):
         x = self.relu1(self.conv1(x))    # Conv1 + ReLU(slope=4)
         x = self.relu2(self.conv2(x))    # Conv2 + ReLU(slope=2)
         x = self.relu3(self.conv3(x))    # Conv3 + ReLU(slope=1)
-        x = self.pool(x)                 # Add pooling to reduce dimensions
+        x = self.downsample(x)           # SPDConv downsampling replaces pooling
         x = self.dropout_conv(x)         # Dropout
         
         # Flatten for fully-connected layers

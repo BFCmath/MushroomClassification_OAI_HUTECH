@@ -1,5 +1,7 @@
 import torch
 import torch.nn as nn
+from SPDDualBranch import SPDConv  # Import SPDConv for downsampling
+
 # ### Dilated Group Convolution Network ###
 class DilatedGroupConvBlock(nn.Module):
     """
@@ -33,7 +35,7 @@ class DilatedGroupConvBlock(nn.Module):
                 reduced_channels, 
                 reduced_channels, 
                 kernel_size=7, 
-                stride=stride, 
+                stride=1,  # Changed from stride parameter to always 1
                 padding=3 * dilation,  # Maintain spatial size with proper padding
                 dilation=dilation,
                 groups=groups,
@@ -51,10 +53,27 @@ class DilatedGroupConvBlock(nn.Module):
         
         # Skip connection (residual path)
         self.skip = nn.Identity()
-        if stride != 1 or in_channels != out_channels:
+        
+        # Use SPDConv for downsampling in skip connection if stride > 1
+        if stride > 1:
             self.skip = nn.Sequential(
-                nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, bias=False),
+                SPDConv(in_channels, out_channels, kernel_size=1, scale=stride, padding=0)
+            )
+        elif in_channels != out_channels:
+            self.skip = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False),
                 nn.BatchNorm2d(out_channels)
+            )
+            
+        # Add SPDConv for downsampling in main path if stride > 1
+        self.downsample = None
+        if stride > 1:
+            self.downsample = SPDConv(
+                reduced_channels,
+                reduced_channels,
+                kernel_size=3,
+                scale=stride,
+                padding=1
             )
             
         self.relu = nn.ReLU(inplace=True)
@@ -65,6 +84,11 @@ class DilatedGroupConvBlock(nn.Module):
         # Main branch
         out = self.input_proj(x)
         out = self.grouped_conv(out)
+        
+        # Apply downsampling if needed
+        if self.downsample is not None:
+            out = self.downsample(out)
+            
         out = self.output_proj(out)
         
         # Residual connection
@@ -81,7 +105,7 @@ class DilatedGroupConvNet(nn.Module):
     This architecture:
     1. Uses dilated convolutions to capture wide context without pooling
     2. Employs group convolutions to reduce parameter count
-    3. Replaces pooling operations with strided convolutions
+    3. Replaces pooling operations with SPDConv for downsampling
     4. Maintains spatial information flow via residual connections
     """
     def __init__(self, num_classes=10, dropout_rate=0.3):
@@ -101,7 +125,7 @@ class DilatedGroupConvNet(nn.Module):
             DilatedGroupConvBlock(64, 64, dilation=4, stride=1)
         )
         
-        # Transition 1: Strided convolution instead of pooling (32x32 → 16x16)
+        # Transition 1: SPDConv instead of strided convolution (32x32 → 16x16)
         self.transition1 = DilatedGroupConvBlock(64, 128, dilation=1, stride=2)
         
         # Stage 2: Medium-scale features (16x16)
@@ -111,7 +135,7 @@ class DilatedGroupConvNet(nn.Module):
             DilatedGroupConvBlock(128, 128, dilation=4, stride=1)
         )
         
-        # Transition 2: Strided convolution instead of pooling (16x16 → 8x8)
+        # Transition 2: SPDConv instead of strided convolution (16x16 → 8x8)
         self.transition2 = DilatedGroupConvBlock(128, 256, dilation=1, stride=2)
         
         # Stage 3: Deep features with increased dilation (8x8)
@@ -120,16 +144,16 @@ class DilatedGroupConvNet(nn.Module):
             DilatedGroupConvBlock(256, 256, dilation=2, stride=1)
         )
         
-        # Global feature extraction without pooling
-        # Use strided convolutions to reduce to 1x1
+        # Global feature extraction using SPDConv instead of strided convolutions
         self.global_features = nn.Sequential(
-            nn.Conv2d(256, 512, kernel_size=3, stride=2, padding=1, bias=False),  # 8x8 → 4x4
+            SPDConv(256, 512, kernel_size=3, scale=2, padding=1),  # 8x8 → 4x4
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, stride=2, padding=1, bias=False),  # 4x4 → 2x2
+            SPDConv(512, 512, kernel_size=3, scale=2, padding=1),  # 4x4 → 2x2
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=2, stride=2, padding=0, bias=False),  # 2x2 → 1x1
+            # Changed kernel_size from 2 to 1 to fix size mismatch error
+            SPDConv(512, 512, kernel_size=1, scale=2, padding=0),  # 2x2 → 1x1
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True)
         )
