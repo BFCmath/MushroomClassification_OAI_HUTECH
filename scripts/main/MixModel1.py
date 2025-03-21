@@ -3,12 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 from SPDDualBranch import SPDConv  # Import the existing SPDConv implementation
 
-class SEBlock(nn.Module):
+class Mix1SEBlock(nn.Module):
     """
     Squeeze-and-Excitation block for channel-wise attention.
     """
     def __init__(self, channels, reduction=16):
-        super(SEBlock, self).__init__()
+        super(Mix1SEBlock, self).__init__()
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         reduced_channels = max(channels // reduction, 8)  # Ensure minimum size
         
@@ -28,12 +28,12 @@ class SEBlock(nn.Module):
         # Scale the input
         return x * y.expand_as(x)
 
-class ResidualInceptionBlock(nn.Module):
+class Mix1ResidualInceptionBlock(nn.Module):
     """
     Residual Inception Block with dilated convolutions and SE attention.
     """
     def __init__(self, in_channels, out_channels, path_channels, dilations=[1, 2, 3]):
-        super(ResidualInceptionBlock, self).__init__()
+        super(Mix1ResidualInceptionBlock, self).__init__()
         
         # Ensure in_channels match out_channels for residual connection
         self.adjust_channels = None
@@ -71,7 +71,7 @@ class ResidualInceptionBlock(nn.Module):
         )
         
         # SE attention block
-        self.se = SEBlock(out_channels)
+        self.se = Mix1SEBlock(out_channels)
         
         # ReLU after residual connection
         self.relu = nn.ReLU(inplace=True)
@@ -102,12 +102,12 @@ class ResidualInceptionBlock(nn.Module):
         
         return out
 
-class SpaceToDepthConv(nn.Module):
+class Mix1SpaceToDepthConv(nn.Module):
     """
     Space-to-Depth Convolution with custom channel adjustment.
     """
     def __init__(self, in_channels, out_channels, scale_factor=2):
-        super(SpaceToDepthConv, self).__init__()
+        super(Mix1SpaceToDepthConv, self).__init__()
         # After space-to-depth, channels increase by scale_factor^2
         self.spd = nn.PixelUnshuffle(scale_factor)
         
@@ -151,7 +151,7 @@ class MixModel1(nn.Module):
         )
         
         # Residual Inception Block A1 (16x16x64 → 16x16x64)
-        self.block_a1 = ResidualInceptionBlock(
+        self.block_a1 = Mix1ResidualInceptionBlock(
             in_channels=64,
             out_channels=64,
             path_channels=16,
@@ -159,7 +159,7 @@ class MixModel1(nn.Module):
         )
         
         # Residual Inception Block A2 (16x16x64 → 16x16x64)
-        self.block_a2 = ResidualInceptionBlock(
+        self.block_a2 = Mix1ResidualInceptionBlock(
             in_channels=64,
             out_channels=64,
             path_channels=16,
@@ -181,7 +181,7 @@ class MixModel1(nn.Module):
         )
         
         # Residual Inception Block B1 (8x8x128 → 8x8x128)
-        self.block_b1 = ResidualInceptionBlock(
+        self.block_b1 = Mix1ResidualInceptionBlock(
             in_channels=128,
             out_channels=128,
             path_channels=32,
@@ -189,7 +189,7 @@ class MixModel1(nn.Module):
         )
         
         # Residual Inception Block B2 (8x8x128 → 8x8x128)
-        self.block_b2 = ResidualInceptionBlock(
+        self.block_b2 = Mix1ResidualInceptionBlock(
             in_channels=128,
             out_channels=128,
             path_channels=32,
@@ -211,7 +211,7 @@ class MixModel1(nn.Module):
         )
         
         # Residual Inception Block C1 (4x4x256 → 4x4x256)
-        self.block_c1 = ResidualInceptionBlock(
+        self.block_c1 = Mix1ResidualInceptionBlock(
             in_channels=256,
             out_channels=256,
             path_channels=64,

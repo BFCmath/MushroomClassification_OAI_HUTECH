@@ -135,6 +135,64 @@ class AdvancedColorTransforms:
                     return enhancer.enhance(0.8)
             return img
     
+    class RandomPixelNoise(object):
+        """
+        Add white, black, or random-colored pixels to the image.
+        
+        For 32x32 images, this is a gentler alternative to cutout,
+        preserving more of the original object information.
+        
+        Args:
+            p: Probability of applying the transform
+            percent_pixels: Percentage of total pixels to modify (0.0-1.0)
+            percent_range: Range of percentage to use (min_factor, max_factor)
+                           Actual percentage will be percent_pixels * random factor in this range
+            white_prob: Probability of adding white pixels (default 0.4)
+            black_prob: Probability of adding black pixels (default 0.4)
+        """
+        def __init__(self, p=0.3, percent_pixels=0.05, percent_range=(0.75, 1.25), white_prob=0.4, black_prob=0.4):
+            self.p = p
+            self.percent_pixels = percent_pixels  # Base percentage (e.g., 0.01 = 1% of pixels)
+            self.percent_range = percent_range    # Range multiplier for randomization
+            self.white_prob = white_prob
+            self.black_prob = black_prob
+            self.random_prob = 1.0 - (white_prob + black_prob)
+            print(f"Random pixel aug is used with {percent_pixels}!")
+            
+        def __call__(self, img):
+            if random.random() < self.p:
+                # Convert to numpy array for pixel manipulation
+                img_array = np.array(img)
+                height, width, channels = img_array.shape
+                
+                # Calculate number of pixels to modify based on image size
+                total_pixels = height * width
+                factor = random.uniform(*self.percent_range)
+                num_pixels = max(1, int(total_pixels * self.percent_pixels * factor))
+                
+                # Randomly choose coordinates
+                y_coords = np.random.randint(0, height, num_pixels)
+                x_coords = np.random.randint(0, width, num_pixels)
+                
+                # Determine pixel color type based on probabilities
+                pixel_type = random.random()
+                
+                if pixel_type < self.white_prob:
+                    # Add white pixels
+                    for y, x in zip(y_coords, x_coords):
+                        img_array[y, x, :] = 255
+                elif pixel_type < self.white_prob + self.black_prob:
+                    # Add black pixels
+                    for y, x in zip(y_coords, x_coords):
+                        img_array[y, x, :] = 0
+                else:
+                    # Add random colored pixels
+                    for y, x in zip(y_coords, x_coords):
+                        img_array[y, x, :] = [random.randint(0, 255) for _ in range(channels)]
+                
+                return Image.fromarray(img_array)
+            return img
+    
     class RandomGrayscale(object):
         """Convert image to grayscale with probability p, but keep 3 channels."""
         def __init__(self, p=0.2):
@@ -151,6 +209,49 @@ class AdvancedColorTransforms:
                 return Image.fromarray(img_array_3channel)
             return img
         
+# Add new custom spatial transforms
+class AdvancedSpatialTransforms:
+    """Collection of advanced spatial transformation techniques."""
+    
+    class RandomCropAndZoom(object):
+        """
+        Randomly crop a portion of the image and resize it back to the original size,
+        creating a zooming effect while maintaining original dimensions.
+        
+        Args:
+            crop_scale: The size of the crop relative to original image (0.0-1.0)
+                        Lower values = stronger zoom effect
+            p: Probability of applying the transform
+        """
+        def __init__(self, crop_scale=0.9, p=0.5):
+            self.crop_scale = crop_scale
+            self.p = p
+            
+        def __call__(self, img):
+            if random.random() < self.p:
+                width, height = img.size
+                
+                # Calculate crop dimensions (e.g., 90% of original size)
+                crop_width = int(width * self.crop_scale)
+                crop_height = int(height * self.crop_scale)
+                
+                # Calculate maximum offsets to keep crop within image
+                max_x = width - crop_width
+                max_y = height - crop_height
+                
+                # Get random crop position
+                x = random.randint(0, max(0, max_x))
+                y = random.randint(0, max(0, max_y))
+                
+                # Perform crop
+                cropped_img = img.crop((x, y, x + crop_width, y + crop_height))
+                
+                # Resize back to original dimensions
+                zoomed_img = cropped_img.resize((width, height), Image.BICUBIC)
+                
+                return zoomed_img
+            return img
+
 # ### Enhanced Transformations ###
 def get_transforms(image_size=32, aug_strength="standard"):
     """
@@ -215,9 +316,8 @@ class MultiScaleTransform:
         transform = random.choice(self.transforms_list)
         return transform(img)
 
-
 # ### Enhanced Data Augmentations for Low-Resolution ###
-def get_enhanced_transforms(multi_scale=False, image_size=32, aug_strength="high"):
+def get_enhanced_transforms(multi_scale=False, image_size=32, pixel_percent = 0.05):
     """
     Creates enhanced transforms specifically designed for low-resolution images
     with options for multi-scale training and advanced color augmentation.
@@ -226,6 +326,9 @@ def get_enhanced_transforms(multi_scale=False, image_size=32, aug_strength="high
     base_transforms = [
         transforms.RandomHorizontalFlip(),
         transforms.RandomRotation(20),
+        
+        # Add new spatial transformation for crop and zoom
+        AdvancedSpatialTransforms.RandomCropAndZoom(crop_scale=0.9, p=0.3),
         
         # Basic color jitter - keep this as it works well with other transforms
         transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1),
@@ -237,6 +340,7 @@ def get_enhanced_transforms(multi_scale=False, image_size=32, aug_strength="high
         AdvancedColorTransforms.RandomGamma(gamma_range=(0.7, 1.3), p=0.2),
         AdvancedColorTransforms.SimulateLightingCondition(p=0.2),
         AdvancedColorTransforms.SimulateHSVNoise(p=0.2),
+        AdvancedColorTransforms.RandomPixelNoise(p=0.2, percent_pixels=pixel_percent),
         
         # Other transformations
         transforms.RandomAffine(degrees=10, translate=(0.1, 0.1), scale=(0.9, 1.1), shear=5),
@@ -285,7 +389,6 @@ def get_enhanced_transforms(multi_scale=False, image_size=32, aug_strength="high
     ])
     
     return train_transform, val_transform
-
             
 # Add new function to get advanced augmentations with Albumentations
 def get_albumentation_transforms(aug_strength="high", image_size=32, multi_scale=False):
@@ -300,7 +403,7 @@ def get_albumentation_transforms(aug_strength="high", image_size=32, multi_scale
     if not ALBUMENTATIONS_AVAILABLE:
         print("Warning: Albumentations not available. Falling back to enhanced transforms.")
         # Pass through the same parameters instead of hardcoding multi_scale=True
-        return get_enhanced_transforms(multi_scale=multi_scale, image_size=image_size, aug_strength=aug_strength)
+        return get_enhanced_transforms(multi_scale=multi_scale, image_size=image_size)
     
     # Configure strength parameters based on aug_strength
     if aug_strength == "low":
@@ -382,60 +485,40 @@ def get_albumentation_transforms(aug_strength="high", image_size=32, multi_scale
         return img
     
     # Full training transforms with both Albumentations and custom transforms
+    # Fixed parameter names to match current Albumentations API
     train_transform = A.Compose([
-        # Spatial transforms
         A.Transpose(p=p_general),
         A.HorizontalFlip(p=p_general),
-        A.VerticalFlip(p=p_general),  # Keep this as it's not in the enhanced transforms
-        
-        # Color transforms (integrating successful ones from enhanced transforms)
+        A.VerticalFlip(p=p_general),
         A.OneOf([
-            # Standard albumentations color transforms
-            A.RandomBrightnessContrast(limit=0.2, p=0.5),
+            # Fixed: 'limit' → 'brightness_limit' and 'contrast_limit'
+            A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.5),
             A.HueSaturationValue(hue_shift_limit=10, sat_shift_limit=20, val_shift_limit=10, p=0.5),
-            # Alternative to RandomGamma from AdvancedColorTransforms
             A.RandomGamma(gamma_limit=(70, 130), p=0.5),
-            # Alternative to RandomGrayscale from AdvancedColorTransforms
             A.ToGray(p=1.0),
-            # Alternative to RandomChannelSwap from AdvancedColorTransforms
             A.ChannelShuffle(p=1.0),
         ], p=p_color),
-        
-        # Custom Lambda transforms for effects not covered by Albumentations
-        A.Lambda(image=random_channel_drop, p=p_color),  # Custom impl. of RandomColorDrop
-        A.Lambda(image=simulate_lighting_condition, p=p_color),  # Custom impl. of SimulateLightingCondition
-        A.Lambda(image=simulate_hsv_noise, p=p_color),  # Custom impl. of SimulateHSVNoise
-        
-        # Blur and noise (similar to what's in current Albumentations pipeline)
+        A.Lambda(image=random_channel_drop, p=p_color),
+        A.Lambda(image=simulate_lighting_condition, p=p_color),
+        A.Lambda(image=simulate_hsv_noise, p=p_color),
         A.OneOf([
-            A.MedianBlur(p=0.5),
-            A.GaussianBlur(p=0.5),
-            A.GaussNoise(var_limit=(5.0, 30.0)),
+            A.MedianBlur(blur_limit=5, p=0.5),
+            A.GaussianBlur(blur_limit=5, p=0.5),
+            # Fixed: 'var_limit' → 'var'
+            A.GaussNoise(var=30.0, p=0.5),
         ], p=p_general),
-
-        # Optical distortions (similar to what's in current Albumentations pipeline)
         A.OneOf([
-            A.OpticalDistortion(distort_limit=distort_limit),
-            A.GridDistortion(num_steps=5, distort_limit=distort_limit),
-            A.ElasticTransform(alpha=3),
+            A.OpticalDistortion(distortion_scale=distort_limit, p=0.5),
+            A.GridDistortion(num_steps=5, distort_limit=distort_limit, p=0.5),
+            A.ElasticTransform(alpha=3, p=0.5),
         ], p=p_optical),
-
-        # Enhanced color adaptations
         A.CLAHE(clip_limit=4.0, p=p_general),
-        
-        # Equivalent to ShiftScaleRotate in current Albumentations pipeline
+        # Keep ShiftScaleRotate for now even though Affine is recommended
         A.ShiftScaleRotate(shift_limit=0.1, scale_limit=0.1, rotate_limit=15, border_mode=0, p=p_affine),
-        
-        # Resize to target image size
         A.Resize(image_size, image_size),
-        
-        # Equivalent to RandomErasing in enhanced transforms
-        A.CoarseDropout(max_holes=8, max_height=8, max_width=8, p=p_general),
-        
-        # Add Gaussian noise (after normalization for correct range matching)
-        A.Lambda(image=add_gaussian_noise, p=0.3, always_apply=False),
-        
-        # Normalize and convert to tensor (always at the end)
+        # Fixed: CoarseDropout parameters
+        A.CoarseDropout(max_holes=8, max_height=8, max_width=8, min_holes=1, min_height=1, min_width=1, p=p_general),
+        A.Lambda(image=add_gaussian_noise, p=0.3),
         A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ToTensorV2(),
     ])
@@ -480,3 +563,89 @@ class CustomSubset(Dataset):
         if hasattr(self.subset, 'dataset'):
             return self.subset.dataset
         return self.subset
+
+class KMeansColorAugmentation:
+    """
+    K-Means Clustering color augmentation that quantizes the image's color space.
+    
+    This augmentation:
+    1. Applies K-Means clustering to find k representative colors in the image
+    2. Replaces each pixel with its nearest cluster center
+    3. Can blend with the original image for subtle effects
+    
+    Args:
+        k: Number of color clusters (default: 8)
+        p: Probability of applying the transform (default: 1.0)
+        blend_factor: How much to blend with original image (0.0-1.0, default: 1.0)
+                     0.0 = original image, 1.0 = fully clustered image
+        max_iter: Maximum K-means iterations (default: 10)
+    """
+    def __init__(self, k=8, p=1.0, blend_factor=1.0, max_iter=10):
+        self.k = k
+        self.p = p
+        self.blend_factor = blend_factor
+        self.max_iter = max_iter
+        
+    def __call__(self, img):
+        if random.random() < self.p:
+            # Convert PIL Image to numpy array
+            img_array = np.array(img)
+            h, w, c = img_array.shape
+            
+            # Reshape to a list of pixels (Nx3)
+            pixels = img_array.reshape(-1, c).astype(np.float32)
+            
+            # Apply K-means clustering
+            criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, self.max_iter, 1.0)
+            _, labels, centers = cv2.kmeans(pixels, self.k, None, criteria, 
+                                             attempts=3, flags=cv2.KMEANS_RANDOM_CENTERS)
+            
+            # Convert back to uint8
+            centers = np.uint8(centers)
+            
+            # Map each pixel to its corresponding cluster center
+            quantized = centers[labels.flatten()]
+            
+            # Reshape back to original image dimensions
+            quantized_img = quantized.reshape(img_array.shape)
+            
+            # Blend with original image if blend_factor < 1.0
+            if self.blend_factor < 1.0:
+                blended_img = cv2.addWeighted(
+                    img_array, 1.0 - self.blend_factor, 
+                    quantized_img, self.blend_factor, 0
+                )
+                result_img = blended_img
+            else:
+                result_img = quantized_img
+                
+            # Convert back to PIL Image
+            return Image.fromarray(result_img)
+            
+        return img
+
+# Create a standalone transform that applies only KMeans color augmentation
+def get_kmeans_transform(image_size=32, k=8, blend_factor=1.0):
+    """
+    Creates a transform pipeline that only applies KMeans color augmentation.
+    
+    Args:
+        image_size: Target image size
+        k: Number of color clusters
+        blend_factor: How much to blend with original image (0.0-1.0)
+    """
+    train_transform = transforms.Compose([
+        transforms.Resize((image_size, image_size)),
+        KMeansColorAugmentation(k=k, p=1.0, blend_factor=blend_factor),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+    
+    # Simple validation transform (no augmentation)
+    val_transform = transforms.Compose([
+        transforms.Resize((image_size, image_size)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+    
+    return train_transform, val_transform

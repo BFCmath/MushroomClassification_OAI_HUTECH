@@ -2,12 +2,12 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class SEBlock(nn.Module):
+class Mix3SEBlock(nn.Module):
     """
     Squeeze-and-Excitation block for channel-wise attention.
     """
     def __init__(self, channels, reduction=16):
-        super(SEBlock, self).__init__()
+        super(Mix3SEBlock, self).__init__()
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         reduced_channels = max(channels // reduction, 8)  # Ensure minimum size
         
@@ -24,12 +24,12 @@ class SEBlock(nn.Module):
         y = self.fc(y).view(b, c, 1, 1)
         return x * y.expand_as(x)
 
-class SpatialAttention(nn.Module):
+class Mix3SpatialAttention(nn.Module):
     """
     Spatial attention module to focus on important spatial locations.
     """
     def __init__(self, kernel_size=7):
-        super(SpatialAttention, self).__init__()
+        super(Mix3SpatialAttention, self).__init__()
         padding = kernel_size // 2
         self.conv = nn.Conv2d(2, 1, kernel_size=kernel_size, padding=padding, bias=False)
         
@@ -44,13 +44,13 @@ class SpatialAttention(nn.Module):
         # Apply attention
         return x * attention
 
-class DilatedMultiScaleBlock(nn.Module):
+class Mix3DilatedMultiScaleBlock(nn.Module):
     """
     Multi-scale feature extraction block using dilated convolutions without spatial reduction.
     Includes residual connection and attention mechanisms.
     """
     def __init__(self, in_channels, out_channels, dilations=[1, 2, 4], use_attention=True):
-        super(DilatedMultiScaleBlock, self).__init__()
+        super(Mix3DilatedMultiScaleBlock, self).__init__()
         self.use_attention = use_attention
         
         # Calculate channels per path to maintain reasonable parameter count
@@ -98,8 +98,8 @@ class DilatedMultiScaleBlock(nn.Module):
         
         # Attention mechanisms
         if use_attention:
-            self.channel_attn = SEBlock(out_channels)
-            self.spatial_attn = SpatialAttention()
+            self.channel_attn = Mix3SEBlock(out_channels)
+            self.spatial_attn = Mix3SpatialAttention()
             
         self.relu = nn.ReLU(inplace=False)
         
@@ -153,18 +153,18 @@ class MixModel3(nn.Module):
         
         # Stage 2: Multi-scale feature extraction blocks (maintains 32x32 resolution)
         self.stage2 = nn.Sequential(
-            DilatedMultiScaleBlock(64, 96, dilations=[1, 2, 4]),
-            DilatedMultiScaleBlock(96, 128, dilations=[1, 3, 5])
+            Mix3DilatedMultiScaleBlock(64, 96, dilations=[1, 2, 4]),
+            Mix3DilatedMultiScaleBlock(96, 128, dilations=[1, 3, 5])
         )
         
         # Stage 3: Deeper feature extraction with increased dilations (maintains 32x32 resolution)
         self.stage3 = nn.Sequential(
-            DilatedMultiScaleBlock(128, 192, dilations=[1, 3, 6]),
-            DilatedMultiScaleBlock(192, 256, dilations=[1, 4, 8])
+            Mix3DilatedMultiScaleBlock(128, 192, dilations=[1, 3, 6]),
+            Mix3DilatedMultiScaleBlock(192, 256, dilations=[1, 4, 8])
         )
         
         # Stage 4: Final feature refinement (maintains 32x32 resolution)
-        self.stage4 = DilatedMultiScaleBlock(256, 384, dilations=[1, 2, 5, 9], use_attention=True)
+        self.stage4 = Mix3DilatedMultiScaleBlock(256, 384, dilations=[1, 2, 5, 9], use_attention=True)
         
         # Stage 5: Efficient feature aggregation
         # Multi-scale spatial pooling to capture different levels of detail

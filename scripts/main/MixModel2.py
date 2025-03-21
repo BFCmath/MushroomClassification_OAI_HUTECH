@@ -3,12 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 from SPDDualBranch import SPDConv  # Import the existing SPDConv implementation
 
-class SEBlock(nn.Module):
+class Mix2SEBlock(nn.Module):
     """
     Squeeze-and-Excitation block for channel-wise attention.
     """
     def __init__(self, channels, reduction=16):
-        super(SEBlock, self).__init__()
+        super(Mix2SEBlock, self).__init__()
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         reduced_channels = max(channels // reduction, 8)  # Ensure minimum size
         
@@ -25,12 +25,12 @@ class SEBlock(nn.Module):
         y = self.fc(y).view(b, c, 1, 1)
         return x * y.expand_as(x)
 
-class InceptionBlockA(nn.Module):
+class Mix2InceptionBlockA(nn.Module):
     """
     Inception block with four parallel paths and dilated convolutions.
     """
     def __init__(self, in_channels, filters=16):
-        super(InceptionBlockA, self).__init__()
+        super(Mix2InceptionBlockA, self).__init__()
         
         # Path 1: 1x1 convolution only
         self.path1 = nn.Sequential(
@@ -76,12 +76,12 @@ class InceptionBlockA(nn.Module):
         path4_out = self.path4(x)
         return torch.cat([path1_out, path2_out, path3_out, path4_out], dim=1)
 
-class InceptionBlockC(nn.Module):
+class Mix2InceptionBlockC(nn.Module):
     """
     Simplified inception block with two parallel paths.
     """
     def __init__(self, in_channels, filters=64):
-        super(InceptionBlockC, self).__init__()
+        super(Mix2InceptionBlockC, self).__init__()
         
         # Path 1: 1x1 convolution
         self.path1 = nn.Sequential(
@@ -121,28 +121,28 @@ class MixModel2(nn.Module):
         self.spd_initial = SPDConv(in_channels=3, out_channels=12, scale=2, kernel_size=1, padding=0)
         
         # Stage A: First inception stage at 16x16 resolution
-        self.inception_a1 = InceptionBlockA(in_channels=12, filters=16)  # 16x16x12 → 16x16x64
-        self.se_a1 = SEBlock(channels=64)  # SE attention on inception output
+        self.inception_a1 = Mix2InceptionBlockA(in_channels=12, filters=16)  # 16x16x12 → 16x16x64
+        self.se_a1 = Mix2SEBlock(channels=64)  # SE attention on inception output
         
-        self.inception_a2 = InceptionBlockA(in_channels=64, filters=16)  # 16x16x64 → 16x16x64
-        self.se_a2 = SEBlock(channels=64)  # SE attention on inception output
+        self.inception_a2 = Mix2InceptionBlockA(in_channels=64, filters=16)  # 16x16x64 → 16x16x64
+        self.se_a2 = Mix2SEBlock(channels=64)  # SE attention on inception output
         
         # Downsampling to Stage B (16x16x64 → 8x8x256)
         self.spd_b = SPDConv(in_channels=64, out_channels=256, scale=2, kernel_size=1, padding=0)
         
         # Stage B: Second inception stage at 8x8 resolution
-        self.inception_b1 = InceptionBlockA(in_channels=256, filters=32)  # 8x8x256 → 8x8x128
-        self.se_b1 = SEBlock(channels=128)  # SE attention on inception output
+        self.inception_b1 = Mix2InceptionBlockA(in_channels=256, filters=32)  # 8x8x256 → 8x8x128
+        self.se_b1 = Mix2SEBlock(channels=128)  # SE attention on inception output
         
-        self.inception_b2 = InceptionBlockA(in_channels=128, filters=32)  # 8x8x128 → 8x8x128
-        self.se_b2 = SEBlock(channels=128)  # SE attention on inception output
+        self.inception_b2 = Mix2InceptionBlockA(in_channels=128, filters=32)  # 8x8x128 → 8x8x128
+        self.se_b2 = Mix2SEBlock(channels=128)  # SE attention on inception output
         
         # Downsampling to Stage C (8x8x128 → 4x4x512)
         self.spd_c = SPDConv(in_channels=128, out_channels=512, scale=2, kernel_size=1, padding=0)
         
         # Stage C: Final inception stage at 4x4 resolution
-        self.inception_c = InceptionBlockC(in_channels=512, filters=64)  # 4x4x512 → 4x4x128
-        self.se_c = SEBlock(channels=128)  # SE attention on inception output
+        self.inception_c = Mix2InceptionBlockC(in_channels=512, filters=64)  # 4x4x512 → 4x4x128
+        self.se_c = Mix2SEBlock(channels=128)  # SE attention on inception output
         
         # Global Average Pooling and Classification
         self.gap = nn.AdaptiveAvgPool2d((1, 1))  # 4x4x128 → 1x1x128

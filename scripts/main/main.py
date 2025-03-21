@@ -29,15 +29,16 @@ from datasets import *
 from SmallResNet import *
 from DualBranch import *
 from InceptionFSD import *
+from DilatedGroup import *
 from DenseNet7x7 import *
-from scripts.main.AdaptedLowNet import *
+from AdaptedLowNet import *
 from SPDResNet import *
 from SPDDualBranch import SPDDualBranchNetwork  # Import the new model
 from MiniXception import MiniXception  # Import the new models
 from MixModel1 import MixModel1
 from MixModel2 import MixModel2
-from DilatedGroup import DilatedGroupConvNet
 from MixModel3 import MixModel3  # Import the new MixModel3
+from MixModel4 import MixModel4  # Import the new MixModel4
 
 
 # Add Albumentations for advanced augmentations
@@ -114,7 +115,8 @@ class EnhancedConfig(Config):
     use_multi_scale: bool = False  # Whether to use multi-scale training
     use_albumentations: bool = True  # Whether to use Albumentations augmentation library
     aug_strength: str = "high"  # Options: "low", "medium", "high"
-    
+    pixel_percent: float = 0.15 
+
 if Config.csv_path in ["/kaggle/input/oai-cv/train_cv.csv"]:
     CLASS_NAMES = ['nấm mỡ', 'bào ngư xám + trắng', 'Đùi gà Baby (cắt ngắn)', 'linh chi trắng'] 
     CLASS_MAP = {name: idx for idx, name in enumerate(CLASS_NAMES)}
@@ -195,6 +197,11 @@ def get_model(num_classes, config):
     elif model_type == 'mixmodel3':
         print("Creating MixModel3 that maintains 32x32 resolution throughout the network...")
         model = MixModel3(num_classes=num_classes, 
+                         dropout_rate=config.dropout_rate)
+        return model
+    elif model_type == 'mixmodel4':
+        print("Creating MixModel4 with multi-branch spatial feature extraction at different scales...")
+        model = MixModel4(num_classes=num_classes, 
                          dropout_rate=config.dropout_rate)
         return model
     else:
@@ -521,7 +528,7 @@ def cross_validate(config, device):
         train_transform, val_transform = get_enhanced_transforms(
             multi_scale=True,
             image_size=config.image_size,
-            aug_strength=getattr(config, 'aug_strength', 'high')
+            pixel_percent = config.pixel_percent
         )
     else:
         print("Using standard transforms")
@@ -1328,7 +1335,7 @@ def main():
             train_transform, val_transform = get_enhanced_transforms(
                 multi_scale=True,
                 image_size=config.image_size,
-                aug_strength=getattr(config, 'aug_strength', 'high')
+                pixel_percent = config.pixel_percent
             )
         else:
             print("Using standard transforms")

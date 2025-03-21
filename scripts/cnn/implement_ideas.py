@@ -23,7 +23,7 @@ import torchvision.transforms.functional as TF
 from PIL import ImageOps, ImageEnhance
 
 # Import LowNet from the same directory
-from scripts.main.LowNet import VariableReLU
+from scripts.main.AdaptedLowNet import VariableReLU
 
 # Add Albumentations for advanced augmentations
 try:
