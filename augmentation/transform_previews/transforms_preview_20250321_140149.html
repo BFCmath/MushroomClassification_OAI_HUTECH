@@ -1,0 +1,336 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Image Transform Preview</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f5f5f5;
+            }
+            h1, h2, h3 {
+                color: #333;
+            }
+            .transform-section {
+                margin-bottom: 30px;
+                background-color: white;
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .sample-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+                margin-top: 15px;
+            }
+            .sample-image {
+                width: 100%;
+                border-radius: 4px;
+                border: 1px solid #ddd;
+            }
+            .original-section {
+                background-color: #f0f8ff;
+            }
+            .transform-name {
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            .timestamp {
+                color: #666;
+                font-size: 0.8em;
+                margin-top: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Image Transform Preview</h1>
+        <p class="timestamp">Generated on 2025-03-21 14:01:49</p>
+    
+        <div class="transform-section original-section">
+            <h2>Original Image</h2>
+            <img src="images/Original_sample_0.jpg" alt="Original Image" style="max-width: 100%; max-height: 300px;">
+        </div>
+    
+        <h2>Standard Transform Groups</h2>
+    
+        <div class="transform-section">
+            <h3>Standard Transforms</h3>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/Standard_sample_0.jpg" alt="Standard sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Standard_sample_1.jpg" alt="Standard sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Standard_sample_2.jpg" alt="Standard sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Standard_sample_3.jpg" alt="Standard sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Standard_sample_4.jpg" alt="Standard sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h3>Enhanced Transforms</h3>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/Enhanced_sample_0.jpg" alt="Enhanced sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Enhanced_sample_1.jpg" alt="Enhanced sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Enhanced_sample_2.jpg" alt="Enhanced sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Enhanced_sample_3.jpg" alt="Enhanced sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Enhanced_sample_4.jpg" alt="Enhanced sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h3>Multi-Scale Transforms</h3>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/Multi-Scale_sample_0.jpg" alt="Multi-Scale sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Multi-Scale_sample_1.jpg" alt="Multi-Scale sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Multi-Scale_sample_2.jpg" alt="Multi-Scale sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Multi-Scale_sample_3.jpg" alt="Multi-Scale sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/Multi-Scale_sample_4.jpg" alt="Multi-Scale sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <h2>Individual Advanced Transforms</h2>
+    
+        <div class="transform-section">
+            <h3>RandomPixelNoise</h3>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/RandomPixelNoise_sample_0.jpg" alt="RandomPixelNoise sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomPixelNoise_sample_1.jpg" alt="RandomPixelNoise sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomPixelNoise_sample_2.jpg" alt="RandomPixelNoise sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomPixelNoise_sample_3.jpg" alt="RandomPixelNoise sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomPixelNoise_sample_4.jpg" alt="RandomPixelNoise sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h3>RandomColorDrop</h3>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/RandomColorDrop_sample_0.jpg" alt="RandomColorDrop sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomColorDrop_sample_1.jpg" alt="RandomColorDrop sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomColorDrop_sample_2.jpg" alt="RandomColorDrop sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomColorDrop_sample_3.jpg" alt="RandomColorDrop sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomColorDrop_sample_4.jpg" alt="RandomColorDrop sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h3>RandomChannelSwap</h3>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/RandomChannelSwap_sample_0.jpg" alt="RandomChannelSwap sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomChannelSwap_sample_1.jpg" alt="RandomChannelSwap sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomChannelSwap_sample_2.jpg" alt="RandomChannelSwap sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomChannelSwap_sample_3.jpg" alt="RandomChannelSwap sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomChannelSwap_sample_4.jpg" alt="RandomChannelSwap sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h3>RandomGamma</h3>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/RandomGamma_sample_0.jpg" alt="RandomGamma sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomGamma_sample_1.jpg" alt="RandomGamma sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomGamma_sample_2.jpg" alt="RandomGamma sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomGamma_sample_3.jpg" alt="RandomGamma sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomGamma_sample_4.jpg" alt="RandomGamma sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h3>SimulateLighting</h3>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/SimulateLighting_sample_0.jpg" alt="SimulateLighting sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/SimulateLighting_sample_1.jpg" alt="SimulateLighting sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/SimulateLighting_sample_2.jpg" alt="SimulateLighting sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/SimulateLighting_sample_3.jpg" alt="SimulateLighting sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/SimulateLighting_sample_4.jpg" alt="SimulateLighting sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h3>SimulateHSVNoise</h3>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/SimulateHSVNoise_sample_0.jpg" alt="SimulateHSVNoise sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/SimulateHSVNoise_sample_1.jpg" alt="SimulateHSVNoise sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/SimulateHSVNoise_sample_2.jpg" alt="SimulateHSVNoise sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/SimulateHSVNoise_sample_3.jpg" alt="SimulateHSVNoise sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/SimulateHSVNoise_sample_4.jpg" alt="SimulateHSVNoise sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h3>RandomGrayscale</h3>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/RandomGrayscale_sample_0.jpg" alt="RandomGrayscale sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomGrayscale_sample_1.jpg" alt="RandomGrayscale sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomGrayscale_sample_2.jpg" alt="RandomGrayscale sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomGrayscale_sample_3.jpg" alt="RandomGrayscale sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RandomGrayscale_sample_4.jpg" alt="RandomGrayscale sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+    </body>
+    </html>
+    
