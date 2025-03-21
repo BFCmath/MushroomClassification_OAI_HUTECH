@@ -20,22 +20,22 @@ The paper proposes a novel algorithm based on a **dual-branch residual network**
 * **LR (Low-Resolution) Branch:** A lightweight, shallower residual network (e.g., ResNet20-2-1-1) designed for low-resolution images. This branch is the "student" network that is deployed for inference.
 * **Rationale:** Separating the networks allows for specialized feature extraction for both high and low-resolution images while leveraging the knowledge from the more capable HR branch.
 
-2. **Common Feature Subspace Algorithm:**
+1. **Common Feature Subspace Algorithm:**
 * The method utilizes the Common Feature Subspace Algorithm to **map features from both HR and LR images into the same subspace.**
 * This is achieved by minimizing the distance between corresponding features of high and low-resolution image pairs during training.
 * This ensures that features extracted from both types of images are comparable and can be used for recognition in a unified space.
 
-3. **Knowledge Distillation (KD):**
+1. **Knowledge Distillation (KD):**
 * Knowledge distillation is employed to **transfer knowledge from the HR "teacher" network to the LR "student" network.**
 * The HR network's outputs (soft targets) guide the training of the LR network, allowing it to learn more effectively from the richer information present in high-resolution images, even when working with low-resolution inputs.
 * KD helps to **reduce network parameters and computational overhead** of the LR network for efficient deployment.
 
-4. **Intermediate-Level Features:**
+1. **Intermediate-Level Features:**
 * The method leverages **intermediate-level features from the HR network to further guide the LR network's training.**
 * Attention loss is introduced to measure the difference between the attention maps of intermediate layers in the HR and LR networks.
 * This encourages the LR network to **focus on the same crucial image regions as the HR network**, even with less detailed input.
 
-5. **Residual Modules:**
+1. **Residual Modules:**
 * The method is built upon **residual networks (ResNet)** due to their proven effectiveness in deep learning and their ability to handle deep networks without vanishing gradients.
 * The paper investigates the impact of residual module parameters:
   * **Depth (d):** Number of convolutional layers within a residual module.

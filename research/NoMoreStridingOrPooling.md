@@ -1,8 +1,9 @@
 # No More Strided Convolutions or Pooling: A New CNN Building Block for Low-Resolution Images and Small Objects
-### Key Finding
+
+## Key Finding
 The authors identify a fundamental flaw in traditional CNN architectures: the use of strided convolution and pooling layers, which are commonly employed to downsample feature maps. While these operations are effective in scenarios with high-quality images and medium-to-large objects, they lead to a loss of fine-grained information in tougher tasks where images are of low resolution or objects are small. This loss degrades the performance of CNNs, as it hampers the learning of effective feature representations under such conditions. The paper argues that this design limitation becomes particularly evident when the assumption of abundant redundant pixel information no longer holds, as is the case with blurry images or tiny objects.
 
-### Contributions
+## Contributions
 1. **Introduction of SPD-Conv Building Block**:
    - The authors propose a novel CNN building block called SPD-Conv (Space-to-Depth Convolution) to replace strided convolution and pooling layers entirely. SPD-Conv consists of a space-to-depth (SPD) layer followed by a non-strided (vanilla) convolution layer. The SPD layer downsamples feature maps by rearranging spatial information into the channel dimension, preserving all discriminative details without loss, unlike strided convolution or pooling. The subsequent non-strided convolution reduces the increased channel dimensionality using learnable parameters, maintaining feature quality.
 
@@ -15,5 +16,8 @@ The authors identify a fundamental flaw in traditional CNN architectures: the us
 4. **Open-Source Availability**:
    - To encourage adoption and further research, the authors have made their code publicly available at <https://github.com/LabSAINT/SPD-Conv>. They also note that SPD-Conv can be easily integrated into popular deep learning frameworks like PyTorch and TensorFlow, enhancing its potential impact on the research and practitioner communities.
 
-### Summary
+## Summary
 The paper’s key finding is that strided convolution and pooling layers, while efficient in standard scenarios, are detrimental to CNN performance on low-resolution images and small objects due to information loss. The primary contribution is the SPD-Conv building block, which addresses this issue by preserving fine-grained information during downsampling, offering a generalizable and high-performing alternative. Through rigorous experimentation and open-source dissemination, the authors establish SPD-Conv as a significant improvement over conventional CNN designs, especially for challenging visual tasks.
+
+## Going to use
+- SPD-Conv Building Block
