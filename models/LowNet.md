@@ -1,58 +1,49 @@
 # LowNet
 
 ```css
-Input Image (3 channels, 32x32)
-         │
-         ▼
-┌─────────────────────┐
-│   Conv1 (3x3, 32)   │
-│   VariableReLU(4)   │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   Conv2 (3x3, 64)   │
-│   VariableReLU(2)   │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   Conv3 (3x3, 128)  │
-│   VariableReLU(1)   │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   MaxPool (4x4)     │
-│   32x32 → 8x8       │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   Dropout           │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   Flatten           │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   FC1 (8192 → 256)  │
-│   ReLU + Dropout    │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   FC2 (256 → 128)   │
-│   ReLU + Dropout    │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   FC3 (128 → classes)│
-└─────────────────────┘
+Input (32x32x3)
+    ↓
+[LOW-RESOLUTION FEATURE EXTRACTOR]
+    Conv2d (3→32, kernel=3x3, padding=1) 
+    VariableReLU(slope=4)
+    (32x32x32)
+    ↓
+    Conv2d (32→64, kernel=3x3, padding=1)
+    VariableReLU(slope=2)
+    (32x32x64)
+    ↓
+    Conv2d (64→128, kernel=3x3, padding=1)
+    VariableReLU(slope=1)
+    (32x32x128)
+    ↓
+    Dropout
+    (32x32x128)
+    ↓
+[INFORMATION-PRESERVING DOWNSAMPLING]
+    SPDConv (128→128, scale=2, kernel=3x3)
+    (16x16x128)
+    ↓
+    SPDConv (128→128, scale=2, kernel=3x3)
+    (8x8x128)
+    ↓
+    Flatten
+    (8192) [128*8*8]
+    ↓
+[CLASSIFIER]
+    Linear (8192→256)
+    ReLU
+    Dropout
+    (256)
+    ↓
+    Linear (256→128)
+    ReLU
+    Dropout
+    (128)
+    ↓
+    Linear (128→num_classes)
+    (num_classes)
+    ↓
+Output
 ```
 
 ## Estimate performance
