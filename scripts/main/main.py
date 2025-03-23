@@ -402,8 +402,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
     scaler = GradScaler() if config.use_amp else None
     
     # Check if using a transformer model with AMP
-    is_transformer = isinstance(model, (PixelTransformer, MemoryEfficientPixT, VisualTransformer, 
-                                        MultiScalePixT, NestedMultiScalePixT, MultiScaleHierarchicalPixT)) or 'PixT' in str(type(model)) or 'VT' in str(type(model))
+    is_transformer = isinstance(model, (PixelTransformer, MemoryEfficientPixT, VisualTransformer)) or 'PixT' in str(type(model)) or 'VT' in str(type(model))
     use_transformer_amp = is_transformer and hasattr(config, 'transformer_use_amp') and config.transformer_use_amp
     
     if use_transformer_amp and not config.use_amp:
