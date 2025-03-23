@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from SPDDualBranch import SPDConv  # Import SPDConv for downsampling
+from scripts.multi_branch.SPDDualBranch import SPDConv  # Import SPDConv for downsampling
 
 # ### Dilated Group Convolution Network ###
 class DilatedGroupConvBlock(nn.Module):

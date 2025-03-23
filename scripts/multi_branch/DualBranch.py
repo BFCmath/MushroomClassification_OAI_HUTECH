@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from SmallResNet import *
+from cnn.SmallResNet import *
 # ### Space-to-Depth Convolution for Information Preservation ###
 class SpaceToDepthConv(nn.Module):
     """

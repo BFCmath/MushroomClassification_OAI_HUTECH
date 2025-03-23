@@ -226,7 +226,7 @@ class AdvancedSpatialTransforms:
         def __init__(self, crop_scale=0.9, p=0.5):
             self.crop_scale = crop_scale
             self.p = p
-            
+            print(f"Using AdvancedSpatialTransforms with {crop_scale} crop scale")
         def __call__(self, img):
             if random.random() < self.p:
                 width, height = img.size
@@ -317,7 +317,7 @@ class MultiScaleTransform:
         return transform(img)
 
 # ### Enhanced Data Augmentations for Low-Resolution ###
-def get_enhanced_transforms(multi_scale=False, image_size=32, pixel_percent = 0.05):
+def get_enhanced_transforms(multi_scale=False, image_size=32, pixel_percent = 0.05, crop_sale =0.9):
     """
     Creates enhanced transforms specifically designed for low-resolution images
     with options for multi-scale training and advanced color augmentation.
@@ -328,7 +328,7 @@ def get_enhanced_transforms(multi_scale=False, image_size=32, pixel_percent = 0.
         transforms.RandomRotation(20),
         
         # Add new spatial transformation for crop and zoom
-        AdvancedSpatialTransforms.RandomCropAndZoom(crop_scale=0.9, p=0.3),
+        AdvancedSpatialTransforms.RandomCropAndZoom(crop_scale=crop_sale, p=0.3),
         
         # Basic color jitter - keep this as it works well with other transforms
         transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1),

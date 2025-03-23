@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from SPDDualBranch import SPDConv  # Import the existing SPDConv implementation
+from scripts.multi_branch.SPDDualBranch import SPDConv  # Import the existing SPDConv implementation
 
 class Mix2SEBlock(nn.Module):
     """

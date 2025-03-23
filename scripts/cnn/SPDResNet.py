@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from DualBranch import SpaceToDepthConv  # Import the existing SPD implementation
+from scripts.multi_branch.DualBranch import SpaceToDepthConv  # Import the existing SPD implementation
 
 class SPDBasicBlock(nn.Module):
     """

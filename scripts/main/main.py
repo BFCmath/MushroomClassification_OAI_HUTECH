@@ -26,20 +26,22 @@ from datasets import MushroomDataset
 from utils import *
 from transforms import *
 from datasets import *
-from SmallResNet import *
-from DualBranch import *
-from InceptionFSD import *
-from DilatedGroup import *
-from DenseNet7x7 import *
-from AdaptedLowNet import *
-from SPDResNet import *
-from SPDDualBranch import SPDDualBranchNetwork  # Import the new model
-from MiniXception import MiniXception  # Import the new models
-from MixModel1 import MixModel1
-from MixModel2 import MixModel2
-from MixModel3 import MixModel3  # Import the new MixModel3
-from MixModel4 import MixModel4  # Import the new MixModel4
-
+from scripts.cnn.SmallResNet import *
+from scripts.multi_branch.DualBranch import *
+from scripts.multi_branch.InceptionFSD import *
+from scripts.cnn.DilatedGroup import *
+from scripts.cnn.DenseNet7x7 import *
+from scripts.cnn.AdaptedLowNet import *
+from scripts.cnn.SPDResNet import *
+from scripts.multi_branch.SPDDualBranch import SPDDualBranchNetwork  # Import the new model
+from scripts.cnn.MiniXception import MiniXception  # Import the new models
+from scripts.mixmodel.MixModel1 import MixModel1
+from scripts.mixmodel.MixModel2 import MixModel2
+from scripts.mixmodel.MixModel3 import MixModel3  # Import the new MixModel3
+from scripts.mixmodel.MixModel4 import MixModel4  # Import the new MixModel4
+from scripts.transformer.PixT import create_pixt_model, TransformerConfig, PixelTransformer, MemoryEfficientPixT
+from scripts.transformer.VT import create_vt_model, VisualTransformer  # Import the new model
+from scripts.transformer.PatchPixT import create_patchpixt_model, PatchPixTConfig, PatchPixT  # Import PatchPixT
 
 # Add Albumentations for advanced augmentations
 try:
@@ -116,6 +118,27 @@ class EnhancedConfig(Config):
     use_albumentations: bool = True  # Whether to use Albumentations augmentation library
     aug_strength: str = "high"  # Options: "low", "medium", "high"
     pixel_percent: float = 0.15 
+    crop_scale: float = 0.9
+    
+    # transformer - direct parameters for manual configuration
+    transformer_size: str = None  # Set to None to use manual configuration instead of presets
+    transformer_d_model: int = 128  # Embedding dimension
+    transformer_nhead: int = 8  # Number of attention heads
+    transformer_num_layers: int = 6  # Number of transformer layers
+    transformer_dim_feedforward: int = 512  # Size of feedforward layer in transformer
+    transformer_dropout_rate: float = 0.1
+    transformer_type: str = "pixt"  # Options: "pixt", "vt", "patchpixt", "multiscale_patchpixt"
+    transformer_patch_size: int = 4  # Patch size for PatchPixT (2, 4, or 8)
+    
+    # Memory efficiency options for transformers
+    transformer_use_gradient_checkpointing: bool = False
+    transformer_sequence_reduction_factor: int = 1
+    transformer_share_layer_params: bool = False
+    transformer_use_amp: bool = True  # Use automatic mixed precision specifically for transformers
+    
+    # Multi-GPU support
+    use_multi_gpu: bool = True  # Whether to use multiple GPUs if available
+    gpu_ids: list = None  # Specific GPU IDs to use, None means use all available
 
 if Config.csv_path in ["/kaggle/input/oai-cv/train_cv.csv"]:
     CLASS_NAMES = ['nấm mỡ', 'bào ngư xám + trắng', 'Đùi gà Baby (cắt ngắn)', 'linh chi trắng'] 
@@ -130,42 +153,38 @@ if Config.train_folds is None:
     print(f"No train_folds specified, using all {Config.num_folds} folds")
 
 # Fix the get_model function which was corrupted
-def get_model(num_classes, config):
+def get_model(num_classes, config, device):
     """
     Use a model suited for the image size with architecture specified in config.
+    Wrap with DataParallel if multiple GPUs are to be used.
     """
     model_type = getattr(config, 'model_type', 'densenet')
     
+    # Create the base model based on model_type
     if model_type == 'lownet':
         print("Creating LowNet model for low-resolution image feature extraction...")
         model = AdaptedLowNet(num_classes=num_classes, 
-                                    dropout_rate=config.dropout_rate)
-        return model
+                             dropout_rate=config.dropout_rate)
     elif model_type == 'spdresnet':
         print("Creating SPDResNet model with Space-to-Depth downsampling...")
         print("Using SPDResNet-18 architecture for small images")
         model = spdresnet18(num_classes=num_classes, dropout_rate=config.dropout_rate)
-        return model
     elif model_type == 'inceptionfsd':
         print("Creating InceptionFSD model with multi-scale feature extraction...")
         model = InceptionFSD(num_classes=num_classes, 
                             dropout_rate=config.dropout_rate)
-        return model
     elif model_type == 'spddualbranch':
         print("Creating SPDDualBranch model with Space-to-Depth downsampling in both branches...")
         model = SPDDualBranchNetwork(num_classes=num_classes,
                                    dropout_rate=config.dropout_rate)
-        return model
     elif model_type == 'dilatedgroupconv':
         print("Creating DilatedGroupConvNet with dilated convolutions...")
         model = DilatedGroupConvNet(num_classes=num_classes, 
                                 dropout_rate=config.dropout_rate)
-        return model
     elif model_type == 'dual_branch':
         print("Creating Dual-Branch Network with common feature subspace...")
         model = DualBranchNetwork(num_classes=num_classes, 
                                  dropout_rate=config.dropout_rate)
-        return model
     elif model_type == 'densenet':
         # Use DenseNet explicitly when requested
         print("Creating DenseNet7x7 model with 7x7 kernels...")
@@ -173,40 +192,108 @@ def get_model(num_classes, config):
                             block_config=(3, 6, 12, 8),
                             num_classes=num_classes, 
                             dropout_rate=config.dropout_rate)
-        return model
     elif model_type == 'smallresnet':
         print("Creating SmallResNet model...")
         model = SmallResNet(num_classes=num_classes, 
                            dropout_rate=config.dropout_rate)
-        return model
     elif model_type == 'minixception':
         print("Creating MiniXception model with SPD downsampling and separable convolutions...")
         model = MiniXception(num_classes=num_classes, 
                            dropout_rate=config.dropout_rate)
-        return model
     elif model_type == 'mixmodel1':
         print("Creating MixModel1 with SPDConv, Residual Inception blocks, and SE attention...")
         model = MixModel1(num_classes=num_classes, 
                          dropout_rate=config.dropout_rate)
-        return model
     elif model_type == 'mixmodel2':
         print("Creating MixModel2 with multi-pathways and skip connections...")
         model = MixModel2(num_classes=num_classes, 
                          dropout_rate=config.dropout_rate)
-        return model
     elif model_type == 'mixmodel3':
         print("Creating MixModel3 that maintains 32x32 resolution throughout the network...")
         model = MixModel3(num_classes=num_classes, 
                          dropout_rate=config.dropout_rate)
-        return model
     elif model_type == 'mixmodel4':
         print("Creating MixModel4 with multi-branch spatial feature extraction at different scales...")
         model = MixModel4(num_classes=num_classes, 
                          dropout_rate=config.dropout_rate)
-        return model
+    elif model_type == 'trans':
+        print("Creating Transformer model for image classification...")
+        transformer_type = getattr(config, 'transformer_type', 'pixt')
+        
+        # Create transformer configuration using direct parameters
+        transformer_config = TransformerConfig(
+            img_size=config.image_size,
+            d_model=config.transformer_d_model,
+            nhead=config.transformer_nhead,
+            num_layers=config.transformer_num_layers,
+            dim_feedforward=getattr(config, 'transformer_dim_feedforward', config.transformer_d_model * 4),
+            dropout=config.transformer_dropout_rate,
+            use_gradient_checkpointing=config.transformer_use_gradient_checkpointing,
+            sequence_reduction_factor=config.transformer_sequence_reduction_factor,
+            share_layer_params=config.transformer_share_layer_params,
+            use_sequence_downsampling=getattr(config, 'transformer_use_sequence_downsampling', False)
+        )
+        
+        # Create the appropriate transformer model based on type
+        if transformer_type == 'vt':
+            model = create_vt_model(
+                num_classes=num_classes,
+                img_size=config.image_size,
+                config=transformer_config
+            )
+        elif transformer_type == "patchpixt":
+            # Create PatchPixT with directly specified parameters
+            patch_size = getattr(config, 'transformer_patch_size', 4)
+            
+            # Create PatchPixT config with manual parameters
+            patch_config = PatchPixTConfig(
+                img_size=config.image_size,
+                patch_size=patch_size,
+                d_model=config.transformer_d_model,
+                nhead=config.transformer_nhead,
+                num_layers=config.transformer_num_layers,
+                dim_feedforward=getattr(config, 'transformer_dim_feedforward', config.transformer_d_model * 4),
+                dropout=config.transformer_dropout_rate,
+                use_gradient_checkpointing=config.transformer_use_gradient_checkpointing,
+                sequence_reduction_factor=config.transformer_sequence_reduction_factor,
+                share_layer_params=config.transformer_share_layer_params,
+                use_sequence_downsampling=getattr(config, 'transformer_use_sequence_downsampling', False)
+            )
+            
+            model = create_patchpixt_model(
+                num_classes=num_classes,
+                img_size=config.image_size,
+                patch_size=patch_size,
+                config=patch_config
+            )
+        elif transformer_type == "pixt":  # Default to 'pixt'
+            model = create_pixt_model(
+                num_classes=num_classes,
+                config=transformer_config
+            )
+        else: 
+            print("Unknown transformer type, stop to save your time")
+            raise ValueError(f"Unknown transformer type: {transformer_type}")
     else:
         print("Unknown model type, stop to save your time")
         raise ValueError(f"Unknown model type: {model_type}")
+    
+    # Move model to device first
+    model = model.to(device)
+    
+    # Wrap with DataParallel if using multiple GPUs
+    if hasattr(config, 'use_multi_gpu') and config.use_multi_gpu:
+        # Get available GPU devices
+        if hasattr(config, 'gpu_ids') and config.gpu_ids:
+            gpu_ids = config.gpu_ids
+        else:
+            gpu_ids = list(range(torch.cuda.device_count()))
+        
+        if len(gpu_ids) > 1:
+            print(f"Using DataParallel with GPUs: {gpu_ids}")
+            model = nn.DataParallel(model, device_ids=gpu_ids)
+    
+    return model
 
 # ### Optimized Layer-wise Learning Rate Optimizer ###
 def get_layer_wise_lr_optimizer(model, config):
@@ -314,6 +401,15 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
     # Initialize gradient scaler for AMP
     scaler = GradScaler() if config.use_amp else None
     
+    # Check if using a transformer model with AMP
+    is_transformer = isinstance(model, (PixelTransformer, MemoryEfficientPixT, VisualTransformer, 
+                                        MultiScalePixT, NestedMultiScalePixT, MultiScaleHierarchicalPixT)) or 'PixT' in str(type(model)) or 'VT' in str(type(model))
+    use_transformer_amp = is_transformer and hasattr(config, 'transformer_use_amp') and config.transformer_use_amp
+    
+    if use_transformer_amp and not config.use_amp:
+        print("Enabling AMP specifically for transformer model")
+        scaler = GradScaler()
+    
     # Training loop
     for epoch in range(config.num_epochs):
         start_time = time.time()
@@ -340,7 +436,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
                 inputs = inputs_mix
             
             # Forward pass with optional AMP
-            if config.use_amp:
+            if config.use_amp or use_transformer_amp:
                 with autocast():
                     outputs = model(inputs)
                     if use_mixup:
@@ -511,6 +607,17 @@ def cross_validate(config, device):
     # Set random seed for reproducibility
     set_seed(config.seed)
     
+    # Check for multi-GPU setup
+    if hasattr(config, 'use_multi_gpu') and config.use_multi_gpu:
+        num_gpus = torch.cuda.device_count()
+        if num_gpus > 1:
+            print(f"Multi-GPU training enabled with {num_gpus} GPUs")
+            # Adjust batch size if using multiple GPUs to utilize them effectively
+            effective_batch_size = config.batch_size * num_gpus
+            print(f"Effective batch size: {effective_batch_size} (per GPU: {config.batch_size})")
+        else:
+            print("Multi-GPU training requested but only one GPU found.")
+    
     # Create version directory
     version_dir = os.path.join(config.output_dir, config.version)
     os.makedirs(version_dir, exist_ok=True)
@@ -528,7 +635,8 @@ def cross_validate(config, device):
         train_transform, val_transform = get_enhanced_transforms(
             multi_scale=True,
             image_size=config.image_size,
-            pixel_percent = config.pixel_percent
+            pixel_percent = config.pixel_percent,
+            crop_scale = config.crop_scale
         )
     else:
         print("Using standard transforms")
@@ -618,7 +726,7 @@ def cross_validate(config, device):
             
             # Initialize model with proper error handling
             try:
-                model = get_model(len(dataset.class_to_idx), config).to(device)
+                model = get_model(len(dataset.class_to_idx), config, device)
             except Exception as e:
                 print(f"Error initializing model: {str(e)}")
                 print("Skipping fold due to model initialization failure")
@@ -730,17 +838,37 @@ def cross_validate(config, device):
 
 # ### Inference Functions ###
 def load_model_from_checkpoint(checkpoint_path, num_classes, config, device):
-    """Load a model from a checkpoint file."""
-    model = get_model(num_classes, config)
+    """Load a model from a checkpoint file with support for DataParallel."""
+    # Create base model on specified device
+    model = get_model(num_classes, config, device)
     checkpoint = torch.load(checkpoint_path, map_location=device)
     
-    # Handle different checkpoint formats
+    # Handle different checkpoint formats and DataParallel prefixes
     if 'model_state_dict' in checkpoint:
-        model.load_state_dict(checkpoint['model_state_dict'])
+        state_dict = checkpoint['model_state_dict']
     else:
-        model.load_state_dict(checkpoint)
-        
-    model = model.to(device)
+        state_dict = checkpoint
+    
+    # Handle case where model was saved with DataParallel but is now loaded without it
+    if not isinstance(model, nn.DataParallel) and all(k.startswith('module.') for k in state_dict.keys()):
+        # Remove 'module.' prefix from state_dict keys
+        from collections import OrderedDict
+        new_state_dict = OrderedDict()
+        for k, v in state_dict.items():
+            new_state_dict[k[7:]] = v  # Remove 'module.' prefix (7 characters)
+        state_dict = new_state_dict
+    
+    # Handle case where model was saved without DataParallel but is now loaded with it
+    elif isinstance(model, nn.DataParallel) and not all(k.startswith('module.') for k in state_dict.keys()):
+        # Add 'module.' prefix to state_dict keys
+        from collections import OrderedDict
+        new_state_dict = OrderedDict()
+        for k, v in state_dict.items():
+            new_state_dict['module.' + k] = v
+        state_dict = new_state_dict
+    
+    # Load the state dict
+    model.load_state_dict(state_dict)
     model.eval()
     return model
 
@@ -1335,7 +1463,8 @@ def main():
             train_transform, val_transform = get_enhanced_transforms(
                 multi_scale=True,
                 image_size=config.image_size,
-                pixel_percent = config.pixel_percent
+                pixel_percent = config.pixel_percent,
+                crop_scale = config.crop_scale
             )
         else:
             print("Using standard transforms")

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from SPDDualBranch import SPDConv  # Import SPDConv for downsampling
+from scripts.multi_branch.SPDDualBranch import SPDConv  # Import SPDConv for downsampling
 
 # Custom ReLU with variable slopes
 class VariableReLU(nn.Module):
