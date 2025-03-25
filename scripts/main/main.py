@@ -41,7 +41,9 @@ from scripts.mixmodel.MixModel3 import MixModel3  # Import the new MixModel3
 from scripts.mixmodel.MixModel4 import MixModel4  # Import the new MixModel4
 from scripts.transformer.PixT import create_pixt_model, TransformerConfig, PixelTransformer, MemoryEfficientPixT
 from scripts.transformer.VT import create_vt_model, VisualTransformer  # Import the new model
-from scripts.transformer.PatchPixT import create_patchpixt_model, PatchPixTConfig, PatchPixT  # Import PatchPixT
+from scripts.transformer.PatchPixT import create_patchpixt_model, PatchPixTConfig, PatchPixT
+from scripts.transformer.CNNMultiPatchPixT import create_cnn_multipatch_pixt_model, CNNMultiPatchPixTConfig, CNNMultiPatchPixT
+from scripts.transformer.TaylorIR import create_taylorir_model, TaylorConfig, TaylorIRClassifier  # Add TaylorIR import
 
 # Add Albumentations for advanced augmentations
 try:
@@ -127,8 +129,11 @@ class EnhancedConfig(Config):
     transformer_num_layers: int = 6  # Number of transformer layers
     transformer_dim_feedforward: int = 512  # Size of feedforward layer in transformer
     transformer_dropout_rate: float = 0.1
-    transformer_type: str = "pixt"  # Options: "pixt", "vt", "patchpixt", "multiscale_patchpixt"
+    transformer_type: str = "pixt"  # Options: "pixt", "vt", "patchpixt", "multiscale_patchpixt", "cnn_multipatch_pixt"
     transformer_patch_size: int = 4  # Patch size for PatchPixT (2, 4, or 8)
+    transformer_patch_sizes: list = None  # List of patch sizes for MultiPatchPixT models, defaults to [1, 2, 4]
+    transformer_fusion_type: str = "concat"  # How to fuse features: "concat", "weighted_sum", "attention"
+    transformer_growth_rate: int = 12  # Growth rate for CNN in CNNMultiPatchPixT
     
     # Memory efficiency options for transformers
     transformer_use_gradient_checkpointing: bool = False
@@ -265,6 +270,51 @@ def get_model(num_classes, config, device):
                 img_size=config.image_size,
                 patch_size=patch_size,
                 config=patch_config
+            )
+        elif transformer_type == "cnn_multipatch_pixt":
+            # Create CNNMultiPatchPixT model with CNN backbone and multiple patch sizes
+            patch_sizes = getattr(config, 'transformer_patch_sizes', [1, 2, 4])
+            fusion_type = getattr(config, 'transformer_fusion_type', 'concat')
+            growth_rate = getattr(config, 'transformer_growth_rate', 12)
+            
+            # Create CNNMultiPatchPixT config
+            cnn_multipatch_config = CNNMultiPatchPixTConfig(
+                img_size=config.image_size,
+                patch_sizes=patch_sizes,
+                d_model=config.transformer_d_model,
+                nhead=config.transformer_nhead,
+                num_layers=config.transformer_num_layers,
+                dim_feedforward=getattr(config, 'transformer_dim_feedforward', config.transformer_d_model * 4),
+                dropout=config.transformer_dropout_rate,
+                fusion_type=fusion_type,
+                growth_rate=growth_rate,
+                use_gradient_checkpointing=config.transformer_use_gradient_checkpointing,
+                share_layer_params=config.transformer_share_layer_params,
+                cnn_dropout=config.dropout_rate
+            )
+            
+            model = create_cnn_multipatch_pixt_model(
+                num_classes=num_classes,
+                img_size=config.image_size,
+                patch_sizes=patch_sizes,
+                config=cnn_multipatch_config
+            )
+        elif transformer_type == "taylorir":
+            # Create TaylorIR model with specified parameters
+            taylor_config = TaylorConfig(
+                img_size=config.image_size,
+                embed_dim=config.transformer_d_model,
+                num_heads=config.transformer_nhead,
+                num_layers=config.transformer_num_layers,
+                dim_feedforward=getattr(config, 'transformer_dim_feedforward', config.transformer_d_model * 4),
+                dropout=config.transformer_dropout_rate,
+                use_gradient_checkpointing=config.transformer_use_gradient_checkpointing
+            )
+            
+            model = create_taylorir_model(
+                num_classes=num_classes,
+                img_size=config.image_size,
+                config=taylor_config
             )
         elif transformer_type == "pixt":  # Default to 'pixt'
             model = create_pixt_model(
