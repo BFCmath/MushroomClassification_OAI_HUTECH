@@ -22,6 +22,7 @@
 ### Transformer
 + Pixel Transformer seems to be a good idea.
 + We can even push that further with multi scale pixel transformer (1x1, 2x2, 4x4, 8x8, 16x16, 32x32).
++ ViT seems to not work well, maybe because of the lack of data.
 
 ## Dropout
 + Some experiments and it seems that the dropout is not the best way to go.
@@ -35,7 +36,19 @@
 + Try to merge the multiscale and extensive data augmentation, but only the low aug is working... So maybe stick with the multiscale.
 + What about randomly erase pixels? Because the images are low resolution, so randomly erase pixels?
 + Actually, instead of erase, we can apply random white or black pixels to the image.
++ The above approach seems to punish the model too much!
++ Mosaic and cutmix didn't work well, however, we can use them to create a fifth class, which is mix, to push the model to further learn global features! Need to do some experiments on this...
++ Some research for data augmentation, and here is some nice one we could try:
+  + CutMix
+  + MixUp
+  + AutoAugment
+  + Repeated Augment
 
+## Regularization
++ Some research for regularization, and here is some nice one we could try:
+  + Label Smoothing
+  + Stochastic depth
+  + Random erasing
 ## Downsampling
 + Some paper reading and it seems to me that the normal downsampling is not the best way to go.
 + Try with other downsampling methods like dilated convolutions, space to depth convolutions, etc...
