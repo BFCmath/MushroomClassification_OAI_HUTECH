@@ -1,5 +1,6 @@
 # MixModel
 ## MixModel1
+
 ```css
 Input (32x32x3)
     ↓
@@ -81,6 +82,7 @@ Output (num_classes)
 ```
 
 ## MixModel2
+
 ```css
 Input (32x32x3)
     ↓
@@ -161,6 +163,7 @@ Output
 ```
 
 ## MixModel3
+
 ```css
 Input (32x32x3)
     ↓
@@ -237,6 +240,7 @@ Output (num_classes)
 ```
 
 ## MixModel4
+
 ```css
 Input (32x32x3)
     ↓
