@@ -44,6 +44,8 @@ from scripts.transformer.VT import create_vt_model, VisualTransformer  # Import 
 from scripts.transformer.PatchPixT import create_patchpixt_model, PatchPixTConfig, PatchPixT
 from scripts.transformer.CNNMultiPatchPixT import create_cnn_multipatch_pixt_model, CNNMultiPatchPixTConfig, CNNMultiPatchPixT
 from scripts.transformer.TaylorIR import create_taylorir_model, TaylorConfig, TaylorIRClassifier  # Add TaylorIR import
+from scripts.transformer.AstroTransformer import create_astro_model, AstroConfig, AstroTransformer  # Add AstroTransformer import
+from scripts.cnn.RL_Net import create_rlnet  # Import the new model
 
 # Add Albumentations for advanced augmentations
 try:
@@ -145,6 +147,10 @@ class EnhancedConfig(Config):
     use_multi_gpu: bool = True  # Whether to use multiple GPUs if available
     gpu_ids: list = None  # Specific GPU IDs to use, None means use all available
 
+    # AstroTransformer specific parameters
+    astro_expansion: int = 2  # Expansion factor for AstroTransformer
+    astro_layers: list = None  # Number of blocks per stage, defaults to [2, 2, 2]
+
 if Config.csv_path in ["/kaggle/input/oai-cv/train_cv.csv"]:
     CLASS_NAMES = ['nấm mỡ', 'bào ngư xám + trắng', 'Đùi gà Baby (cắt ngắn)', 'linh chi trắng'] 
     CLASS_MAP = {name: idx for idx, name in enumerate(CLASS_NAMES)}
@@ -190,6 +196,11 @@ def get_model(num_classes, config, device):
         print("Creating Dual-Branch Network with common feature subspace...")
         model = DualBranchNetwork(num_classes=num_classes, 
                                  dropout_rate=config.dropout_rate)
+    elif model_type == 'rlnet':
+        print("Creating RL-Net with Multi-Kernel blocks and multi-scale feature extraction...")
+        model = create_rlnet(num_classes=num_classes, 
+                           input_channels=3,
+                           dropout_rate=config.dropout_rate)
     elif model_type == 'densenet':
         # Use DenseNet explicitly when requested
         print("Creating DenseNet7x7 model with 7x7 kernels...")
@@ -316,6 +327,18 @@ def get_model(num_classes, config, device):
                 img_size=config.image_size,
                 config=taylor_config
             )
+        elif transformer_type == "astro":
+            # Create AstroTransformer model with Sample.py-based implementation
+            astro_config = AstroConfig(
+                expansion=getattr(config, 'astro_expansion', 2),
+                layers=getattr(config, 'astro_layers', [2, 2, 2]),
+                use_gradient_checkpointing=config.transformer_use_gradient_checkpointing
+            )
+            
+            model = create_astro_model(
+                num_classes=num_classes,
+                config=astro_config
+            )
         elif transformer_type == "pixt":  # Default to 'pixt'
             model = create_pixt_model(
                 num_classes=num_classes,
@@ -327,10 +350,10 @@ def get_model(num_classes, config, device):
     else:
         print("Unknown model type, stop to save your time")
         raise ValueError(f"Unknown model type: {model_type}")
-    
+
     # Move model to device first
     model = model.to(device)
-    
+
     # Wrap with DataParallel if using multiple GPUs
     if hasattr(config, 'use_multi_gpu') and config.use_multi_gpu:
         # Get available GPU devices
@@ -374,7 +397,7 @@ def get_layer_wise_lr_optimizer(model, config):
         if sum(1 for _ in module.parameters()) == 0:
             print(f"  {name}: Skipping - no trainable parameters")
             continue
-            
+        
         if name == 'features':
             # Apply gradually decreasing LR to feature layers
             for i, layer in enumerate(module):
@@ -407,16 +430,15 @@ def get_layer_wise_lr_optimizer(model, config):
                 other_params.append({'params': params, 'lr': config.learning_rate})
                 param_set.update(params)  # Add to our tracking set
     
+    # Combine all parameter groups
+    param_groups = feature_params + classifier_params + other_params
+    
     # Check for parameters that weren't included in any group
     all_params = set(p for p in model.parameters() if p.requires_grad)
     missed_params = all_params - param_set
-    
     if missed_params:
         print(f"  Found {len(missed_params)} parameters not assigned to any group, adding with base LR")
         other_params.append({'params': list(missed_params), 'lr': config.learning_rate})
-    
-    # Combine all parameter groups
-    param_groups = feature_params + classifier_params + other_params
     
     # If param_groups is still empty, fall back to using all model parameters
     if len(param_groups) == 0:
@@ -427,7 +449,7 @@ def get_layer_wise_lr_optimizer(model, config):
     return optim.Adam(param_groups, lr=config.learning_rate, weight_decay=config.l2_reg)
 
 # ### Training Function with AMP and Gradient Clipping ###
-def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, config, device):
+def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, config, device, output_dir):
     """Train with mixup, early stopping, scheduler, and optimizations."""
     best_val_loss = float('inf')
     best_val_acc = 0.0
@@ -445,16 +467,14 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
     }
     
     # Create output directory if it doesn't exist
-    version_dir = os.path.join(config.output_dir, config.version)
-    os.makedirs(version_dir, exist_ok=True)
-  
+    os.makedirs(output_dir, exist_ok=True)
+    
     # Initialize gradient scaler for AMP
     scaler = GradScaler() if config.use_amp else None
     
     # Check if using a transformer model with AMP
     is_transformer = isinstance(model, (PixelTransformer, MemoryEfficientPixT, VisualTransformer)) or 'PixT' in str(type(model)) or 'VT' in str(type(model))
     use_transformer_amp = is_transformer and hasattr(config, 'transformer_use_amp') and config.transformer_use_amp
-    
     if use_transformer_amp and not config.use_amp:
         print("Enabling AMP specifically for transformer model")
         scaler = GradScaler()
@@ -585,8 +605,8 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
             best_model_state = model.state_dict().copy()
             patience_counter = 0
             
-            # Save checkpoint to version directory instead of output_dir
-            checkpoint_path = os.path.join(version_dir, 'best_model.pth')
+            # Save checkpoint to directory passed as parameter
+            checkpoint_path = os.path.join(output_dir, 'best_model.pth')
             torch.save({
                 'epoch': epoch,
                 'model_state_dict': best_model_state,
@@ -612,7 +632,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
         model.load_state_dict(best_model_state)
         print(f"Restored best model with validation accuracy: {best_val_acc:.4f}")
     
-    # Validate the best model to get predictions for analysis
+    # Validate the best model to get predictions for analysis        
     model.eval()
     all_true_labels = []
     all_predictions = []
@@ -627,7 +647,6 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
             all_predictions.extend(predicted.cpu().numpy())
     
     # Get dataset class names for analysis
-    # This assumes val_loader.dataset is a Subset of MushroomDataset
     if hasattr(val_loader.dataset, 'dataset'):  # For Subset
         classes = val_loader.dataset.dataset.classes
     else:
@@ -639,13 +658,13 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
     # Print report
     print_false_prediction_report(analysis)
     
-    # Save analysis to version directory instead of output_dir
-    analysis_path = os.path.join(version_dir, 'false_prediction_analysis.json')
+    # Save analysis to directory passed as parameter 
+    analysis_path = os.path.join(output_dir, 'false_prediction_analysis.json')
     with open(analysis_path, 'w') as f:
         json.dump(convert_to_json_serializable(analysis), f, indent=2)
     
-    # Plot confusion matrix to version directory
-    cm_path = os.path.join(version_dir, 'confusion_matrix.png')
+    # Plot confusion matrix to directory passed as parameter
+    cm_path = os.path.join(output_dir, 'confusion_matrix.png')
     plot_confusion_matrix(all_true_labels, all_predictions, classes, cm_path)
     
     return model, best_val_acc, history, analysis
@@ -702,15 +721,11 @@ def cross_validate(config, device):
     except Exception as e:
         print(f"Error loading dataset: {str(e)}")
         raise
-        
+    
     val_metrics = []
     fold_results = {}
     all_histories = {}
     all_analyses = {}
-    
-    # Create a local copy of train_folds to avoid modifying the config object
-    train_folds = config.train_folds
-
     
     # Create class weights if enabled
     class_weights = None
@@ -725,7 +740,7 @@ def cross_validate(config, device):
             print(f"Applying weight {config.weight_multiplier} to class '{config.prioritized_class}' (index {priority_idx})")
         else:
             print(f"Warning: Prioritized class '{config.prioritized_class}' not found in dataset classes: {dataset.classes}")
-            
+        
         # Move class weights to the correct device
         class_weights = class_weights.to(device)
     
@@ -733,14 +748,13 @@ def cross_validate(config, device):
     base_train_dataset = MushroomDataset(config.csv_path, transform=None)
     base_val_dataset = MushroomDataset(config.csv_path, transform=None)
     
-    for fold_idx, fold in enumerate(train_folds):
-        print(f"\n===== Fold {fold+1}/{config.num_folds} ({fold_idx+1}/{len(train_folds)}) =====")
+    for fold_idx, fold in enumerate(config.train_folds):
+        print(f"\n===== Fold {fold+1}/{config.num_folds} ({fold_idx+1}/{len(config.train_folds)}) =====")
         
         try:
             # Create train/val datasets for this fold with appropriate transforms
             train_indices = dataset.data[dataset.data['fold'] != fold].index.tolist()
             val_indices = dataset.data[dataset.data['fold'] == fold].index.tolist()
-            
             if len(train_indices) == 0 or len(val_indices) == 0:
                 print(f"Warning: Empty train or validation set for fold {fold}. Skipping...")
                 continue
@@ -755,7 +769,7 @@ def cross_validate(config, device):
             
             # Create data loaders with optimized settings and error handling
             train_loader = DataLoader(
-                train_dataset, 
+                train_dataset,  
                 batch_size=config.batch_size, 
                 shuffle=True, 
                 num_workers=config.num_workers,
@@ -787,7 +801,7 @@ def cross_validate(config, device):
                 print(f"Using weighted CrossEntropyLoss with weights: {class_weights.cpu().numpy()}")
             else:
                 criterion = nn.CrossEntropyLoss()
-                
+            
             optimizer = get_layer_wise_lr_optimizer(model, config)
             
             # Create scheduler with proper error handling
@@ -814,21 +828,22 @@ def cross_validate(config, device):
                 print("Using default scheduler (ReduceLROnPlateau)")
                 scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5, verbose=True)
             
-            # Train model - updated to also return analysis
+            # Train model - updated to also return analysis, passing fold_dir as output directory
             model, val_accuracy, history, analysis = train_model(
-                model,
+                model, 
                 train_loader, 
                 val_loader, 
                 criterion, 
                 optimizer, 
                 scheduler, 
                 config, 
-                device
+                device,
+                fold_dir  # Pass fold_dir as the output directory
             )
-
+            
             # Generate and save visualizations
             plot_training_history(history, os.path.join(fold_dir, 'training_history.png'))
-
+            
             # Store results
             val_metrics.append(val_accuracy)
             fold_results[fold] = val_accuracy
@@ -848,10 +863,9 @@ def cross_validate(config, device):
                     json.dump(convert_to_json_serializable(analysis), f, indent=2)
             except Exception as e:
                 print(f"Error saving analysis: {str(e)}")
-                
+            
             # Clear some memory
             torch.cuda.empty_cache() if torch.cuda.is_available() else None
-            
         except Exception as e:
             print(f"Error processing fold {fold}: {str(e)}")
             print("Continuing to next fold...")
@@ -876,10 +890,8 @@ def cross_validate(config, device):
             'config': {k: str(v) if not isinstance(v, (int, float, bool, type(None))) else v 
                       for k, v in config.__dict__.items()},
         }
-        
         with open(os.path.join(version_dir, 'cv_results.json'), 'w') as f:
             json.dump(cv_results, f, indent=4)
-        
         return avg_val_accuracy, fold_results, all_histories, all_analyses
     else:
         print("No valid results from any fold. Cross-validation failed.")
@@ -929,8 +941,8 @@ def preprocess_image(image_path, transform=None):
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
-    
-    # Load and preprocess the image
+        
+    # Load and preprocess the image        
     img = Image.open(image_path).convert('RGB')
     img_tensor = transform(img)
     return img_tensor
@@ -942,7 +954,7 @@ def predict_image(model, image_path, class_names, device, transform=None):
         img_tensor = img_tensor.unsqueeze(0).to(device)  # Add batch dimension
         
         with torch.no_grad():
-            outputs = model(img_tensor)  # Fixed: was using 'inputs' variable that didn't exist
+            outputs = model(img_tensor)
             probabilities = torch.nn.functional.softmax(outputs, dim=1)
             confidence, predicted_idx = torch.max(probabilities, 1)
         
@@ -987,17 +999,16 @@ def batch_inference(model, image_dir, class_names, device, transform=None, batch
     
     # Sort paths for consistent ordering
     image_paths = sorted(image_paths)
-    
+    print(f"Running inference on {len(image_paths)} images in batches of {batch_size}")
     if not image_paths:
         print(f"No images found in {image_dir}")
         return [], torch.tensor([]), class_names  # Return consistent tuple structure
     
     results = []
+    valid_paths = []
     all_probabilities = []
     processed_count = 0
     failed_count = 0
-    
-    print(f"Running inference on {len(image_paths)} images in batches of {batch_size}")
     
     for i in range(0, len(image_paths), batch_size):
         batch_paths = image_paths[i:i+batch_size]
@@ -1022,7 +1033,6 @@ def batch_inference(model, image_dir, class_names, device, transform=None, batch
         # Stack successful tensors and run inference
         try:
             batch_tensor = torch.stack(valid_tensors).to(device)
-            
             with torch.no_grad():
                 outputs = model(batch_tensor)
                 probabilities = torch.nn.functional.softmax(outputs, dim=1)
@@ -1060,7 +1070,6 @@ def batch_inference(model, image_dir, class_names, device, transform=None, batch
                     'class_probabilities': class_probs  # Store all class probabilities
                 })
                 processed_count += 1
-                
         except Exception as e:
             print(f"Error during batch inference: {str(e)}")
             # Continue to next batch
@@ -1098,7 +1107,6 @@ def save_logits_csv(filenames, probabilities, class_names, output_file):
     """Save all class probabilities to a logits CSV file."""
     # Create a DataFrame with one row per image
     data = {'filename': filenames}
-    
     # Add one column per class with the probability values
     for i, class_name in enumerate(class_names):
         data[class_name] = probabilities[:, i].numpy()
@@ -1135,7 +1143,7 @@ def run_inference(config, model_path, input_path, output_dir, device):
         output_json_path = os.path.join(output_dir, "inference_results.json")
         output_submission_path = os.path.join(output_dir, "submission.csv")
         output_logits_path = os.path.join(output_dir, "logits.csv")
-
+        
         if not input_path.is_dir():
             print(f"Error: {input_path} is not a directory. Please provide a directory of images.")
             return [], None, None
@@ -1211,8 +1219,6 @@ def combine_fold_predictions(fold_predictions, class_names, ensemble_method="mea
     
     # Group predictions by filename
     combined_results = {}
-    
-    # Process predictions from all folds
     for fold_preds in fold_predictions:
         for pred in fold_preds:
             filename = pred['filename']
@@ -1273,7 +1279,6 @@ def combine_fold_predictions(fold_predictions, class_names, ensemble_method="mea
                     final_class = result['fold_predictions'][0]['class']
                     final_class_id = result['fold_predictions'][0]['class_id']
                     final_confidence = result['fold_predictions'][0]['confidence']
-                
             else:  # Default is "mean" - properly average full probability distributions
                 # Check if we have full probability distributions
                 if result['fold_class_probabilities'] and len(result['fold_class_probabilities']) > 0:
@@ -1363,7 +1368,6 @@ def combine_fold_predictions(fold_predictions, class_names, ensemble_method="mea
                 result_entry['class_probabilities'] = class_probabilities
             
             final_results.append(result_entry)
-            
         except Exception as e:
             print(f"Error processing ensemble for {filename}: {str(e)}")
             # Add a basic entry so we don't lose this image in results
@@ -1413,10 +1417,10 @@ def evaluate_model(model, data_loader, criterion, device, num_classes=None):
                 
                 # Compute probabilities
                 probabilities = torch.nn.functional.softmax(outputs, dim=1)
+                _, predicted = torch.max(outputs, 1)
                 
                 # Update statistics
                 running_loss += loss.item() * inputs.size(0)
-                _, predicted = torch.max(outputs, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
                 
@@ -1483,7 +1487,7 @@ def main():
         
         # Create output directory
         version_dir = os.path.join(config.output_dir, config.version)
-        os.makedirs(version_dir, exist_ok=True)    
+        os.makedirs(version_dir, exist_ok=True)
         
         # Save config to JSON for reproducibility with better error handling
         try:
@@ -1505,7 +1509,9 @@ def main():
             train_transform, val_transform = get_albumentation_transforms(
                 aug_strength=getattr(config, 'aug_strength', 'high'), 
                 image_size=config.image_size,
-                multi_scale=getattr(config, 'use_multi_scale', False)
+                multi_scale=getattr(config, 'use_multi_scale', False),
+                pixel_percent = config.pixel_percent,
+                crop_scale = config.crop_scale
             )
         elif getattr(config, 'use_multi_scale', False):
             print("Using multi-scale training transforms")
@@ -1518,7 +1524,7 @@ def main():
         else:
             print("Using standard transforms")
             train_transform, val_transform = get_transforms(
-                image_size=config.image_size,
+                image_size=config.image_size, 
                 aug_strength="standard"
             )
         
@@ -1527,30 +1533,26 @@ def main():
         
         # Run cross-validation with the enhanced model architecture
         avg_val_accuracy, fold_results, cv_histories, analyses = cross_validate(config, device)
-
+        
         # Save combined analysis if we have results
         if analyses:
             try:
                 combined_analysis_path = os.path.join(version_dir, 'combined_analysis.json')
                 with open(combined_analysis_path, 'w') as f:
                     json.dump(convert_to_json_serializable(analyses), f, indent=2)
-                    
+                
                 # Print summary of problematic classes across folds
                 print("\n=== Summary of Problematic Classes Across Folds ===")
                 class_problem_scores = {}
-                
                 for fold, analysis in analyses.items():
                     if not analysis or 'per_class' not in analysis:
                         continue
-                        
                     for class_name, stats in analysis['per_class'].items():
                         if class_name not in class_problem_scores:
                             class_problem_scores[class_name] = {'total_false': 0, 'count': 0}
-                        
                         class_problem_scores[class_name]['total_false'] += stats.get('false', 0)
                         class_problem_scores[class_name]['count'] += 1
                 
-                # Calculate average false predictions per class
                 if class_problem_scores:
                     for class_name, stats in class_problem_scores.items():
                         stats['avg_false'] = stats['total_false'] / max(stats['count'], 1)  # Avoid division by zero
@@ -1618,7 +1620,7 @@ def main():
                         print(f"No valid results from fold {fold+1}, skipping in ensemble")
                 
                 # Combine predictions from all folds using multiple ensemble methods
-                if all_fold_results and len(all_fold_results) > 1:  # Make sure we have at least some results from multiple folds
+                if all_fold_results and len(all_fold_results) > 1:
                     # Get ensemble methods (ensure it's a list)
                     ensemble_methods = config.ensemble_methods if isinstance(config.ensemble_methods, list) else [config.ensemble_methods]
                     
@@ -1626,9 +1628,8 @@ def main():
                     for method in ensemble_methods:
                         if not method:  # Skip empty/None methods
                             continue
-                            
-                        print(f"\n--- Creating ensemble using method: {method} ---")
                         
+                        print(f"\n--- Creating ensemble using method: {method} ---")
                         combined_results = combine_fold_predictions(
                             all_fold_results, 
                             class_names,
@@ -1677,7 +1678,6 @@ def main():
                                     "config": {k: str(v) if not isinstance(v, (int, float, bool, str, type(None), list, dict)) else v 
                                              for k, v in config.__dict__.items()}
                                 }, f, indent=4)
-                            
                             print(f"\nEnsemble methods comparison saved to {comparison_path}")
                         except Exception as e:
                             print(f"Error generating ensemble comparison: {str(e)}")
@@ -1686,7 +1686,7 @@ def main():
                     print("Ensemble is disabled. Each fold's predictions are saved separately.")
                 else:
                     print("No valid inference results from any fold, skipping ensemble")
-                
+        
         # Report total execution time
         total_time = time.time() - start_time
         print(f"\nTotal execution time: {format_time(total_time)}")
