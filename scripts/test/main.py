@@ -20,33 +20,13 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau, CosineAnnealingWarmResta
 from PIL import Image
 import cv2
 import torchvision.transforms.functional as TF
+from transformers import AutoModelForImageClassification  # Added import for HuggingFace model
 
 # Import LowNet from the same directory
 from datasets import MushroomDataset
 from utils import *
 from transforms import *
 from datasets import *
-from scripts.cnn.SmallResNet import *
-from scripts.multi_branch.DualBranch import *
-from scripts.multi_branch.InceptionFSD import *
-from scripts.cnn.DilatedGroup import *
-from scripts.cnn.DenseNet7x7 import *
-from scripts.cnn.AdaptedLowNet import *
-from scripts.cnn.SPDResNet import *
-from scripts.multi_branch.SPDDualBranch import SPDDualBranchNetwork  # Import the new model
-from scripts.cnn.MiniXception import MiniXception  # Import the new models
-from scripts.mixmodel.MixModel1 import MixModel1
-from scripts.mixmodel.MixModel2 import MixModel2
-from scripts.mixmodel.MixModel3 import MixModel3  # Import the new MixModel3
-from scripts.mixmodel.MixModel4 import MixModel4  # Import the new MixModel4
-from scripts.transformer.PixT import create_pixt_model, TransformerConfig, PixelTransformer, MemoryEfficientPixT
-from scripts.transformer.VT import create_vt_model, VisualTransformer  # Import the new model
-from scripts.transformer.PatchPixT import create_patchpixt_model, PatchPixTConfig, PatchPixT
-from scripts.transformer.CNNMultiPatchPixT import create_cnn_multipatch_pixt_model, CNNMultiPatchPixTConfig, CNNMultiPatchPixT
-from scripts.transformer.TaylorIR import create_taylorir_model, TaylorConfig, TaylorIRClassifier  # Add TaylorIR import
-from scripts.transformer.AstroTransformer import create_astro_model, AstroConfig, AstroTransformer  # Add AstroTransformer import
-from scripts.cnn.RLNet import create_rlnet  # Import the RL-Net model
-from scripts.cnn.RLSPDNet import create_rlspdnet  # Import the new RLSPDNet model
 
 # Add Albumentations for advanced augmentations
 try:
@@ -124,34 +104,10 @@ class EnhancedConfig(Config):
     aug_strength: str = "high"  # Options: "low", "medium", "high"
     pixel_percent: float = 0.15 
     crop_scale: float = 0.9
-    label_smoothing: float = 0.1  # Label smoothing factor (0.0 means no smoothing)
-    
-    # transformer - direct parameters for manual configuration
-    transformer_size: str = None  # Set to None to use manual configuration instead of presets
-    transformer_d_model: int = 128  # Embedding dimension
-    transformer_nhead: int = 8  # Number of attention heads
-    transformer_num_layers: int = 6  # Number of transformer layers
-    transformer_dim_feedforward: int = 512  # Size of feedforward layer in transformer
-    transformer_dropout_rate: float = 0.1
-    transformer_type: str = "pixt"  # Options: "pixt", "vt", "patchpixt", "multiscale_patchpixt", "cnn_multipatch_pixt"
-    transformer_patch_size: int = 4  # Patch size for PatchPixT (2, 4, or 8)
-    transformer_patch_sizes: list = None  # List of patch sizes for MultiPatchPixT models, defaults to [1, 2, 4]
-    transformer_fusion_type: str = "concat"  # How to fuse features: "concat", "weighted_sum", "attention"
-    transformer_growth_rate: int = 12  # Growth rate for CNN in CNNMultiPatchPixT
-    
-    # Memory efficiency options for transformers
-    transformer_use_gradient_checkpointing: bool = False
-    transformer_sequence_reduction_factor: int = 1
-    transformer_share_layer_params: bool = False
-    transformer_use_amp: bool = True  # Use automatic mixed precision specifically for transformers
-    
+  
     # Multi-GPU support
     use_multi_gpu: bool = True  # Whether to use multiple GPUs if available
     gpu_ids: list = None  # Specific GPU IDs to use, None means use all available
-
-    # AstroTransformer specific parameters
-    astro_expansion: int = 2  # Expansion factor for AstroTransformer
-    astro_layers: list = None  # Number of blocks per stage, defaults to [2, 2, 2]
 
 if Config.csv_path in ["/kaggle/input/oai-cv/train_cv.csv"]:
     CLASS_NAMES = ['nấm mỡ', 'bào ngư xám + trắng', 'Đùi gà Baby (cắt ngắn)', 'linh chi trắng'] 
@@ -165,6 +121,25 @@ if Config.train_folds is None:
     Config.train_folds = list(range(Config.num_folds))
     print(f"No train_folds specified, using all {Config.num_folds} folds")
 
+# Define wrapper class for HuggingFace models
+class HuggingFaceModelWrapper(nn.Module):
+    """
+    Wrapper for HuggingFace models to ensure the forward pass returns only logits for compatibility
+    with standard PyTorch loss functions.
+    """
+    def __init__(self, model):
+        super().__init__()
+        self.model = model
+    
+    def forward(self, x):
+        outputs = self.model(x)
+        # Extract logits from HuggingFace model output
+        if hasattr(outputs, 'logits'):
+            return outputs.logits
+        return outputs  # Fallback in case structure changes
+
+
+
 # Fix the get_model function which was corrupted
 def get_model(num_classes, config, device):
     """
@@ -174,186 +149,18 @@ def get_model(num_classes, config, device):
     model_type = getattr(config, 'model_type', 'densenet')
     
     # Create the base model based on model_type
-    if model_type == 'lownet':
-        print("Creating LowNet model for low-resolution image feature extraction...")
-        model = AdaptedLowNet(num_classes=num_classes, 
-                             dropout_rate=config.dropout_rate)
-    elif model_type == 'spdresnet':
-        print("Creating SPDResNet model with Space-to-Depth downsampling...")
-        print("Using SPDResNet-18 architecture for small images")
-        model = spdresnet18(num_classes=num_classes, dropout_rate=config.dropout_rate)
-    elif model_type == 'inceptionfsd':
-        print("Creating InceptionFSD model with multi-scale feature extraction...")
-        model = InceptionFSD(num_classes=num_classes, 
-                            dropout_rate=config.dropout_rate)
-    elif model_type == 'spddualbranch':
-        print("Creating SPDDualBranch model with Space-to-Depth downsampling in both branches...")
-        model = SPDDualBranchNetwork(num_classes=num_classes,
-                                   dropout_rate=config.dropout_rate)
-    elif model_type == 'dilatedgroupconv':
-        print("Creating DilatedGroupConvNet with dilated convolutions...")
-        model = DilatedGroupConvNet(num_classes=num_classes, 
-                                dropout_rate=config.dropout_rate)
-    elif model_type == 'dual_branch':
-        print("Creating Dual-Branch Network with common feature subspace...")
-        model = DualBranchNetwork(num_classes=num_classes, 
-                                 dropout_rate=config.dropout_rate)
-    elif model_type == 'rlnet':
-        print("Creating RL-Net with Multi-Kernel blocks and multi-scale feature extraction...")
-        model = create_rlnet(num_classes=num_classes, 
-                           input_channels=3,
-                           dropout_rate=config.dropout_rate)
-    elif model_type == 'rlspdnet':
-        print("Creating RLSPDNet with Multi-Kernel blocks and Space-to-Depth downsampling...")
-        model = create_rlspdnet(num_classes=num_classes, 
-                             input_channels=3,
-                             dropout_rate=config.dropout_rate)
-    elif model_type == 'densenet':
-        # Use DenseNet explicitly when requested
-        print("Creating DenseNet7x7 model with 7x7 kernels...")
-        model = DenseNet7x7(growth_rate=16, 
-                            block_config=(3, 6, 12, 8),
-                            num_classes=num_classes, 
-                            dropout_rate=config.dropout_rate)
-    elif model_type == 'smallresnet':
-        print("Creating SmallResNet model...")
-        model = SmallResNet(num_classes=num_classes, 
-                           dropout_rate=config.dropout_rate)
-    elif model_type == 'minixception':
-        print("Creating MiniXception model with SPD downsampling and separable convolutions...")
-        model = MiniXception(num_classes=num_classes, 
-                           dropout_rate=config.dropout_rate)
-    elif model_type == 'mixmodel1':
-        print("Creating MixModel1 with SPDConv, Residual Inception blocks, and SE attention...")
-        model = MixModel1(num_classes=num_classes, 
-                         dropout_rate=config.dropout_rate)
-    elif model_type == 'mixmodel2':
-        print("Creating MixModel2 with multi-pathways and skip connections...")
-        model = MixModel2(num_classes=num_classes, 
-                         dropout_rate=config.dropout_rate)
-    elif model_type == 'mixmodel3':
-        print("Creating MixModel3 that maintains 32x32 resolution throughout the network...")
-        model = MixModel3(num_classes=num_classes, 
-                         dropout_rate=config.dropout_rate)
-    elif model_type == 'mixmodel4':
-        print("Creating MixModel4 with multi-branch spatial feature extraction at different scales...")
-        model = MixModel4(num_classes=num_classes, 
-                         dropout_rate=config.dropout_rate)
-    elif model_type == 'trans':
-        print("Creating Transformer model for image classification...")
-        transformer_type = getattr(config, 'transformer_type', 'pixt')
-        
-        # Create transformer configuration using direct parameters
-        transformer_config = TransformerConfig(
-            img_size=config.image_size,
-            d_model=config.transformer_d_model,
-            nhead=config.transformer_nhead,
-            num_layers=config.transformer_num_layers,
-            dim_feedforward=getattr(config, 'transformer_dim_feedforward', config.transformer_d_model * 4),
-            dropout=config.transformer_dropout_rate,
-            use_gradient_checkpointing=config.transformer_use_gradient_checkpointing,
-            sequence_reduction_factor=config.transformer_sequence_reduction_factor,
-            share_layer_params=config.transformer_share_layer_params,
-            use_sequence_downsampling=getattr(config, 'transformer_use_sequence_downsampling', False)
+    if model_type == 'huggingface_resnet50':
+        print("Creating HuggingFace ResNet50 model...")
+        base_model = AutoModelForImageClassification.from_pretrained(
+            'edadaltocg/resnet50_cifar10',
+            num_labels=num_classes,
+            ignore_mismatched_sizes=True
         )
-        
-        # Create the appropriate transformer model based on type
-        if transformer_type == 'vt':
-            model = create_vt_model(
-                num_classes=num_classes,
-                img_size=config.image_size,
-                config=transformer_config
-            )
-        elif transformer_type == "patchpixt":
-            # Create PatchPixT with directly specified parameters
-            patch_size = getattr(config, 'transformer_patch_size', 4)
-            
-            # Create PatchPixT config with manual parameters
-            patch_config = PatchPixTConfig(
-                img_size=config.image_size,
-                patch_size=patch_size,
-                d_model=config.transformer_d_model,
-                nhead=config.transformer_nhead,
-                num_layers=config.transformer_num_layers,
-                dim_feedforward=getattr(config, 'transformer_dim_feedforward', config.transformer_d_model * 4),
-                dropout=config.transformer_dropout_rate,
-                use_gradient_checkpointing=config.transformer_use_gradient_checkpointing,
-                sequence_reduction_factor=config.transformer_sequence_reduction_factor,
-                share_layer_params=config.transformer_share_layer_params,
-                use_sequence_downsampling=getattr(config, 'transformer_use_sequence_downsampling', False)
-            )
-            
-            model = create_patchpixt_model(
-                num_classes=num_classes,
-                img_size=config.image_size,
-                patch_size=patch_size,
-                config=patch_config
-            )
-        elif transformer_type == "cnn_multipatch_pixt":
-            # Create CNNMultiPatchPixT model with CNN backbone and multiple patch sizes
-            patch_sizes = getattr(config, 'transformer_patch_sizes', [1, 2, 4])
-            fusion_type = getattr(config, 'transformer_fusion_type', 'concat')
-            growth_rate = getattr(config, 'transformer_growth_rate', 12)
-            
-            # Create CNNMultiPatchPixT config
-            cnn_multipatch_config = CNNMultiPatchPixTConfig(
-                img_size=config.image_size,
-                patch_sizes=patch_sizes,
-                d_model=config.transformer_d_model,
-                nhead=config.transformer_nhead,
-                num_layers=config.transformer_num_layers,
-                dim_feedforward=getattr(config, 'transformer_dim_feedforward', config.transformer_d_model * 4),
-                dropout=config.transformer_dropout_rate,
-                fusion_type=fusion_type,
-                growth_rate=growth_rate,
-                use_gradient_checkpointing=config.transformer_use_gradient_checkpointing,
-                share_layer_params=config.transformer_share_layer_params,
-                cnn_dropout=config.dropout_rate
-            )
-            
-            model = create_cnn_multipatch_pixt_model(
-                num_classes=num_classes,
-                img_size=config.image_size,
-                patch_sizes=patch_sizes,
-                config=cnn_multipatch_config
-            )
-        elif transformer_type == "taylorir":
-            # Create TaylorIR model with specified parameters
-            taylor_config = TaylorConfig(
-                img_size=config.image_size,
-                embed_dim=config.transformer_d_model,
-                num_heads=config.transformer_nhead,
-                num_layers=config.transformer_num_layers,
-                dim_feedforward=getattr(config, 'transformer_dim_feedforward', config.transformer_d_model * 4),
-                dropout=config.transformer_dropout_rate,
-                use_gradient_checkpointing=config.transformer_use_gradient_checkpointing
-            )
-            
-            model = create_taylorir_model(
-                num_classes=num_classes,
-                img_size=config.image_size,
-                config=taylor_config
-            )
-        elif transformer_type == "astro":
-            # Create AstroTransformer model with Sample.py-based implementation
-            astro_config = AstroConfig(
-                expansion=getattr(config, 'astro_expansion', 2),
-                layers=getattr(config, 'astro_layers', [2, 2, 2]),
-                use_gradient_checkpointing=config.transformer_use_gradient_checkpointing
-            )
-            
-            model = create_astro_model(
-                num_classes=num_classes,
-                config=astro_config
-            )
-        elif transformer_type == "pixt":  # Default to 'pixt'
-            model = create_pixt_model(
-                num_classes=num_classes,
-                config=transformer_config
-            )
-        else: 
-            print("Unknown transformer type, stop to save your time")
-            raise ValueError(f"Unknown transformer type: {transformer_type}")
+        # Wrap HuggingFace model to extract logits automatically
+        model = HuggingFaceModelWrapper(base_model)
+    elif model_type == '...':
+        print("Creating ... model...")
+        model = ...
     else:
         print("Unknown model type, stop to save your time")
         raise ValueError(f"Unknown model type: {model_type}")
@@ -479,13 +286,6 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
     # Initialize gradient scaler for AMP
     scaler = GradScaler() if config.use_amp else None
     
-    # Check if using a transformer model with AMP
-    is_transformer = isinstance(model, (PixelTransformer, MemoryEfficientPixT, VisualTransformer)) or 'PixT' in str(type(model)) or 'VT' in str(type(model))
-    use_transformer_amp = is_transformer and hasattr(config, 'transformer_use_amp') and config.transformer_use_amp
-    if use_transformer_amp and not config.use_amp:
-        print("Enabling AMP specifically for transformer model")
-        scaler = GradScaler()
-    
     # Training loop
     for epoch in range(config.num_epochs):
         start_time = time.time()
@@ -511,40 +311,20 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
                 labels_a, labels_b = labels, labels[index]
                 inputs = inputs_mix
             
-            # Forward pass with optional AMP
-            if config.use_amp or use_transformer_amp:
-                with autocast():
-                    outputs = model(inputs)
-                    if use_mixup:
-                        loss = lam * criterion(outputs, labels_a) + (1 - lam) * criterion(outputs, labels_b)
-                    else:
-                        loss = criterion(outputs, labels)
-                
-                # Backward pass with scaler
-                scaler.scale(loss).backward()
-                
-                # Gradient clipping
-                if config.grad_clip_val > 0:
-                    scaler.unscale_(optimizer)
-                    torch.nn.utils.clip_grad_norm_(model.parameters(), config.grad_clip_val)
-                    
-                scaler.step(optimizer)
-                scaler.update()
+            # Standard training flow without AMP
+            outputs = model(inputs)
+            if use_mixup:
+                loss = lam * criterion(outputs, labels_a) + (1 - lam) * criterion(outputs, labels_b)
             else:
-                # Standard training flow without AMP
-                outputs = model(inputs)
-                if use_mixup:
-                    loss = lam * criterion(outputs, labels_a) + (1 - lam) * criterion(outputs, labels_b)
-                else:
-                    loss = criterion(outputs, labels)
+                loss = criterion(outputs, labels)
+            
+            loss.backward()
+            
+            # Gradient clipping
+            if config.grad_clip_val > 0:
+                torch.nn.utils.clip_grad_norm_(model.parameters(), config.grad_clip_val)
                 
-                loss.backward()
-                
-                # Gradient clipping
-                if config.grad_clip_val > 0:
-                    torch.nn.utils.clip_grad_norm_(model.parameters(), config.grad_clip_val)
-                    
-                optimizer.step()
+            optimizer.step()
             
             # Update statistics
             running_loss += loss.item() * inputs.size(0)
@@ -802,19 +582,12 @@ def cross_validate(config, device):
                 print("Skipping fold due to model initialization failure")
                 continue
             
-            # Get label smoothing value from config
-            label_smoothing = getattr(config, 'label_smoothing', 0.0)
-            
-            # Loss function with class weights and label smoothing if enabled
+            # Loss function with class weights if enabled
             if class_weights is not None:
-                criterion = nn.CrossEntropyLoss(weight=class_weights, label_smoothing=label_smoothing)
-                print(f"Using weighted CrossEntropyLoss with weights: {class_weights.cpu().numpy()} and label smoothing: {label_smoothing}")
+                criterion = nn.CrossEntropyLoss(weight=class_weights)
+                print(f"Using weighted CrossEntropyLoss with weights: {class_weights.cpu().numpy()}")
             else:
-                criterion = nn.CrossEntropyLoss(label_smoothing=label_smoothing)
-                if label_smoothing > 0:
-                    print(f"Using CrossEntropyLoss with label smoothing: {label_smoothing}")
-                else:
-                    print("Using standard CrossEntropyLoss without label smoothing")
+                criterion = nn.CrossEntropyLoss()
             
             optimizer = get_layer_wise_lr_optimizer(model, config)
             
