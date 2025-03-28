@@ -137,48 +137,38 @@ def convert_to_json_serializable(obj):
         return obj
 
 # ### New function to plot and save training history ###
-def plot_training_history(history, save_path):
-    """Plot and save training metrics history."""
-    plt.figure(figsize=(15, 10))
+def plot_training_history(history, save_path, use_ema=False):
+    """
+    Plot training and validation loss/accuracy history.
     
-    # Plot training & validation loss
-    plt.subplot(2, 2, 1)
-    plt.plot(history['train_loss'], label='Train Loss')
-    plt.plot(history['val_loss'], label='Validation Loss')
-    plt.title('Model Loss')
+    Args:
+        history: Dictionary with loss and accuracy history
+        output_path: Path to save the plot
+        use_ema: If True, start plotting from epoch 5 to better visualize EMA trends
+    """
+    start_epoch = 5 if use_ema else 0  # Start from epoch 5 if using EMA
+    
+    plt.figure(figsize=(12, 5))
+    
+    # Plot training and validation loss
+    plt.subplot(1, 2, 1)
+    plt.plot(range(start_epoch, len(history['train_loss'])), history['train_loss'][start_epoch:], label='Training Loss')
+    plt.plot(range(start_epoch, len(history['val_loss'])), history['val_loss'][start_epoch:], label='Validation Loss')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend()
-    plt.grid(True)
+    plt.title('Loss Over Epochs' + (' (Starting from Epoch 5)' if use_ema else ''))
     
-    # Plot training & validation accuracy
-    plt.subplot(2, 2, 2)
-    plt.plot(history['train_acc'], label='Train Accuracy')
-    plt.plot(history['val_acc'], label='Validation Accuracy')
-    plt.title('Model Accuracy')
+    # Plot training and validation accuracy
+    plt.subplot(1, 2, 2)
+    plt.plot(range(start_epoch, len(history['train_acc'])), history['train_acc'][start_epoch:], label='Training Accuracy')
+    plt.plot(range(start_epoch, len(history['val_acc'])), history['val_acc'][start_epoch:], label='Validation Accuracy')
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
     plt.legend()
-    plt.grid(True)
+    plt.title('Accuracy Over Epochs' + (' (Starting from Epoch 5)' if use_ema else ''))
     
-    # Plot learning rate
-    plt.subplot(2, 2, 3)
-    plt.plot(history['lr'])
-    plt.title('Learning Rate')
-    plt.xlabel('Epoch')
-    plt.ylabel('LR')
-    plt.yscale('log')
-    plt.grid(True)
-    
-    # Save the plot
     plt.tight_layout()
-    plt.savefig(save_path)
-    
-    # Also save history as JSON for future reference
-    json_path = os.path.splitext(save_path)[0] + '.json'
-    with open(json_path, 'w') as f:
-        json.dump(history, f)
-    
-    print(f"Training history saved to {save_path} and {json_path}")
+    plt.savefig(output_path)
     plt.close()
-    
+
