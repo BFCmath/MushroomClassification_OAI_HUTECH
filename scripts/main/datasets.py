@@ -1,66 +1,227 @@
-import os 
+import os
 import pandas as pd
-from torch.utils.data import Dataset
-from torch.utils.data import DataLoader, Dataset, Subset
 import numpy as np
-import torch 
-from PIL import Image
-from pathlib import Path
 import random
-from transforms import AlbumentationsWrapper
-class MushroomDataset(Dataset):
-    """Dataset class for loading images with robust error handling."""
-    def __init__(self, csv_file, transform=None):
-        # Validate CSV file
-        if not os.path.exists(csv_file):
-            raise FileNotFoundError(f"CSV file does not exist: {csv_file}")
-        self.data = pd.read_csv(csv_file)
-        
-        # Check required columns and empty data
-        required_columns = ['image_path', 'class_name']
-        if not all(col in self.data.columns for col in required_columns):
-            raise ValueError("CSV must contain 'image_path' and 'class_name' columns")
-        if len(self.data) == 0:
-            raise ValueError("CSV file is empty")
+import torch
+from torch.utils.data import Dataset
+from PIL import Image
 
+
+class MushroomDataset(Dataset):
+    """Dataset for mushroom classification."""
+    
+    def __init__(self, csv_path, transform=None, root_dir=None):
+        """
+        Args:
+            csv_path: Path to CSV file with annotations
+            transform: Optional transform to be applied
+            root_dir: Root directory for the images
+        """
+        self.data = pd.read_csv(csv_path)
         self.transform = transform
-        self.classes = sorted(self.data['class_name'].unique())
-        self.class_to_idx = {class_name: idx for idx, class_name in enumerate(self.classes)}
-        self.error_count = 0  # Track error count
-        print(f"Loaded dataset with {len(self.data)} samples and {len(self.classes)} classes")
+        self.root_dir = root_dir
+        
+        # Extract unique classes from the CSV file (assuming 'class' column exists)
+        if 'class' in self.data.columns:
+            self.classes = sorted(self.data['class'].unique())
+            self.class_to_idx = {cls_name: i for i, cls_name in enumerate(self.classes)}
+        else:
+            # Assign dummy classes for inference-only datasets
+            self.classes = ['unknown']
+            self.class_to_idx = {'unknown': 0}
     
     def __len__(self):
         return len(self.data)
-
+    
     def __getitem__(self, idx):
-        # Try loading with retries
-        max_retries = 1
-        for attempt in range(max_retries):
-            try:
-                # Get image path with correct platform handling
-                current_idx = (idx + attempt) % len(self.data)
-                img_path = str(Path(self.data.iloc[current_idx]['image_path'])).replace('\\', '/')
-                
-                # Load image and label
-                image = Image.open(img_path).convert('RGB')
-                label = self.class_to_idx[self.data.iloc[current_idx]['class_name']]
-                
-                # Apply transformations
-                if self.transform:
-                    if isinstance(self.transform, AlbumentationsWrapper):
-                        image = np.array(image)
-                    image = self.transform(image)
-                
-                return image, label
-                
-            except Exception as e:
-                self.error_count += 1
-                print(f"Error loading image at index {current_idx}: {str(e)}")
+        img_path = self.data.iloc[idx]['path']
+        if self.root_dir:
+            img_path = os.path.join(self.root_dir, img_path)
+            
+        # Load image from path - with error handling
+        try:
+            image = Image.open(img_path).convert('RGB')
+        except Exception as e:
+            print(f"Error loading image {img_path}: {e}")
+            # Return a blank image of the expected size with black pixels
+            image = Image.new('RGB', (32, 32), color='black')
         
-        # If all retries failed, use a placeholder
-        print(f"All {max_retries} attempts to load valid image failed, starting at idx {idx}")
-        # Create a recognizable pattern with correct image size
-        placeholder = torch.ones((3, 32, 32)) * 0.1 if self.transform else Image.new('RGB', (32, 32), color=(25, 25, 25))
-        # Use a random valid label to avoid biasing the model
-        random_label = random.randint(0, len(self.classes) - 1)
-        return placeholder, random_label
+        # Apply transformation if provided
+        if self.transform:
+            image = self.transform(image)
+        
+        # Get label if available (class column must exist)
+        if 'class' in self.data.columns:
+            class_name = self.data.iloc[idx]['class']
+            label = self.class_to_idx[class_name]
+            return image, label
+        else:
+            # For inference datasets, return image and placeholder label
+            return image, 0
+
+
+class MixupDataset(Dataset):
+    """
+    Wrapper dataset that adds mixup class to training data.
+    The mixup class is generated by combining images from different classes.
+    """
+    def __init__(self, base_dataset, mixup_ratio=0.2, mixup_class_name="mixup", strategy="average"):
+        """
+        Initialize the MixupDataset.
+        
+        Args:
+            base_dataset: The base dataset to wrap
+            mixup_ratio: Ratio of mixup samples to original samples
+            mixup_class_name: Name of the mixup class
+            strategy: How to combine images - "average", "overlay", or "mosaic"
+        """
+        self.base_dataset = base_dataset
+        self.mixup_ratio = mixup_ratio
+        self.strategy = strategy
+        self.classes = base_dataset.classes.copy() if hasattr(base_dataset, 'classes') else []
+        self.classes.append(mixup_class_name)  # Add mixup class name
+        
+        # Create mapping of class indices to sample indices
+        self.class_to_samples = {}
+        for i, (_, target) in enumerate(base_dataset):
+            if target not in self.class_to_samples:
+                self.class_to_samples[target] = []
+            self.class_to_samples[target].append(i)
+            
+        # Calculate number of mixup samples to generate
+        num_original = len(base_dataset)
+        self.num_mixup = int(num_original * mixup_ratio)
+        self.mixup_class_idx = len(self.classes) - 1  # Index of the mixup class
+        
+        # Store class indices mapping
+        self.class_to_idx = {cls: i for i, cls in enumerate(self.classes)}
+        self.base_classes = base_dataset.classes if hasattr(base_dataset, 'classes') else []
+        
+        # Count unique classes in the dataset
+        self.unique_class_count = len(set(self.class_to_samples.keys()))
+        print(f"Dataset has {self.unique_class_count} unique classes")
+        
+        # Check if we have enough classes for mosaic strategy
+        if strategy == "mosaic" and self.unique_class_count < 4:
+            print(f"Warning: Only {self.unique_class_count} classes available, but mosaic strategy requires 4 different classes.")
+            print("Falling back to 'average' strategy for mixup.")
+            self.strategy = "average"
+        else:
+            self.strategy = strategy
+    
+    def __len__(self):
+        """Return the total size of the dataset including mixup samples."""
+        return len(self.base_dataset) + self.num_mixup
+    
+    def __getitem__(self, idx):
+        """Get a sample from the dataset."""
+        if idx < len(self.base_dataset):
+            # Return original sample
+            return self.base_dataset[idx]
+        
+        # Generate a mixup sample
+        mixup_idx = idx - len(self.base_dataset)
+        
+        if self.strategy == "mosaic":
+            # Mosaic strategy - combine 4 images from different classes in a grid
+            img_tensor = torch.zeros(3, 32, 32)  # Default size, will be adjusted by transform
+            
+            # Get all available class indices
+            class_indices = list(self.class_to_samples.keys())
+            
+            # Always select 4 different classes for mosaic
+            # This is possible because we checked in __init__ that we have at least 4 classes
+            selected_classes = random.sample(class_indices, 4)
+            
+            # Get a random sample from each selected class
+            sample_indices = [random.choice(self.class_to_samples[cls]) for cls in selected_classes]
+            images = [self.base_dataset[idx][0] for idx in sample_indices]
+            
+            # Print the classes used for this mosaic (helpful for debugging)
+            if random.random() < 0.01:  # Only print occasionally (1% of the time)
+                class_names = [self.base_dataset.dataset.classes[cls] if hasattr(self.base_dataset, 'dataset') else str(cls) for cls in selected_classes]
+                print(f"Creating mosaic with classes: {class_names}")
+            
+            # Combine into a mosaic (2x2 grid)
+            # Top-left
+            h, w = images[0].shape[1] // 2, images[0].shape[2] // 2
+            img_tensor[:, :h, :w] = images[0][:, :h, :w]
+            # Top-right
+            img_tensor[:, :h, w:] = images[1][:, :h, w:]
+            # Bottom-left
+            img_tensor[:, h:, :w] = images[2][:, h:, :w]
+            # Bottom-right
+            img_tensor[:, h:, w:] = images[3][:, h:, w:]
+        
+        elif self.strategy == "overlay":
+            # Overlay strategy - overlay two images with transparency
+            # Select 2 random classes and samples
+            class_indices = list(self.class_to_samples.keys())
+            classes = random.sample(class_indices, min(2, len(class_indices)))
+            
+            if len(classes) < 2:  # Handle case with only one class
+                classes = classes * 2
+                
+            sample_indices = [random.choice(self.class_to_samples[cls]) for cls in classes]
+            img1, _ = self.base_dataset[sample_indices[0]]
+            img2, _ = self.base_dataset[sample_indices[1]]
+            
+            # Random alpha for blending
+            alpha = random.uniform(0.3, 0.7)
+            img_tensor = alpha * img1 + (1 - alpha) * img2
+        
+        else:  # Default to "average" strategy
+            # Average strategy - average multiple images
+            # Select 2-4 random classes and samples
+            class_indices = list(self.class_to_samples.keys())
+            num_samples = random.randint(2, min(4, len(class_indices)))
+            classes = random.sample(class_indices, min(num_samples, len(class_indices)))
+            
+            if len(classes) < 2:  # Handle case with only one class
+                classes = classes * 2
+                
+            sample_indices = [random.choice(self.class_to_samples[cls]) for cls in classes]
+            images = [self.base_dataset[idx][0] for idx in sample_indices]
+            
+            # Simple average
+            img_tensor = sum(images) / len(images)
+        
+        # Return the mixup image with the mixup class label
+        target = self.mixup_class_idx
+        return img_tensor, target
+    
+    def get_original_num_classes(self):
+        """Return the number of original classes (without mixup)."""
+        return len(self.base_classes)
+
+
+class CustomSubset(Dataset):
+    """Custom subset that applies transform to the original dataset."""
+    def __init__(self, subset, transform=None):
+        self.subset = subset
+        self.transform = transform
+        
+    def __getitem__(self, idx):
+        x, y = self.subset[idx]
+        if self.transform:
+            x = self.transform(x)
+        return x, y
+        
+    def __len__(self):
+        return len(self.subset)
+    
+    @property
+    def classes(self):
+        """Access classes attribute from the underlying dataset."""
+        if hasattr(self.subset, 'dataset') and hasattr(self.subset.dataset, 'classes'):
+            return self.subset.dataset.classes
+        elif hasattr(self.subset, 'classes'):
+            return self.subset.classes
+        raise AttributeError("Could not find 'classes' attribute in the underlying dataset")
+    
+    @property
+    def dataset(self):
+        """Access the original dataset for compatibility."""
+        if hasattr(self.subset, 'dataset'):
+            return self.subset.dataset
+        return self.subset

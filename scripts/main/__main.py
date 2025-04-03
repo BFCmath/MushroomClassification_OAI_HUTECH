@@ -114,11 +114,11 @@ class Config:
     ensemble_methods: list = ["mean", "vote"]  # List of methods to combine predictions: "mean", "vote", "weighted"
     # Backward compatibility - will be set to ["mean"] if None
 
-# Fix the EnhancedConfig class
+# Update Config class with new parameters
 @dataclass
 class EnhancedConfig(Config):
     """Enhanced configuration with additional parameters for advanced techniques."""
-    model_type: str = "dual_branch"  # Options: dual_branch, densenet, smallresnet, mobilenet, inceptionfsd, dilatedgroupconv, dilatedgroupconv
+    model_type: str = "dual_branch"  # Options: dual_branch, densenet, smallresnet, mobilenet, inceptionfsd, dilatedgroupconv
     use_multi_scale: bool = False  # Whether to use multi-scale training
     use_albumentations: bool = True  # Whether to use Albumentations augmentation library
     aug_strength: str = "high"  # Options: "low", "medium", "high"
@@ -126,13 +126,21 @@ class EnhancedConfig(Config):
     crop_scale: float = 0.9
     label_smoothing: float = 0.1  # Label smoothing factor (0.0 means no smoothing)
     
-    # Mixup class parameters
-    use_mixup_class: bool = False  # Whether to add a mixup class to training
-    mixup_class_ratio: float = 0.2  # Ratio of mixup samples to original samples
-    mixup_class_name: str = "mixup"  # Name of the mixup class
-    mixup_strategy: str = "average"  # How to combine images: "average", "overlay", "mosaic"
+    # Transform-related parameters
+    elastic_deform_p: float = 0.15  # Probability for elastic deformation
+    elastic_deform_alpha: float = 2.0  # Alpha parameter for elastic deformation
+    elastic_deform_sigma: float = 1.5  # Sigma parameter for elastic deformation
+    focus_zoom_strength: float = 0.2  # Strength for central focus zoom
+    focus_zoom_p: float = 0.3  # Probability for central focus zoom
+    aspect_ratio_p: float = 0.3  # Probability for aspect ratio variation
+    grid_shuffle_p: float = 0.2  # Probability for grid shuffle
+    polar_transform_p: float = 0.2  # Probability for polar transform
+    tps_strength: float = 0.05  # Strength for thin plate spline
+    tps_p: float = 0.1  # Probability for thin plate spline
+    radial_distortion_strength: float = 0.15  # Strength for radial distortion
+    radial_distortion_p: float = 0.3  # Probability for radial distortion
     
-    # transformer - direct parameters for manual configuration
+    # Transformer parameters - consolidated from duplicates
     transformer_size: str = None  # Set to None to use manual configuration instead of presets
     transformer_d_model: int = 128  # Embedding dimension
     transformer_nhead: int = 8  # Number of attention heads
@@ -703,21 +711,43 @@ def cross_validate(config, device):
     version_dir = os.path.join(config.output_dir, config.version)
     os.makedirs(version_dir, exist_ok=True)
     
+    # Create mushroom transform parameters dictionary from config - moved outside the if blocks
+    # to ensure it's always defined no matter which transform path is chosen
+    mushroom_params = {
+        'radial_distortion_strength': getattr(config, 'radial_distortion_strength', 0.15),
+        'radial_distortion_p': getattr(config, 'radial_distortion_p', 0.3),
+        'elastic_deform_alpha': getattr(config, 'elastic_deform_alpha', 2.0),
+        'elastic_deform_sigma': getattr(config, 'elastic_deform_sigma', 1.5),
+        'elastic_deform_p': getattr(config, 'elastic_deform_p', 0.15),
+        'focus_zoom_strength': getattr(config, 'focus_zoom_strength', 0.2),
+        'focus_zoom_p': getattr(config, 'focus_zoom_p', 0.3),
+        'aspect_ratio_p': getattr(config, 'aspect_ratio_p', 0.3),
+        'grid_shuffle_p': getattr(config, 'grid_shuffle_p', 0.2),
+        'polar_transform_p': getattr(config, 'polar_transform_p', 0.2),
+        'tps_strength': getattr(config, 'tps_strength', 0.05),
+        'tps_p': getattr(config, 'tps_p', 0.1)
+    }
+    
     # Get appropriate transforms based on configuration with consistent parameters
     if getattr(config, 'use_albumentations', False) and ALBUMENTATIONS_AVAILABLE:
         print(f"Using Albumentations transforms with strength: {config.aug_strength}")
+        
         train_transform, val_transform = get_albumentation_transforms(
             aug_strength=getattr(config, 'aug_strength', 'high'),
             image_size=config.image_size,
-            multi_scale=getattr(config, 'use_multi_scale', False)
+            multi_scale=getattr(config, 'use_multi_scale', False),
+            pixel_percent=config.pixel_percent,
+            crop_scale=config.crop_scale
         )
     elif getattr(config, 'use_multi_scale', False):
         print("Using enhanced multi-scale transforms")
         train_transform, val_transform = get_enhanced_transforms(
             multi_scale=True,
             image_size=config.image_size,
-            pixel_percent = config.pixel_percent,
-            crop_scale = config.crop_scale
+            pixel_percent=config.pixel_percent,
+            crop_scale=config.crop_scale,
+            advanced_spatial_transforms=True,  # Changed from use_mushroom_transforms to match function signature
+            mushroom_transform_params=mushroom_params
         )
     else:
         print("Using standard transforms")
@@ -735,6 +765,7 @@ def cross_validate(config, device):
         print(f"Error loading dataset: {str(e)}")
         raise
     
+    analyses = {}
     val_metrics = []
     fold_results = {}
     all_histories = {}
@@ -763,11 +794,11 @@ def cross_validate(config, device):
     
     for fold_idx, fold in enumerate(config.train_folds):
         print(f"\n===== Fold {fold+1}/{config.num_folds} ({fold_idx+1}/{len(config.train_folds)}) =====")
-        
         try:
             # Create train/val datasets for this fold with appropriate transforms
             train_indices = dataset.data[dataset.data['fold'] != fold].index.tolist()
             val_indices = dataset.data[dataset.data['fold'] == fold].index.tolist()
+            
             if len(train_indices) == 0 or len(val_indices) == 0:
                 print(f"Warning: Empty train or validation set for fold {fold}. Skipping...")
                 continue
@@ -777,41 +808,23 @@ def cross_validate(config, device):
             os.makedirs(fold_dir, exist_ok=True)
             
             # Create subsets for this fold using CustomSubset for more efficient transform application
-            train_subset = CustomSubset(Subset(base_train_dataset, train_indices), train_transform)
+            train_dataset = CustomSubset(Subset(base_train_dataset, train_indices), train_transform)
             val_dataset = CustomSubset(Subset(base_val_dataset, val_indices), val_transform)
-            
-            # Apply MixupDataset wrapper to training data if enabled
-            if getattr(config, 'use_mixup_class', False):
-                original_num_classes = len(dataset.classes)
-                print(f"Adding mixup class to training data (original classes: {original_num_classes})")
-                train_dataset = MixupDataset(
-                    train_subset,
-                    mixup_ratio=config.mixup_class_ratio,
-                    mixup_class_name=config.mixup_class_name,
-                    strategy=config.mixup_strategy
-                )
-                print(f"Training dataset now has {len(train_dataset.classes)} classes: {train_dataset.classes}")
-                print(f"Added {train_dataset.num_mixup} mixup samples to training data")
-                # Store original num_classes for model creation
-                original_num_classes = train_dataset.get_original_num_classes()
-            else:
-                train_dataset = train_subset
-                original_num_classes = len(dataset.classes)
             
             # Create data loaders with optimized settings and error handling
             train_loader = DataLoader(
-                train_dataset,  
-                batch_size=config.batch_size, 
-                shuffle=True, 
+                train_dataset,
+                batch_size=config.batch_size,
+                shuffle=True,
                 num_workers=config.num_workers,
                 pin_memory=config.pin_memory,
                 drop_last=False  # Don't drop last batch even if smaller than batch_size
             )
             
             val_loader = DataLoader(
-                val_dataset, 
-                batch_size=config.batch_size, 
-                shuffle=False, 
+                val_dataset,
+                batch_size=config.batch_size,
+                shuffle=False,
                 num_workers=config.num_workers,
                 pin_memory=config.pin_memory
             )
@@ -820,12 +833,7 @@ def cross_validate(config, device):
             
             # Initialize model with proper error handling
             try:
-                if getattr(config, 'use_mixup_class', False):
-                    # For training, create a model with 5 classes (or more if needed)
-                    model = get_model(len(train_dataset.classes), config, device)
-                else:
-                    # Normal case - create model with the original number of classes
-                    model = get_model(original_num_classes, config, device)
+                model = get_model(len(dataset.class_to_idx), config, device)
             except Exception as e:
                 print(f"Error initializing model: {str(e)}")
                 print("Skipping fold due to model initialization failure")
@@ -836,14 +844,8 @@ def cross_validate(config, device):
             
             # Loss function with class weights and label smoothing if enabled
             if class_weights is not None:
-                if getattr(config, 'use_mixup_class', False):
-                    # Add a weight of 1.0 for the mixup class
-                    extended_weights = torch.cat([class_weights, torch.tensor([1.0], device=device)])
-                    criterion = nn.CrossEntropyLoss(weight=extended_weights, label_smoothing=label_smoothing)
-                    print(f"Using weighted CrossEntropyLoss with extended weights: {extended_weights.cpu().numpy()} and label smoothing: {label_smoothing}")
-                else:
-                    criterion = nn.CrossEntropyLoss(weight=class_weights, label_smoothing=label_smoothing)
-                    print(f"Using weighted CrossEntropyLoss with weights: {class_weights.cpu().numpy()} and label smoothing: {label_smoothing}")
+                criterion = nn.CrossEntropyLoss(weight=class_weights, label_smoothing=label_smoothing)
+                print(f"Using weighted CrossEntropyLoss with weights: {class_weights.cpu().numpy()} and label smoothing: {label_smoothing}")
             else:
                 criterion = nn.CrossEntropyLoss(label_smoothing=label_smoothing)
                 if label_smoothing > 0:
@@ -853,14 +855,14 @@ def cross_validate(config, device):
             
             optimizer = get_layer_wise_lr_optimizer(model, config)
             
-            # Create scheduler with proper error handling
+            # Create scheduler with proper error handling 
             try:
                 if config.scheduler_type == "plateau":
                     scheduler = ReduceLROnPlateau(
-                        optimizer, 
-                        mode='min', 
-                        factor=config.scheduler_factor, 
-                        patience=config.scheduler_patience, 
+                        optimizer,
+                        mode='min',
+                        factor=config.scheduler_factor,
+                        patience=config.scheduler_patience,
                         verbose=True
                     )
                 elif config.scheduler_type == "cosine":
@@ -868,7 +870,8 @@ def cross_validate(config, device):
                         optimizer,
                         T_0=10,
                         T_mult=2,
-                        eta_min=1e-6
+                        eta_min=1e-6,
+                        verbose=True
                     )
                 else:
                     raise ValueError(f"Unknown scheduler type: {config.scheduler_type}")
@@ -879,50 +882,16 @@ def cross_validate(config, device):
             
             # Train model - updated to also return analysis, passing fold_dir as output directory
             model, val_accuracy, history, analysis = train_model(
-                model, 
-                train_loader, 
-                val_loader, 
-                criterion, 
-                optimizer, 
-                scheduler, 
-                config, 
+                model,
+                train_loader,
+                val_loader,
+                criterion,
+                optimizer,
+                scheduler,
+                config,
                 device,
                 fold_dir  # Pass fold_dir as the output directory
             )
-            
-            # Fix the issue with saving the modified model in the cross_validate function
-            if getattr(config, 'use_mixup_class', False):
-                print("Converting model for inference (removing mixup class)...")
-                
-                # Extract the feature layers
-                # This depends on the model architecture - using a generic approach
-                if hasattr(model, 'module'):  # For DataParallel models
-                    feature_extractor = model.module
-                else:
-                    feature_extractor = model
-                    
-                # Replace the final layer to output only original classes
-                if hasattr(feature_extractor, 'classifier'):
-                    # Get the input features size of the last layer
-                    in_features = feature_extractor.classifier.in_features
-                    print(f"Replacing classifier layer: {in_features} -> {original_num_classes}")
-                    feature_extractor.classifier = nn.Linear(in_features, original_num_classes)
-                elif hasattr(feature_extractor, 'fc'):
-                    # For ResNet and similar architectures
-                    in_features = feature_extractor.fc.in_features
-                    print(f"Replacing fc layer: {in_features} -> {original_num_classes}")
-                    feature_extractor.fc = nn.Linear(in_features, original_num_classes)
-                else:
-                    print("Warning: Could not identify final layer to replace.")
-                    print(f"Model structure: {model.__class__.__name__}")
-                
-                # Move the modified model back to the device
-                model = model.to(device)
-                
-                # Save the modified model for inference
-                modified_model_path = os.path.join(fold_dir, 'inference_model_weights.pth')
-                torch.save(model.state_dict(), modified_model_path)
-                print(f"Modified model saved to {modified_model_path}")
             
             # Generate and save visualizations
             plot_training_history(history, os.path.join(fold_dir, 'training_history.png'))
@@ -959,6 +928,7 @@ def cross_validate(config, device):
         # Report cross-validation results
         avg_val_accuracy = np.mean(val_metrics)
         std_val_accuracy = np.std(val_metrics)
+        
         print("\n===== Cross-Validation Summary =====")
         for fold, acc in fold_results.items():
             print(f"Fold {fold+1}: {acc:.4f}")
@@ -985,14 +955,6 @@ def load_model_from_checkpoint(checkpoint_path, num_classes, config, device):
     """Load a model from a checkpoint file with support for DataParallel."""
     # Create base model on specified device
     model = get_model(num_classes, config, device)
-    
-    # Check if there's a special inference model for mixup class approach
-    if getattr(config, 'use_mixup_class', False):
-        inference_model_path = os.path.dirname(checkpoint_path) + '/inference_model_weights.pth'
-        if os.path.exists(inference_model_path):
-            print(f"Loading inference model from {inference_model_path}")
-            checkpoint_path = inference_model_path
-    
     checkpoint = torch.load(checkpoint_path, map_location=device)
     
     # Handle different checkpoint formats and DataParallel prefixes
@@ -1003,7 +965,6 @@ def load_model_from_checkpoint(checkpoint_path, num_classes, config, device):
     
     # Handle case where model was saved with DataParallel but is now loaded without it
     if not isinstance(model, nn.DataParallel) and all(k.startswith('module.') for k in state_dict.keys()):
-        # Remove 'module.' prefix from state_dict keys
         from collections import OrderedDict
         new_state_dict = OrderedDict()
         for k, v in state_dict.items():
@@ -1012,47 +973,14 @@ def load_model_from_checkpoint(checkpoint_path, num_classes, config, device):
     
     # Handle case where model was saved without DataParallel but is now loaded with it
     elif isinstance(model, nn.DataParallel) and not all(k.startswith('module.') for k in state_dict.keys()):
-        # Add 'module.' prefix to state_dict keys
         from collections import OrderedDict
         new_state_dict = OrderedDict()
         for k, v in state_dict.items():
             new_state_dict['module.' + k] = v
         state_dict = new_state_dict
     
-    # Handle case where final layer dimensions don't match
-    # This can happen when training with mixup class but inference without
-    if 'classifier.weight' in state_dict and state_dict['classifier.weight'].size(0) != num_classes:
-        print(f"Warning: Model was trained with {state_dict['classifier.weight'].size(0)} classes but expected {num_classes}")
-        print("Attempting to fix by dropping the mixup class weights...")
-        
-        # Keep only weights for original classes (drop the last class - mixup)
-        original_weights = state_dict['classifier.weight'][:num_classes]
-        original_bias = state_dict['classifier.bias'][:num_classes]
-        
-        state_dict['classifier.weight'] = original_weights
-        state_dict['classifier.bias'] = original_bias
-    
-    # Similarly for 'fc' layer (used in many architectures)
-    if 'fc.weight' in state_dict and state_dict['fc.weight'].size(0) != num_classes:
-        print(f"Warning: Model was trained with {state_dict['fc.weight'].size(0)} classes but expected {num_classes}")
-        print("Attempting to fix by dropping the mixup class weights...")
-        
-        # Keep only weights for original classes (drop the last class - mixup)
-        original_weights = state_dict['fc.weight'][:num_classes]
-        original_bias = state_dict['fc.bias'][:num_classes]
-        
-        state_dict['fc.weight'] = original_weights
-        state_dict['fc.bias'] = original_bias
-    
     # Load the state dict
-    try:
-        model.load_state_dict(state_dict)
-    except Exception as e:
-        print(f"Error loading state dict: {e}")
-        # Try to load with strict=False which will ignore missing keys
-        print("Attempting to load with strict=False")
-        model.load_state_dict(state_dict, strict=False)
-        
+    model.load_state_dict(state_dict)
     model.eval()
     return model
 
@@ -1197,7 +1125,7 @@ def batch_inference(model, image_dir, class_names, device, transform=None, batch
             print(f"Error during batch inference: {str(e)}")
             # Continue to next batch
     
-    # Print summary
+    # Print summary:
     print(f"Processed {processed_count} images successfully, {failed_count} images failed")
     
     # Combine all probability tensors
@@ -1220,16 +1148,14 @@ def save_submission_csv(results, output_file):
         'id': result['filename'],
         'type': result['class'] # still class, mapping to correct class_id later
     } for result in results])
-    
     df['type'] = df['type'].map(CLASS_MAP)
     df.to_csv(output_file, index=False)
     print(f"Submission saved to {output_file}")
 
 def save_logits_csv(filenames, probabilities, class_names, output_file):
     """Save all class probabilities to a logits CSV file."""
-    # Create a DataFrame with one row per image
+    # Create a DataFrame with one row per image and one column per class with the probability values
     data = {'filename': filenames}
-    # Add one column per class with the probability values
     for i, class_name in enumerate(class_names):
         data[class_name] = probabilities[:, i].numpy()
     
@@ -1261,7 +1187,7 @@ def run_inference(config, model_path, input_path, output_dir, device):
         # Ensure output directory exists
         os.makedirs(output_dir, exist_ok=True)
         
-        # Generate output paths:
+        # Generate output paths
         output_json_path = os.path.join(output_dir, "inference_results.json")
         output_submission_path = os.path.join(output_dir, "submission.csv")
         output_logits_path = os.path.join(output_dir, "logits.csv")
@@ -1343,7 +1269,6 @@ def combine_fold_predictions(fold_predictions, class_names, ensemble_method="mea
     for fold_preds in fold_predictions:
         for pred in fold_preds:
             filename = pred['filename']
-            
             if filename not in combined_results:
                 combined_results[filename] = {
                     'filename': filename,
@@ -1351,20 +1276,20 @@ def combine_fold_predictions(fold_predictions, class_names, ensemble_method="mea
                     'fold_predictions': [],
                     'fold_class_probabilities': []  # Store full probability distributions
                 }
-            
             combined_results[filename]['fold_predictions'].append({
                 'fold': pred.get('fold', -1),
                 'class': pred['class'],
                 'class_id': pred['class_id'],
                 'confidence': pred['confidence']
             })
+            
             # Store full class probability distributions if available
             if 'class_probabilities' in pred:
                 combined_results[filename]['fold_class_probabilities'].append(
                     pred['class_probabilities']
                 )
     
-    # Process each image's multiple predictions:
+    # Process each image's multiple predictions
     final_results = []
     for filename, result in combined_results.items():
         # Initialize to None to avoid variable scope issues later
@@ -1379,9 +1304,8 @@ def combine_fold_predictions(fold_predictions, class_names, ensemble_method="mea
                     votes[class_name] = votes.get(class_name, 0) + 1
                 
                 # Find class with most votes
-                if votes:  # Ensure class exists in dictionary
+                if votes:
                     final_class = max(votes.items(), key=lambda x: x[1])[0]
-                    
                     # Find class_id and average confidence for this class
                     matching_preds = [p for p in result['fold_predictions'] if p['class'] == final_class]
                     if matching_preds:
@@ -1399,6 +1323,25 @@ def combine_fold_predictions(fold_predictions, class_names, ensemble_method="mea
                     final_class = result['fold_predictions'][0]['class']
                     final_class_id = result['fold_predictions'][0]['class_id']
                     final_confidence = result['fold_predictions'][0]['confidence']
+                
+                # Check if we have full probability distributions
+                if result['fold_class_probabilities'] and len(result['fold_class_probabilities']) > 0:
+                    # Initialize an averaged probability distribution
+                    avg_probs = {class_name: 0.0 for class_name in class_names}
+                    
+                    # Sum probabilities for each class across all folds
+                    for probs in result['fold_class_probabilities']:
+                        for class_name, prob in probs.items():
+                            if class_name in avg_probs:  # Ensure class exists in dictionary
+                                avg_probs[class_name] += prob
+                    
+                    # Average the summed probabilities
+                    num_folds = len(result['fold_class_probabilities'])
+                    for class_name in avg_probs:
+                        avg_probs[class_name] /= num_folds
+                    
+                    # Store the full averaged distribution
+                    class_probabilities = avg_probs
             else:  # Default is "mean" - properly average full probability distributions
                 # Check if we have full probability distributions
                 if result['fold_class_probabilities'] and len(result['fold_class_probabilities']) > 0:
@@ -1507,7 +1450,7 @@ def combine_fold_predictions(fold_predictions, class_names, ensemble_method="mea
 
 def evaluate_model(model, data_loader, criterion, device, num_classes=None):
     """Evaluate model performance on a dataset with comprehensive metrics."""
-    # Set model to evaluation model
+    # Set model to evaluation mode
     model.eval()
     running_loss = 0.0
     correct = 0
@@ -1568,7 +1511,7 @@ def evaluate_model(model, data_loader, criterion, device, num_classes=None):
         if num_classes is not None:
             # Create confusion matrix and get per-class metrics
             analysis = analyze_false_predictions(all_targets, all_predictions, 
-                                              list(range(num_classes)))
+                                                 list(range(num_classes)))
             results['analysis'] = analysis
             results['per_class_accuracy'] = {
                 i: stats['accuracy'] for i, stats in analysis['per_class'].items()
@@ -1580,7 +1523,6 @@ def evaluate_model(model, data_loader, criterion, device, num_classes=None):
         results['probabilities'] = all_probabilities
         
         return results
-        
     except Exception as e:
         print(f"Error during model evaluation: {str(e)}")
         import traceback
@@ -1591,126 +1533,6 @@ def evaluate_model(model, data_loader, criterion, device, num_classes=None):
             'error': str(e)
         }
 
-# Add the MixupDataset class
-class MixupDataset(Dataset):
-    """
-    Wrapper dataset that adds mixup class to training data.
-    The mixup class is generated by combining images from different classes.
-    """
-    def __init__(self, base_dataset, mixup_ratio=0.2, mixup_class_name="mixup", strategy="average"):
-        """
-        Initialize the MixupDataset.
-        
-        Args:
-            base_dataset: The base dataset to wrap
-            mixup_ratio: Ratio of mixup samples to original samples
-            mixup_class_name: Name of the mixup class
-            strategy: How to combine images - "average", "overlay", or "mosaic"
-        """
-        self.base_dataset = base_dataset
-        self.mixup_ratio = mixup_ratio
-        self.strategy = strategy
-        self.classes = base_dataset.classes.copy() if hasattr(base_dataset, 'classes') else []
-        self.classes.append(mixup_class_name)  # Add mixup class name
-        
-        # Create mapping of class indices to sample indices
-        self.class_to_samples = {}
-        for i, (_, target) in enumerate(base_dataset):
-            if target not in self.class_to_samples:
-                self.class_to_samples[target] = []
-            self.class_to_samples[target].append(i)
-            
-        # Calculate number of mixup samples to generate
-        num_original = len(base_dataset)
-        self.num_mixup = int(num_original * mixup_ratio)
-        self.mixup_class_idx = len(self.classes) - 1  # Index of the mixup class
-        
-        # Store class indices mapping
-        self.class_to_idx = {cls: i for i, cls in enumerate(self.classes)}
-        self.base_classes = base_dataset.classes if hasattr(base_dataset, 'classes') else []
-        
-    def __len__(self):
-        """Return the total size of the dataset including mixup samples."""
-        return len(self.base_dataset) + self.num_mixup
-    
-    def __getitem__(self, idx):
-        """Get a sample from the dataset."""
-        if idx < len(self.base_dataset):
-            # Return original sample
-            return self.base_dataset[idx]
-        
-        # Generate a mixup sample
-        mixup_idx = idx - len(self.base_dataset)
-        
-        if self.strategy == "mosaic":
-            # Mosaic strategy - combine 4 images in a grid
-            img_tensor = torch.zeros(3, 32, 32)  # Default size, will be adjusted by transform
-            
-            # Select 4 images randomly from different classes when possible
-            class_indices = list(self.class_to_samples.keys())
-            if len(class_indices) >= 4:
-                selected_classes = random.sample(class_indices, 4)
-            else:
-                # If there are fewer than 4 classes, repeat some
-                selected_classes = random.choices(class_indices, k=4)
-            
-            # Get a random sample from each selected class
-            sample_indices = [random.choice(self.class_to_samples[cls]) for cls in selected_classes]
-            images = [self.base_dataset[idx][0] for idx in sample_indices]
-            
-            # Combine into a mosaic (2x2 grid)
-            # Top-left
-            h, w = images[0].shape[1] // 2, images[0].shape[2] // 2
-            img_tensor[:, :h, :w] = images[0][:, :h, :w]
-            # Top-right
-            img_tensor[:, :h, w:] = images[1][:, :h, w:]
-            # Bottom-left
-            img_tensor[:, h:, :w] = images[2][:, h:, :w]
-            # Bottom-right
-            img_tensor[:, h:, w:] = images[3][:, h:, w:]
-        
-        elif self.strategy == "overlay":
-            # Overlay strategy - overlay two images with transparency
-            # Select 2 random classes and samples
-            class_indices = list(self.class_to_samples.keys())
-            classes = random.sample(class_indices, min(2, len(class_indices)))
-            
-            if len(classes) < 2:  # Handle case with only one class
-                classes = classes * 2
-                
-            sample_indices = [random.choice(self.class_to_samples[cls]) for cls in classes]
-            img1, _ = self.base_dataset[sample_indices[0]]
-            img2, _ = self.base_dataset[sample_indices[1]]
-            
-            # Random alpha for blending
-            alpha = random.uniform(0.3, 0.7)
-            img_tensor = alpha * img1 + (1 - alpha) * img2
-        
-        else:  # Default to "average" strategy
-            # Average strategy - average multiple images
-            # Select 2-4 random classes and samples
-            class_indices = list(self.class_to_samples.keys())
-            num_samples = random.randint(2, min(4, len(class_indices)))
-            classes = random.sample(class_indices, min(num_samples, len(class_indices)))
-            
-            if len(classes) < 2:  # Handle case with only one class
-                classes = classes * 2
-                
-            sample_indices = [random.choice(self.class_to_samples[cls]) for cls in classes]
-            images = [self.base_dataset[idx][0] for idx in sample_indices]
-            
-            # Simple average
-            img_tensor = sum(images) / len(images)
-        
-        # Return the mixup image with the mixup class label
-        target = self.mixup_class_idx
-        return img_tensor, target
-    
-    def get_original_num_classes(self):
-        """Return the number of original classes (without mixup)."""
-        return len(self.base_classes)
-
-# Fix the code in the main function to properly handle mixup class
 def main():
     """Run both training and inference in a single pipeline."""
     try:
@@ -1718,9 +1540,6 @@ def main():
         config = EnhancedConfig()
         if config.debug:
             print("WARNING: THIS IS DEBUG MODE")
-        
-        # Use mixup class for training only
-        orig_use_mixup_class = getattr(config, 'use_mixup_class', False)
         
         # Set device
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -1745,32 +1564,47 @@ def main():
         # Save start time for benchmarking
         start_time = time.time()
         
-        # === Training Phase ===
-        print("\n=== Starting Training Phase (Cross-validation) with Enhanced Features ===")
-        
         # Configure transforms at the global scope rather than locally
+        # Create mushroom transform parameters dictionary here for consistency
+        mushroom_params = {
+            'radial_distortion_strength': getattr(config, 'radial_distortion_strength', 0.15),
+            'radial_distortion_p': getattr(config, 'radial_distortion_p', 0.3),
+            'elastic_deform_alpha': getattr(config, 'elastic_deform_alpha', 2.0),
+            'elastic_deform_sigma': getattr(config, 'elastic_deform_sigma', 1.5),
+            'elastic_deform_p': getattr(config, 'elastic_deform_p', 0.15),
+            'focus_zoom_strength': getattr(config, 'focus_zoom_strength', 0.2),
+            'focus_zoom_p': getattr(config, 'focus_zoom_p', 0.3),
+            'aspect_ratio_p': getattr(config, 'aspect_ratio_p', 0.3),
+            'grid_shuffle_p': getattr(config, 'grid_shuffle_p', 0.2),
+            'polar_transform_p': getattr(config, 'polar_transform_p', 0.2),
+            'tps_strength': getattr(config, 'tps_strength', 0.05),
+            'tps_p': getattr(config, 'tps_p', 0.1)
+        }
+        
         if getattr(config, 'use_albumentations', False) and ALBUMENTATIONS_AVAILABLE:
             print(f"Using Albumentations augmentation with {config.aug_strength} strength")
             # Use global variables to properly override transformations
             train_transform, val_transform = get_albumentation_transforms(
-                aug_strength=getattr(config, 'aug_strength', 'high'), 
-                image_size=config.image_size, 
+                aug_strength=getattr(config, 'aug_strength', 'high'),
+                image_size=config.image_size,
                 multi_scale=getattr(config, 'use_multi_scale', False),
-                pixel_percent = config.pixel_percent,
-                crop_scale = config.crop_scale
+                pixel_percent=config.pixel_percent,
+                crop_scale=config.crop_scale
             )
         elif getattr(config, 'use_multi_scale', False):
             print("Using multi-scale training transforms")
             train_transform, val_transform = get_enhanced_transforms(
                 multi_scale=True,
                 image_size=config.image_size,
-                pixel_percent = config.pixel_percent,
-                crop_scale = config.crop_scale
+                pixel_percent=config.pixel_percent,
+                crop_scale=config.crop_scale,
+                advanced_spatial_transforms=True,  # Changed to match parameter name
+                mushroom_transform_params=mushroom_params
             )
         else:
             print("Using standard transforms")
             train_transform, val_transform = get_transforms(
-                image_size=config.image_size, 
+                image_size=config.image_size,
                 aug_strength="standard"
             )
         
@@ -1790,21 +1624,24 @@ def main():
                 # Print summary of problematic classes across folds
                 print("\n=== Summary of Problematic Classes Across Folds ===")
                 class_problem_scores = {}
+                
                 for fold, analysis in analyses.items():
                     if not analysis or 'per_class' not in analysis:
                         continue
+                        
                     for class_name, stats in analysis['per_class'].items():
                         if class_name not in class_problem_scores:
                             class_problem_scores[class_name] = {'total_false': 0, 'count': 0}
+                        
                         class_problem_scores[class_name]['total_false'] += stats.get('false', 0)
                         class_problem_scores[class_name]['count'] += 1
                 
                 if class_problem_scores:
+                    # Sort by average false predictions (descending)
                     for class_name, stats in class_problem_scores.items():
                         stats['avg_false'] = stats['total_false'] / max(stats['count'], 1)  # Avoid division by zero
                     
-                    # Sort by average false predictions (descending)
-                    sorted_problems = sorted(class_problem_scores.items(), 
+                    sorted_problems = sorted(class_problem_scores.items(),
                                           key=lambda x: x[1]['avg_false'], reverse=True)
                     
                     print("\nClasses sorted by average false predictions:")
@@ -1837,7 +1674,6 @@ def main():
                 
                 # Run inference for each trained fold model
                 all_fold_results = []
-                
                 for fold in config.train_folds:
                     print(f"\n--- Running inference with fold {fold+1} model ---")
                     fold_dir = os.path.join(version_dir, f'fold_{fold}')
@@ -1850,9 +1686,9 @@ def main():
                     
                     # Run inference with this fold's model
                     results, probs, _ = run_inference(
-                        config, 
-                        model_path, 
-                        config.inference_input_path, 
+                        config,
+                        model_path,
+                        config.inference_input_path,
                         fold_dir,  # Save in fold directory
                         device
                     )
@@ -1877,8 +1713,8 @@ def main():
                         
                         print(f"\n--- Creating ensemble using method: {method} ---")
                         combined_results = combine_fold_predictions(
-                            all_fold_results, 
-                            class_names, 
+                            all_fold_results,
+                            class_names,
                             ensemble_method=method
                         )
                         
@@ -1888,9 +1724,11 @@ def main():
                             os.makedirs(ensemble_dir, exist_ok=True)
                             
                             # Save combined results
-                            combined_json_path = os.path.join(ensemble_dir, "inference_results.json")
-                            combined_submission_path = os.path.join(ensemble_dir, "submission.csv")
                             try:
+                                # Save ensemble results
+                                combined_json_path = os.path.join(ensemble_dir, "inference_results.json")
+                                combined_submission_path = os.path.join(ensemble_dir, "submission.csv")
+                                
                                 save_inference_results(combined_results, combined_json_path)
                                 save_submission_csv(combined_results, combined_submission_path)
                                 
@@ -1925,7 +1763,6 @@ def main():
                             print(f"\nEnsemble methods comparison saved to {comparison_path}")
                         except Exception as e:
                             print(f"Error generating ensemble comparison: {str(e)}")
-                            
                 elif not config.ensemble_methods or (len(config.ensemble_methods) == 1 and not config.ensemble_methods[0]):
                     print("Ensemble is disabled. Each fold's predictions are saved separately.")
                 else:
