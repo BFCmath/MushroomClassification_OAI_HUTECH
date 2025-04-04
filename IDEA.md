@@ -55,3 +55,8 @@
 + Testing to make sure that the SPD is the key to win this competition...
 + SPD indeed gives a better result than the normal downsampling!
 + FSD (Feature Space Downsampling) seems to work well, but need to check again.
+
+## Robustness
++ Attack the models with high and low aug images
++ TTA
++ Adversarial validation
