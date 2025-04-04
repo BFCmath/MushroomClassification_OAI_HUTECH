@@ -12,7 +12,7 @@ import base64
 # Constants
 SUPPORTED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.webp']
 # Use absolute path joining for reliability
-DEFAULT_TEST_FOLDER = "D:\project\oai\\test" # <-- Safer default path
+DEFAULT_TEST_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), 'attack_dataset/colorize_mushroom_test')) # <-- Safer default path
 
 app = Flask(__name__)
 # Ensure templates folder is correctly identified relative to this script
@@ -684,8 +684,8 @@ if __name__ == '__main__':
     print(f"Starting Flask Image Viewer")
     print(f"Default test folder: {DEFAULT_TEST_FOLDER}")
     print(f"Templates folder: {app.template_folder}")
-    print(f"Access the viewer at: http://127.0.0.1:4040/")
+    print(f"Access the viewer at: http://127.0.0.1:5000/")
     print("-" * 40)
     # Turn off reloader if template creation happens inside main,
     # or ensure create_templates() is idempotent. debug=True enables the reloader.
-    app.run(debug=False, port=4040) # Use debug=False for production
+    app.run(debug=True) # Use debug=False for production
