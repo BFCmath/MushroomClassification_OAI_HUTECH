@@ -1,0 +1,256 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mushroom Spatial Transform Demo</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f5f5f5;
+            }
+            h1, h2, h3 {
+                color: #333;
+            }
+            .transform-section {
+                margin-bottom: 30px;
+                background-color: white;
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .sample-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+                margin-top: 15px;
+            }
+            .sample-image {
+                width: 100%;
+                border-radius: 4px;
+                border: 1px solid #ddd;
+            }
+            .original-section {
+                background-color: #f0f8ff;
+            }
+            .transform-description {
+                color: #555;
+                margin: 10px 0 20px;
+                font-size: 0.9em;
+                line-height: 1.4;
+            }
+            .timestamp {
+                color: #666;
+                font-size: 0.8em;
+                margin-top: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Mushroom Spatial Transform Demo</h1>
+        <p class="timestamp">Generated on 2025-04-02 17:34:11</p>
+        
+        <div class="transform-section original-section">
+            <h2>Original Image</h2>
+            <img src="images/Original_sample_0.jpg" alt="Original Image" style="max-width: 100%; max-height: 300px;">
+        </div>
+    
+        <div class="transform-section">
+            <h2>RadialDistortion</h2>
+            <p class="transform-description">Applies barrel or pincushion distortion to simulate lens effects and natural cap curvature variations.</p>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/RadialDistortion_sample_0.jpg" alt="RadialDistortion sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RadialDistortion_sample_1.jpg" alt="RadialDistortion sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RadialDistortion_sample_2.jpg" alt="RadialDistortion sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/RadialDistortion_sample_3.jpg" alt="RadialDistortion sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h2>ElasticDeformation</h2>
+            <p class="transform-description">Applies elastic warping to simulate natural growth variations while preserving mushroom structure.</p>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/ElasticDeformation_sample_0.jpg" alt="ElasticDeformation sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/ElasticDeformation_sample_1.jpg" alt="ElasticDeformation sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/ElasticDeformation_sample_2.jpg" alt="ElasticDeformation sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/ElasticDeformation_sample_3.jpg" alt="ElasticDeformation sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h2>CentralFocusZoom</h2>
+            <p class="transform-description">Selectively zooms on the center region to emphasize the cap-stem junction while maintaining periphery.</p>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/CentralFocusZoom_sample_0.jpg" alt="CentralFocusZoom sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/CentralFocusZoom_sample_1.jpg" alt="CentralFocusZoom sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/CentralFocusZoom_sample_2.jpg" alt="CentralFocusZoom sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/CentralFocusZoom_sample_3.jpg" alt="CentralFocusZoom sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h2>AspectRatioVariation</h2>
+            <p class="transform-description">Applies subtle changes to height/width ratio to simulate different growth stages.</p>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/AspectRatioVariation_sample_0.jpg" alt="AspectRatioVariation sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/AspectRatioVariation_sample_1.jpg" alt="AspectRatioVariation sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/AspectRatioVariation_sample_2.jpg" alt="AspectRatioVariation sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/AspectRatioVariation_sample_3.jpg" alt="AspectRatioVariation sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h2>GridShuffle</h2>
+            <p class="transform-description">Divides image into grid cells and randomly shuffles them, forcing the model to focus on local patterns.</p>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/GridShuffle_sample_0.jpg" alt="GridShuffle sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/GridShuffle_sample_1.jpg" alt="GridShuffle sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/GridShuffle_sample_2.jpg" alt="GridShuffle sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/GridShuffle_sample_3.jpg" alt="GridShuffle sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h2>PolarTransform</h2>
+            <p class="transform-description">Converts image to polar coordinates and applies transformations, effective for circular caps with radial features.</p>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/PolarTransform_sample_0.jpg" alt="PolarTransform sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/PolarTransform_sample_1.jpg" alt="PolarTransform sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/PolarTransform_sample_2.jpg" alt="PolarTransform sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/PolarTransform_sample_3.jpg" alt="PolarTransform sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h2>StructuredOcclusion</h2>
+            <p class="transform-description">Adds realistic occlusions mimicking forest debris or overlapping mushrooms, more contextually appropriate than random erasing.</p>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/StructuredOcclusion_sample_0.jpg" alt="StructuredOcclusion sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/StructuredOcclusion_sample_1.jpg" alt="StructuredOcclusion sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/StructuredOcclusion_sample_2.jpg" alt="StructuredOcclusion sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/StructuredOcclusion_sample_3.jpg" alt="StructuredOcclusion sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+        <div class="transform-section">
+            <h2>ThinPlateSpline</h2>
+            <p class="transform-description">Applies smooth non-linear warping to simulate realistic mushroom shape deformations while preserving continuity.</p>
+            <div class="sample-grid">
+        
+                <div>
+                    <img src="images/ThinPlateSpline_sample_0.jpg" alt="ThinPlateSpline sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/ThinPlateSpline_sample_1.jpg" alt="ThinPlateSpline sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/ThinPlateSpline_sample_2.jpg" alt="ThinPlateSpline sample" class="sample-image">
+                </div>
+            
+                <div>
+                    <img src="images/ThinPlateSpline_sample_3.jpg" alt="ThinPlateSpline sample" class="sample-image">
+                </div>
+            
+            </div>
+        </div>
+        
+    </body>
+    </html>
+    
