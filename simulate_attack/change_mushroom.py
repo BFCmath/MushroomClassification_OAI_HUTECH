@@ -40,77 +40,38 @@ def create_background_mask_heuristic(image, corner_fraction=0.1, color_threshold
     return background_mask, foreground_mask # Return both
 
 # --- Function: Colorize Foreground with Smooth transition & MAX ALPHA ---
+# (Keep the colorize_foreground_smooth_limited function exactly as before)
 def colorize_foreground_smooth_limited(image, foreground_mask, target_color, 
                                        mix_factor=0.5, noise_level=20, 
                                        mask_blur_ksize=15, max_effect_alpha=0.3): # Default max effect alpha
-    """
-    Colorizes the foreground (e.g., mushroom) using a blurred mask for smooth transitions,
-    limiting the maximum effect by scaling the alpha.
-
-    Parameters:
-    - image: Original BGR image.
-    - foreground_mask: Binary mask (255 for foreground pixels).
-    - target_color: The BGR tuple for the tint color.
-    - mix_factor: How much of the target_color to blend into the *target* pixels (0.0 to 1.0).
-    - noise_level: Amount of random noise (0-255) to add to the target color.
-    - mask_blur_ksize: Kernel size for blurring the foreground mask. Must be odd.
-    - max_effect_alpha: Maximum influence of the colorization (0.0 to 1.0). 
-                          1.0 = full effect in foreground areas, 0.3 = 30% effect max.
-
-    Returns:
-    - Augmented image.
-    """
     h, w = image.shape[:2]
-    
-    # --- Input validation ---
-    if mask_blur_ksize <= 0:
-         mask_blur_ksize = 1
-    elif mask_blur_ksize % 2 == 0:
-        mask_blur_ksize += 1
+    if mask_blur_ksize <= 0: mask_blur_ksize = 1
+    elif mask_blur_ksize % 2 == 0: mask_blur_ksize += 1
     mix_factor = np.clip(mix_factor, 0.0, 1.0)
     max_effect_alpha = np.clip(max_effect_alpha, 0.0, 1.0)
-    # --- End validation ---
-
-    # 1. Create the target color layer (target color + noise)
     color_layer = np.full_like(image, target_color, dtype=np.uint8)
     if noise_level > 0:
         noise = np.random.randint(-noise_level, noise_level + 1, color_layer.shape, dtype=np.int16)
         color_layer = np.clip(color_layer.astype(np.int16) + noise, 0, 255).astype(np.uint8)
-
-    # 2. Create the "fully colorized" image (what pixels *would* look like if fully tinted)
-    # Blend original image with the color layer based on mix_factor
     fully_colorized_pixels = cv2.addWeighted(
         image.astype(np.float32), 1.0 - mix_factor,
         color_layer.astype(np.float32), mix_factor, 0.0
     )
-
-    # 3. Blur the FOREGROUND mask to create a spatial alpha map (0.0 to 1.0)
     alpha_mask_blurred = cv2.GaussianBlur(foreground_mask.astype(np.uint8), (mask_blur_ksize, mask_blur_ksize), 0)
     alpha_mask_float = alpha_mask_blurred.astype(np.float32) / 255.0
-    
-    # 4. Apply the maximum effect limit <<< ---
-    # Scale the spatial alpha map by the desired maximum effect alpha
     scaled_alpha_mask = alpha_mask_float * max_effect_alpha
-    
-    # Add channel dimension for broadcasting (h, w) -> (h, w, 1)
     scaled_alpha_mask_3d = scaled_alpha_mask[:, :, None] 
-
-    # 5. Perform alpha blending using the SCALED FOREGROUND alpha mask
-    # final = original * (1 - scaled_alpha) + fully_colorized * scaled_alpha
     final_image_float = (image.astype(np.float32) * (1.0 - scaled_alpha_mask_3d) +
                          fully_colorized_pixels * scaled_alpha_mask_3d)
-
-    # 6. Clip values and convert back to uint8
     final_image = np.clip(final_image_float, 0, 255).astype(np.uint8)
-
     return final_image
     
 # --- Function to generate random colors (can reuse or make specific ones) ---
+# (Keep the get_random_color_for_tint function exactly as before)
 def get_random_color_for_tint():
-    """Generates a random BGR color, potentially less constrained than 'bright'."""
     hue = random.random() 
-    saturation = random.uniform(0.4, 0.9) # Allow slightly less saturation
-    value = random.uniform(0.5, 0.9) # Allow slightly less brightness
+    saturation = random.uniform(0.4, 0.9)
+    value = random.uniform(0.5, 0.9) 
     rgb_float = colorsys.hsv_to_rgb(hue, saturation, value)
     bgr_int = tuple(int(c * 255) for c in reversed(rgb_float))
     return bgr_int
@@ -118,7 +79,7 @@ def get_random_color_for_tint():
 # --- Main Script Logic ---
 
 input_folder = "test"
-output_folder = "colorize_mushroom_test" # New output folder name
+output_folder = "colorize_mushroom_test" # Keeping the folder name
 
 # --- Parameters to Tune ---
 # Mask Generation (Crucial for identifying the mushroom):
@@ -127,10 +88,10 @@ PARAM_color_threshold = 50  # *** Tune this based on mask results! ***
 PARAM_blur_ksize = 5        
 PARAM_morph_ksize = 7       
 # Mushroom Colorization Parameters:
-PARAM_mushroom_mix_factor = 0.6      # How strongly the target color is blended (before alpha)
-PARAM_mushroom_noise_level = 30      # Noise added to the target color
-PARAM_mushroom_mask_blur_ksize = 11  # Smoothness of mushroom edge transition (smaller than bg maybe?)
-PARAM_mushroom_max_effect_alpha = 0.35 # <<< Max strength of the tint effect (e.g., 35%)
+PARAM_mushroom_mix_factor = 0.6      
+PARAM_mushroom_noise_level = 30      
+PARAM_mushroom_mask_blur_ksize = 11  
+PARAM_mushroom_max_effect_alpha = 0.35 
 PARAM_mushroom_use_random_color = True 
 PARAM_mushroom_fixed_color = (0, 255, 255) # BGR: Yellow (if not using random)
 # --- End Parameters ---
@@ -145,17 +106,20 @@ try:
     image_files = [f for f in os.listdir(input_folder) if f.lower().endswith('.jpg')]
     if not image_files:
         print(f"Warning: No .jpg files found in {input_folder}")
+        image_files = [] # Ensure it's an empty list if none found
 except FileNotFoundError:
     print(f"Error: Input folder not found: {input_folder}")
     exit() 
 
-random.seed(46) # New seed
+random.seed(46) 
 np.random.seed(46)
 
 print(f"\nStarting mushroom colorization augmentation (Max Alpha = {PARAM_mushroom_max_effect_alpha})...")
-processed_count = 0
-skipped_count = 0
-mask_fail_count = 0
+processed_count = 0 # Counts successfully augmented images
+saved_original_count = 0 # Counts images saved as original due to mask failure
+load_fail_count = 0 # Counts images that couldn't be loaded
+save_fail_count = 0 # Counts images that failed to save
+
 for img_file in image_files:
     input_path = os.path.join(input_folder, img_file)
     output_path = os.path.join(output_folder, img_file)
@@ -163,11 +127,14 @@ for img_file in image_files:
     image = cv2.imread(input_path)
     if image is None:
         print(f"Warning: Could not load image {input_path}. Skipping.")
-        skipped_count += 1
-        continue
+        load_fail_count += 1
+        continue # Skip this file entirely if loading failed
     
-    # 1. Create the background/foreground mask using the heuristic
-    # We need the foreground_mask this time
+    # Assume augmentation will succeed initially
+    image_to_save = None 
+    augmentation_applied = False
+    
+    # 1. Create the background/foreground mask
     _, foreground_mask_binary = create_background_mask_heuristic(
         image,
         corner_fraction=PARAM_corner_fraction,
@@ -176,55 +143,64 @@ for img_file in image_files:
         morph_ksize=PARAM_morph_ksize
     )
     
-    # Optional: Check if the mask seems valid (e.g., not completely black or white)
-    # This is a basic check, might need refinement
+    # 2. Check if the mask seems valid
     non_zero_pixels = cv2.countNonZero(foreground_mask_binary)
     total_pixels = image.shape[0] * image.shape[1]
+    
+    # Check if mask is almost empty or almost full (heuristic failure)
     if non_zero_pixels < 0.01 * total_pixels or non_zero_pixels > 0.99 * total_pixels:
-        print(f"Warning: Foreground mask for {img_file} seems unusual (mostly black or white). Skipping colorization for this image.")
-        # Decide whether to save original or skip entirely
-        # Saving original might be safer if you need all files
-        # cv2.imwrite(output_path, image) 
-        mask_fail_count += 1
-        skipped_count += 1
+        print(f"Warning: Foreground mask for {img_file} seems unusual. Saving original image.")
+        image_to_save = image # Set image_to_save to the original
+        augmentation_applied = False
         # Optionally save the problematic mask for debugging:
         # mask_output_path = os.path.join(output_folder, f"mask_fail_{img_file}")
         # cv2.imwrite(mask_output_path, foreground_mask_binary)
-        continue # Skip augmentation for this image
-
-
-    # --- DEBUG: Save the *foreground* mask if needed ---
-    # mask_output_path = os.path.join(output_folder, f"mask_foreground_{img_file}")
-    # cv2.imwrite(mask_output_path, foreground_mask_binary)
-    # --- End Debug ---
-
-    # Choose the target tint color
-    if PARAM_mushroom_use_random_color:
-        target_color = get_random_color_for_tint()
     else:
-        target_color = PARAM_mushroom_fixed_color
-        
-    # 2. Apply the foreground colorization using the function
-    augmented_image = colorize_foreground_smooth_limited(
-        image, 
-        foreground_mask_binary, # Pass the FOREGROUND mask
-        target_color=target_color, 
-        mix_factor=PARAM_mushroom_mix_factor, 
-        noise_level=PARAM_mushroom_noise_level,
-        mask_blur_ksize=PARAM_mushroom_mask_blur_ksize,
-        max_effect_alpha=PARAM_mushroom_max_effect_alpha # Pass the max alpha limit
-    )
+        # Mask seems okay, proceed with augmentation
+        # --- DEBUG: Save the *foreground* mask if needed ---
+        # mask_output_path = os.path.join(output_folder, f"mask_foreground_{img_file}")
+        # cv2.imwrite(mask_output_path, foreground_mask_binary)
+        # --- End Debug ---
+
+        # Choose the target tint color
+        if PARAM_mushroom_use_random_color:
+            target_color = get_random_color_for_tint()
+        else:
+            target_color = PARAM_mushroom_fixed_color
+            
+        # Apply the foreground colorization
+        image_to_save = colorize_foreground_smooth_limited(
+            image, 
+            foreground_mask_binary, 
+            target_color=target_color, 
+            mix_factor=PARAM_mushroom_mix_factor, 
+            noise_level=PARAM_mushroom_noise_level,
+            mask_blur_ksize=PARAM_mushroom_mask_blur_ksize,
+            max_effect_alpha=PARAM_mushroom_max_effect_alpha 
+        )
+        augmentation_applied = True # Mark that augmentation was applied
     
-    # 3. Save the augmented image
-    success = cv2.imwrite(output_path, augmented_image)
+    # 3. Save the result (either augmented or original)
+    success = cv2.imwrite(output_path, image_to_save)
     if success:
-        print(f"Processed {img_file} with tint {target_color} -> {output_path}")
-        processed_count += 1
+        if augmentation_applied:
+            print(f"Processed and saved augmented: {output_path}")
+            processed_count += 1
+        else:
+            print(f"Saved original (due to mask issue): {output_path}")
+            saved_original_count += 1
     else:
         print(f"Error: Failed to save image {output_path}")
-        skipped_count += 1
+        save_fail_count += 1
 
+# --- Final Summary ---
+total_input_files = len(image_files)
 print(f"\nProcessing complete.")
-print(f"Successfully processed: {processed_count} images.")
-print(f"Skipped/Failed: {skipped_count} images (includes {mask_fail_count} potentially due to mask issues).")
-print(f"--- NOTE: Check results carefully! The heuristic mask generation (PARAM_color_threshold={PARAM_color_threshold}) is critical for identifying the mushroom correctly. ---")
+print(f"Total input files: {total_input_files}")
+print(f"Successfully augmented: {processed_count} images.")
+print(f"Saved as original (due to mask issue): {saved_original_count} images.")
+print(f"Failed to load: {load_fail_count} images.")
+print(f"Failed to save: {save_fail_count} images.")
+total_output = processed_count + saved_original_count
+print(f"Total files written to output folder: {total_output}")
+print(f"--- NOTE: Check results carefully! Mask generation (PARAM_color_threshold={PARAM_color_threshold}) impacts results. ---")
