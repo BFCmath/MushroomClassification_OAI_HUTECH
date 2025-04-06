@@ -614,9 +614,6 @@ class AdvancedSpatialTransforms:
                 return Image.fromarray(result)
             return img
 
-# Set this to True since we've implemented the transforms directly
-ADVANCED_TRANSFORMS_AVAILABLE = True
-
 # ### Enhanced Transformations ###
 def get_transforms(image_size=32, aug_strength="standard"):
     """

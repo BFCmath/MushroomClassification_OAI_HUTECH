@@ -24,59 +24,80 @@ def analyze_false_predictions(true_labels, predicted_labels, class_names):
     Returns:
         Dictionary with false prediction statistics
     """
-    # Convert numpy arrays to lists if needed
-    if hasattr(true_labels, 'tolist'):
-        true_labels = true_labels.tolist()
-    if hasattr(predicted_labels, 'tolist'):
-        predicted_labels.tolist()
-    
-    # Create confusion matrix
-    cm = confusion_matrix(true_labels, predicted_labels)
-    
-    # Calculate false predictions per class
-    false_pred_per_class = {}
-    
-    # For each true class, count misclassifications
-    for true_idx, class_name in enumerate(class_names):
-        # Total samples of this class
-        total = int(np.sum(cm[true_idx, :]))
-        # Correct predictions (true positives)
-        correct = int(cm[true_idx, true_idx])
-        # False predictions (should be this class but predicted as something else)
-        false = int(total - correct)
+    try:
+        # Convert numpy arrays to lists if needed
+        if hasattr(true_labels, 'tolist'):
+            true_labels = true_labels.tolist()
+        if hasattr(predicted_labels, 'tolist'):
+            predicted_labels = predicted_labels.tolist()
         
-        # Store the statistics
-        false_pred_per_class[class_name] = {
-            'total': int(total),
-            'correct': int(correct),
-            'false': int(false),
-            'accuracy': float(correct / total) if total > 0 else 0.0
+        # Create confusion matrix - avoiding sklearn import inside function
+        cm = confusion_matrix(true_labels, predicted_labels)
+        
+        # Calculate false predictions per class
+        false_pred_per_class = {}
+        
+        # For each true class, count misclassifications
+        for true_idx, class_name in enumerate(class_names):
+            try:
+                # Total samples of this class
+                total = int(np.sum(cm[true_idx, :]))
+                # Correct predictions (true positives)
+                correct = int(cm[true_idx, true_idx])
+                # False predictions (should be this class but predicted as something else)
+                false = int(total - correct)
+                
+                # Store the statistics
+                false_pred_per_class[class_name] = {
+                    'total': int(total),
+                    'correct': int(correct),
+                    'false': int(false),
+                    'accuracy': float(correct / total) if total > 0 else 0.0
+                }
+                
+                # Store which classes this class was confused with
+                confused_with = {}
+                for pred_idx, pred_class in enumerate(class_names):
+                    if pred_idx != true_idx and cm[true_idx, pred_idx] > 0:
+                        confused_with[pred_class] = int(cm[true_idx, pred_idx])
+                
+                false_pred_per_class[class_name]['confused_with'] = confused_with
+            except IndexError:
+                print(f"WARNING: CLASS INDEX OUT OF RANGE FOR {class_name}. SKIPPING.")
+                continue
+            except Exception as e:
+                print(f"ERROR ANALYZING CLASS {class_name}: {str(e)}")
+                continue
+        
+        # Calculate overall statistics
+        total_samples = len(true_labels)
+        total_correct = sum(1 for i in range(len(true_labels)) if true_labels[i] == predicted_labels[i])
+        overall_accuracy = float(total_correct / total_samples) if total_samples > 0 else 0.0
+        
+        result = {
+            'per_class': false_pred_per_class,
+            'overall': {
+                'total_samples': int(total_samples),
+                'correct_predictions': int(total_correct),
+                'false_predictions': int(total_samples - total_correct),
+                'accuracy': float(overall_accuracy)
+            }
         }
         
-        # Store which classes this class was confused with
-        confused_with = {}
-        for pred_idx, pred_class in enumerate(class_names):
-            if pred_idx != true_idx and cm[true_idx, pred_idx] > 0:
-                confused_with[pred_class] = int(cm[true_idx, pred_idx])
-        
-        false_pred_per_class[class_name]['confused_with'] = confused_with
-    
-    # Calculate overall statistics
-    total_samples = len(true_labels)
-    total_correct = sum(1 for i in range(len(true_labels)) if true_labels[i] == predicted_labels[i])
-    overall_accuracy = float(total_correct / total_samples) if total_samples > 0 else 0.0
-    
-    result = {
-        'per_class': false_pred_per_class,
-        'overall': {
-            'total_samples': int(total_samples),
-            'correct_predictions': int(total_correct),
-            'false_predictions': int(total_samples - total_correct),
-            'accuracy': float(overall_accuracy)
+        return result
+    except Exception as e:
+        print(f"CRITICAL ERROR IN ANALYZE_FALSE_PREDICTIONS: {str(e)}")
+        # Return a minimal valid structure as fallback
+        return {
+            'per_class': {},
+            'overall': {
+                'total_samples': len(true_labels) if hasattr(true_labels, '__len__') else 0,
+                'correct_predictions': 0,
+                'false_predictions': 0,
+                'accuracy': 0.0,
+                'error': str(e)
+            }
         }
-    }
-    
-    return result
 
 def plot_confusion_matrix(true_labels, predicted_labels, class_names, save_path):
     """Plot and save confusion matrix."""
@@ -181,4 +202,3 @@ def plot_training_history(history, save_path):
     
     print(f"Training history saved to {save_path} and {json_path}")
     plt.close()
-    
