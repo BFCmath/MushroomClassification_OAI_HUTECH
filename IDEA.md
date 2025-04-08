@@ -60,3 +60,11 @@
 + Attack the models with high and low aug images
 + TTA
 + Adversarial validation
++ Adversarial Training
+ 
+## Potential Ideas
++ GAN
++ JEPA
++ Image Super Resolution
++ Noise injection
++ Anti Aliasing
