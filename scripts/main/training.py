@@ -4,6 +4,7 @@ import time
 import json
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
 from torch.cuda.amp import autocast, GradScaler
@@ -18,6 +19,7 @@ from utils import analyze_false_predictions, print_false_prediction_report, plot
 from datasets import MushroomDataset, MixupDataset
 from scripts.transformer.PixT import PixelTransformer, MemoryEfficientPixT
 from scripts.transformer.VT import VisualTransformer
+from scripts.main.poly_loss import create_poly_loss
 
 
 def set_seed(seed=42):
@@ -393,7 +395,7 @@ def cross_validate(config, device):
             image_size=config.image_size,
             aug_strength=getattr(config, 'aug_strength', 'standard')
         )
-    
+        
     # Initialize dataset once for fold information
     try:
         dataset = MushroomDataset(config.csv_path, transform=None)
@@ -502,22 +504,41 @@ def cross_validate(config, device):
             # Get label smoothing value from config
             label_smoothing = getattr(config, 'label_smoothing', 0.0)
             
-            # Loss function with class weights and label smoothing if enabled
-            if class_weights is not None:
-                if getattr(config, 'use_mixup_class', False):
-                    # Add a weight of 1.0 for the mixup class
-                    extended_weights = torch.cat([class_weights, torch.tensor([1.0], device=device)])
-                    criterion = nn.CrossEntropyLoss(weight=extended_weights, label_smoothing=label_smoothing)
-                    print(f"Using weighted CrossEntropyLoss with extended weights: {extended_weights.cpu().numpy()} and label smoothing: {label_smoothing}")
+            # Determine which loss function to use
+            loss_type = getattr(config, 'loss_type', 'ce')
+            
+            if loss_type == "poly":
+                print(f"Using PolyLoss with epsilon={config.poly_loss_epsilon}")
+                
+                # Set up PolyLoss with class weights if needed
+                if class_weights is not None:
+                    if getattr(config, 'use_mixup_class', False):
+                        # Add a weight of 1.0 for the mixup class
+                        extended_weights = torch.cat([class_weights, torch.tensor([1.0], device=device)])
+                        criterion = create_poly_loss(ce_weight=extended_weights, epsilon=config.poly_loss_epsilon)
+                        print(f"Using weighted PolyLoss with extended weights: {extended_weights.cpu().numpy()}")
+                    else:
+                        criterion = create_poly_loss(ce_weight=class_weights, epsilon=config.poly_loss_epsilon)
+                        print(f"Using weighted PolyLoss with weights: {class_weights.cpu().numpy()}")
                 else:
-                    criterion = nn.CrossEntropyLoss(weight=class_weights, label_smoothing=label_smoothing)
-                    print(f"Using weighted CrossEntropyLoss with weights: {class_weights.cpu().numpy()} and label smoothing: {label_smoothing}")
+                    criterion = create_poly_loss(epsilon=config.poly_loss_epsilon)
             else:
-                criterion = nn.CrossEntropyLoss(label_smoothing=label_smoothing)
-                if label_smoothing > 0:
-                    print(f"Using CrossEntropyLoss with label smoothing: {label_smoothing}")
+                # Default to CrossEntropyLoss with label smoothing
+                if class_weights is not None:
+                    if getattr(config, 'use_mixup_class', False):
+                        # Add a weight of 1.0 for the mixup class
+                        extended_weights = torch.cat([class_weights, torch.tensor([1.0], device=device)])
+                        criterion = nn.CrossEntropyLoss(weight=extended_weights, label_smoothing=label_smoothing)
+                        print(f"Using weighted CrossEntropyLoss with extended weights: {extended_weights.cpu().numpy()} and label smoothing: {label_smoothing}")
+                    else:
+                        criterion = nn.CrossEntropyLoss(weight=class_weights, label_smoothing=label_smoothing)
+                        print(f"Using weighted CrossEntropyLoss with weights: {class_weights.cpu().numpy()} and label smoothing: {label_smoothing}")
                 else:
-                    print("Using standard CrossEntropyLoss without label smoothing")
+                    criterion = nn.CrossEntropyLoss(label_smoothing=label_smoothing)
+                    if label_smoothing > 0:
+                        print(f"Using CrossEntropyLoss with label smoothing: {label_smoothing}")
+                    else:
+                        print("Using standard CrossEntropyLoss without label smoothing")
             
             optimizer = get_layer_wise_lr_optimizer(model, config)
             

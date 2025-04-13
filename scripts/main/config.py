@@ -9,7 +9,7 @@ CLASS_MAP = {name: idx for idx, name in enumerate(CLASS_NAMES)}
 class Config:
     """Configuration for hyperparameters."""
     debug = False
-    version: str = "exp1.19"  # Version for organizing outputs
+    version: str = "exp1.40"  # Version for organizing outputs
     data_dir: str = '/kaggle/input/oai-cv/'
     csv_path: str = os.path.join(data_dir, 'train_cv.csv')
     output_dir: str = '/kaggle/working/'
@@ -22,7 +22,7 @@ class Config:
     l2_reg: float = 0.00001  # Increased from 0.0001
     num_folds: int = 6  # Folds 0 to 5
     train_folds = None
-    early_stopping_patience: int = 50  # Increased from 10
+    early_stopping_patience: int = 35  # Increased from 10
     early_stopping_warmup: int = 75
     mixup_alpha: float = 0.5
     mixup_prob: float = 0.0  # Increased from 0.2
@@ -69,11 +69,32 @@ class TransConfig:
     transformer_share_layer_params: bool = False
     transformer_use_amp: bool = False  # Use automatic mixed precision for transformers
     
-    
     # AstroTransformer specific parameters
     astro_expansion: int = 2  # Expansion factor for AstroTransformer
     astro_layers: list = None  # Number of blocks per stage, defaults to [2, 2, 2]
+
+@dataclass
+class CapsConfig:
+    """Configuration for Hybrid Capsule Networks."""
+    # Basic capsule architecture parameters
+    caps_channels: int = 4      # Number of capsule channels (C parameter)
+    caps_kernels: int = 10      # Number of kernels used to form a cluster (K parameter)
+    caps_depth: int = 32        # Capsule depth (D parameter)
+    caps_bias: bool = True      # Whether to use bias while transforming capsules
     
+    # Attention mechanism parameters
+    caps_channel_reduction_ratio: int = 4  # Reduction ratio for channel attention mechanism
+    caps_spatial_kernel_size: int = 3      # Kernel size for spatial attention
+    
+    # Routing parameters
+    caps_routing_iterations: int = 1       # Number of routing iterations (not used in combined attention)
+    caps_agreement_lambda: float = 1.0     # Weight for agreement in routing
+    
+    # DenseNet backbone parameters
+    caps_use_densenet_backbone: bool = True  # Use DenseNet backbone for feature extraction
+    caps_densenet_growth_rate: int = 16      # Growth rate for DenseNet
+    caps_densenet_block_config: tuple = (3, 6, 8)  # DenseNet block configuration
+
 @dataclass 
 class AttackConfig:
     # Model weights path configurations - updated with better defaults
@@ -153,9 +174,9 @@ class AttackConfig:
         return weight_paths
 
 @dataclass
-class EnhancedConfig(Config, TransConfig, AttackConfig):
+class EnhancedConfig(Config, TransConfig, AttackConfig, CapsConfig):
     """Enhanced configuration with additional parameters for advanced techniques."""
-    model_type: str = "spdresnet"  # Options: dual_branch, densenet, smallresnet, etc.
+    model_type: str = "spdresnet"  # Options: dual_branch, densenet, smallresnet, hybridcapsnet, etc.
     use_multi_scale: bool = True  # Whether to use multi-scale training
     use_albumentations: bool = False  # Whether to use Albumentations augmentation library
     use_advanced_spatial_transforms: bool = True  # Whether to use advanced spatial transformations
@@ -178,16 +199,25 @@ class EnhancedConfig(Config, TransConfig, AttackConfig):
     radial_distortion_strength: float = 0.15  # Strength for radial distortion
     radial_distortion_p: float = 0.3  # Probability for radial distortion
     
+    # CutBlur parameters
+    cutblur_strength: float = 3.0  # Strength of the blur effect 
+    cutblur_min_size: float = 0.1  # Minimum size of the cut region (relative to image)
+    cutblur_max_size: float = 0.4  # Maximum size of the cut region (relative to image)
+    cutblur_p: float = 0.3  # Probability of applying CutBlur
+    
     # Mixup class parameters
     use_mixup_class: bool = True  # Whether to add a mixup class to training
     mixup_class_ratio: float = 0.2  # Ratio of mixup samples to original samples
     mixup_class_name: str = "mixup"  # Name of the mixup class
     mixup_strategy: str = "average"  # How to combine images: "average", "overlay", "mosaic"
     
-    
     # Multi-GPU support
     use_multi_gpu: bool = True  # Whether to use multiple GPUs if available
     gpu_ids = None  # Specific GPU IDs to use, None means use all available
+    
+    # Loss function configuration
+    loss_type: str = "ce"  # Options: "ce" for Cross-Entropy, "poly" for PolyLoss
+    poly_loss_epsilon: float = 1.0  # Epsilon parameter for PolyLoss
 
 def initialize_config():
     """Initialize config settings based on data paths and defaults."""

@@ -164,8 +164,8 @@ def plot_training_history(history, save_path):
     
     # Plot training & validation loss
     plt.subplot(2, 2, 1)
-    plt.plot(history['train_loss'], label='Train Loss')
-    plt.plot(history['val_loss'], label='Validation Loss')
+    plt.plot(history['train_loss'][8:], label='Train Loss')
+    plt.plot(history['val_loss'][8:], label='Validation Loss')
     plt.title('Model Loss')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')

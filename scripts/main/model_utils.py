@@ -24,6 +24,7 @@ from scripts.transformer.TaylorIR import create_taylorir_model, TaylorConfig, Ta
 from scripts.transformer.AstroTransformer import create_astro_model, AstroConfig, AstroTransformer
 from scripts.cnn.RLNet import create_rlnet
 from scripts.cnn.RLSPDNet import create_rlspdnet
+from scripts.caps.HybridCapsNet import create_hybridcapsnet  # Updated import for HybridCapsNet
 
 
 def get_model(num_classes, config, device):
@@ -68,6 +69,32 @@ def get_model(num_classes, config, device):
         model = create_rlspdnet(num_classes=num_classes, 
                              input_channels=3,
                              dropout_rate=config.dropout_rate)
+    elif model_type == 'hybridcapsnet':
+        print("Creating HybridCapsNet with combined attention and cluster routing...")
+        # Get capsule network specific parameters with defaults
+        C = getattr(config, 'caps_channels', 4)
+        K = getattr(config, 'caps_kernels', 10)
+        D = getattr(config, 'caps_depth', 32)
+        if_bias = getattr(config, 'caps_bias', True)
+        reduction_ratio = getattr(config, 'caps_channel_reduction_ratio', 4)
+        use_densenet_backbone = getattr(config, 'caps_use_densenet_backbone', True)
+        
+        # Print configuration details
+        backbone_type = "DenseNet" if use_densenet_backbone else "Standard ConvNet"
+        print(f"Using {backbone_type} backbone for HybridCapsNet")
+        
+        model = create_hybridcapsnet(
+            num_classes=num_classes,
+            input_img_dim=3,  # Assuming RGB images 
+            input_img_size=config.image_size,
+            C=C,
+            K=K,
+            D=D,
+            if_bias=if_bias,
+            dropout_rate=config.dropout_rate,
+            reduction_ratio=reduction_ratio,
+            use_densenet_backbone=use_densenet_backbone
+        )
     elif model_type == 'densenet':
         # Use DenseNet explicitly when requested
         print("Creating DenseNet7x7 model with 7x7 kernels...")

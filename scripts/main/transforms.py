@@ -614,6 +614,52 @@ class AdvancedSpatialTransforms:
                 return Image.fromarray(result)
             return img
 
+    class CutBlur:
+        """
+        Randomly cut a rectangular region, blur it and put it back into the original image.
+        Good for simulating local focus issues in photographs.
+        
+        Args:
+            blur_strength: Strength of the blur (sigma value for Gaussian blur)
+            min_size: Minimum size of the cut region relative to image size (0.1 = 10%)
+            max_size: Maximum size of the cut region relative to image size (0.5 = 50%)
+            p: Probability of applying transform
+        """
+        def __init__(self, blur_strength=3.0, min_size=0.1, max_size=0.4, p=0.3):
+            self.blur_strength = blur_strength
+            self.min_size = min_size
+            self.max_size = max_size
+            self.p = p
+            
+        def __call__(self, img):
+            if random.random() < self.p:
+                # Convert to numpy array for processing
+                img_array = np.array(img)
+                height, width = img_array.shape[:2]
+                
+                # Determine cut region size
+                cut_ratio = random.uniform(self.min_size, self.max_size)
+                cut_width = int(width * cut_ratio)
+                cut_height = int(height * cut_ratio)
+                
+                # Determine random position for the cut
+                x = random.randint(0, max(0, width - cut_width))
+                y = random.randint(0, max(0, height - cut_height))
+                
+                # Extract the region to blur
+                region = img_array[y:y+cut_height, x:x+cut_width]
+                
+                # Apply Gaussian blur to the region
+                blurred_region = cv2.GaussianBlur(region, (0, 0), self.blur_strength)
+                
+                # Put blurred region back into the original image
+                result = img_array.copy()
+                result[y:y+cut_height, x:x+cut_width] = blurred_region
+                
+                return Image.fromarray(result)
+            
+            return img
+
 # ### Enhanced Transformations ###
 def get_transforms(image_size=32, aug_strength="standard"):
     """
@@ -694,7 +740,11 @@ def get_enhanced_transforms(multi_scale=False, image_size=32, pixel_percent = 0.
         'grid_shuffle_p': 0.2,
         'polar_p': 0.2,
         'tps_strength': 0.05,
-        'tps_p': 0.1
+        'tps_p': 0.1,
+        'cutblur_strength': 3.0,
+        'cutblur_min_size': 0.1,
+        'cutblur_max_size': 0.4,
+        'cutblur_p': 0.3
     }
     
     # Update with custom parameters if provided - handle both naming conventions
@@ -706,7 +756,12 @@ def get_enhanced_transforms(multi_scale=False, image_size=32, pixel_percent = 0.
             'elastic_deform_alpha': 'elastic_alpha',
             'elastic_deform_sigma': 'elastic_sigma',
             'elastic_deform_p': 'elastic_p',
-            'polar_transform_p': 'polar_p'
+            'polar_transform_p': 'polar_p',
+            # Add mapping for CutBlur parameters
+            'cutblur_strength': 'cutblur_strength',
+            'cutblur_min_size': 'cutblur_min_size',
+            'cutblur_max_size': 'cutblur_max_size',
+            'cutblur_p': 'cutblur_p'
         }
         
         # Copy parameters, handling both naming conventions
@@ -760,6 +815,12 @@ def get_enhanced_transforms(multi_scale=False, image_size=32, pixel_percent = 0.
                 num_control_points=3,
                 deformation_strength=default_params['tps_strength'], 
                 p=default_params['tps_p']
+            ),
+            AdvancedSpatialTransforms.CutBlur(
+                blur_strength=default_params['cutblur_strength'],
+                min_size=default_params['cutblur_min_size'],
+                max_size=default_params['cutblur_max_size'],
+                p=default_params['cutblur_p']
             )
         ]
         base_transforms.extend(mushroom_transforms)
