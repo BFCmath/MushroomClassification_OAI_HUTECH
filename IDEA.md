@@ -61,7 +61,7 @@
 + TTA
 + Adversarial validation
 + Adversarial Training
- 
+
 ## Potential Ideas
 + GAN
 + JEPA
