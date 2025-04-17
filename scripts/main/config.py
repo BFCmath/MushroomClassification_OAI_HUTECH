@@ -218,6 +218,11 @@ class EnhancedConfig(Config, TransConfig, AttackConfig, CapsConfig):
     # Loss function configuration
     loss_type: str = "ce"  # Options: "ce" for Cross-Entropy, "poly" for PolyLoss
     poly_loss_epsilon: float = 1.0  # Epsilon parameter for PolyLoss
+    
+    # Test Time Augmentation settings
+    use_tta: bool = False  # Whether to use Test Time Augmentation during inference
+    tta_transforms: str = "8"  # Number of transforms to use: "8" = original + horizontal flip + 90° rotations
+    tta_merge_mode: str = "mean"  # How to combine TTA predictions: "mean" or "gmean" (geometric mean)
 
 def initialize_config():
     """Initialize config settings based on data paths and defaults."""

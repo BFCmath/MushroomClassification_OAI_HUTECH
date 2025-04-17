@@ -32,43 +32,107 @@ def preprocess_image(image_path, transform=None):
     return img_tensor
 
 
-def predict_image(model, image_path, class_names, device, transform=None):
-    """Run inference on a single image and return predictions."""
-    try:
-        img_tensor = preprocess_image(image_path, transform)
-        img_tensor = img_tensor.unsqueeze(0).to(device)  # Add batch dimension
+class TTATransformer:
+    """
+    Test Time Augmentation transformer that applies multiple augmentations
+    to a single image and averages the predictions.
+    """
+    def __init__(self, base_transform, tta_transforms="8"):
+        self.base_transform = base_transform
+        self.tta_transforms = tta_transforms
         
+        # Define TTA transforms based on the specified strategy
+        self.transforms = self._get_transforms()
+        
+    def _get_transforms(self):
+        """Create list of transforms based on strategy."""
+        if self.tta_transforms == "8":
+            # 8 transforms: original + horizontal flip + 90° rotations of both
+            return [
+                # Original
+                lambda img: self.base_transform(img),
+                # Horizontal flip
+                lambda img: self.base_transform(img.transpose(Image.FLIP_LEFT_RIGHT)),
+                # 90° rotation
+                lambda img: self.base_transform(img.transpose(Image.ROTATE_90)),
+                # 180° rotation
+                lambda img: self.base_transform(img.transpose(Image.ROTATE_180)),
+                # 270° rotation
+                lambda img: self.base_transform(img.transpose(Image.ROTATE_270)),
+                # Horizontal flip + 90° rotation
+                lambda img: self.base_transform(img.transpose(Image.FLIP_LEFT_RIGHT).transpose(Image.ROTATE_90)),
+                # Horizontal flip + 180° rotation
+                lambda img: self.base_transform(img.transpose(Image.FLIP_LEFT_RIGHT).transpose(Image.ROTATE_180)),
+                # Horizontal flip + 270° rotation
+                lambda img: self.base_transform(img.transpose(Image.FLIP_LEFT_RIGHT).transpose(Image.ROTATE_270)),
+            ]
+        else:
+            # Default to just the base transform if strategy not recognized
+            return [self.base_transform]
+    
+    def __call__(self, img):
+        """Apply all transforms to the image and stack results."""
+        return [t(img) for t in self.transforms]
+
+
+def predict_image_with_tta(model, image_path, class_names, device, transform=None, merge_mode="mean"):
+    """Run inference on a single image with TTA and return predictions."""
+    try:
+        # Load image
+        img = Image.open(image_path).convert('RGB')
+        
+        # Apply TTA transforms
+        img_tensors = [t.unsqueeze(0).to(device) for t in transform(img)]
+        
+        all_probabilities = []
+        
+        # Process each augmented image
         with torch.no_grad():
-            outputs = model(img_tensor)
-            probabilities = torch.nn.functional.softmax(outputs, dim=1)
-            confidence, predicted_idx = torch.max(probabilities, 1)
+            for img_tensor in img_tensors:
+                outputs = model(img_tensor)
+                probs = torch.nn.functional.softmax(outputs, dim=1)
+                all_probabilities.append(probs)
+            
+            # Combine predictions based on merge mode
+            if merge_mode == "gmean":
+                # Geometric mean - multiply and take nth root
+                combined_probs = torch.cat(all_probabilities, dim=0)
+                combined_probs = torch.prod(combined_probs, dim=0) ** (1.0 / len(all_probabilities))
+            else:
+                # Arithmetic mean (default)
+                combined_probs = torch.cat(all_probabilities, dim=0).mean(dim=0)
+            
+            # Get final prediction
+            confidence, predicted_idx = torch.max(combined_probs, 0)
         
         predicted_class = class_names[predicted_idx.item()]
         confidence = confidence.item()
         
         # Get top-k predictions
         k = min(3, len(class_names))
-        topk_values, topk_indices = torch.topk(probabilities, k)
+        topk_values, topk_indices = torch.topk(combined_probs, k)
         topk_predictions = [
             (class_names[idx.item()], prob.item()) 
-            for idx, prob in zip(topk_indices[0], topk_values[0])
+            for idx, prob in zip(topk_indices, topk_values)
         ]
         
         # Add full probability distribution
-        class_probabilities = {class_name: probabilities[0, idx].item() 
-                              for idx, class_name in enumerate(class_names)}
+        class_probabilities = {class_name: combined_probs[idx].item() 
+                             for idx, class_name in enumerate(class_names)}
         
         return {
             'class': predicted_class,
+            'class_id': predicted_idx.item(),  # Add the missing class_id here!
             'confidence': confidence,
             'top_predictions': topk_predictions,
             'class_probabilities': class_probabilities,
             'success': True
         }
     except Exception as e:
-        print(f"Error predicting image {image_path}: {str(e)}")
+        print(f"Error predicting image {image_path} with TTA: {str(e)}")
         return {
             'class': None,
+            'class_id': -1,  # Add a default class_id here
             'confidence': 0.0,
             'top_predictions': [],
             'error': str(e),
@@ -76,8 +140,8 @@ def predict_image(model, image_path, class_names, device, transform=None):
         }
 
 
-def batch_inference(model, image_dir, class_names, device, transform=None, batch_size=16):
-    """Run inference on multiple images in a directory."""
+def batch_inference(model, image_dir, class_names, device, transform=None, batch_size=16, use_tta=False, tta_merge_mode="mean"):
+    """Run inference on multiple images in a directory with optional TTA."""
     image_paths = []
     for ext in ['jpg', 'jpeg', 'png']:
         image_paths.extend(list(Path(image_dir).glob(f'*.{ext}')))
@@ -95,69 +159,105 @@ def batch_inference(model, image_dir, class_names, device, transform=None, batch
     processed_count = 0
     failed_count = 0
     
+    # Setup TTA transformer if enabled
+    if use_tta:
+        print(f"Using Test Time Augmentation (TTA) with merge mode: {tta_merge_mode}")
+        tta_transformer = TTATransformer(transform)
+    
     for i in range(0, len(image_paths), batch_size):
         batch_paths = image_paths[i:i+batch_size]
-        valid_tensors = []
-        valid_paths = []
         
-        # Process each image with error handling
-        for img_path in batch_paths:
+        # Process each image - with either regular transform or TTA
+        if use_tta:
+            # TTA approach processes each image individually
+            for img_path in batch_paths:
+                try:
+                    # Use TTA prediction function
+                    result = predict_image_with_tta(
+                        model, img_path, class_names, device, 
+                        transform=tta_transformer, merge_mode=tta_merge_mode
+                    )
+                    
+                    if result['success']:
+                        # Add filename and path
+                        result['image_path'] = str(img_path)
+                        result['filename'] = Path(img_path).stem
+                        results.append(result)
+                        
+                        # Convert class probabilities to tensor for consistency
+                        probs_tensor = torch.zeros(len(class_names))
+                        for idx, class_name in enumerate(class_names):
+                            probs_tensor[idx] = result['class_probabilities'].get(class_name, 0.0)
+                        all_probabilities.append(probs_tensor.unsqueeze(0))
+                        processed_count += 1
+                    else:
+                        failed_count += 1
+                except Exception as e:
+                    failed_count += 1
+                    print(f"Error processing image {img_path} with TTA: {str(e)}")
+        else:
+            # Regular batch processing
+            valid_tensors = []
+            valid_paths = []
+            
+            # Process each image with error handling
+            for img_path in batch_paths:
+                try:
+                    tensor = preprocess_image(str(img_path), transform)
+                    valid_tensors.append(tensor)
+                    valid_paths.append(img_path)
+                except Exception as e:
+                    failed_count += 1
+                    print(f"Error processing image {img_path}: {str(e)}")
+                    # Continue to next image instead of failing entire batch
+            
+            if not valid_tensors:
+                print(f"No valid images in current batch, skipping")
+                continue
+            
+            # Stack successful tensors and run inference
             try:
-                tensor = preprocess_image(str(img_path), transform)
-                valid_tensors.append(tensor)
-                valid_paths.append(img_path)
+                batch_tensor = torch.stack(valid_tensors).to(device)
+                with torch.no_grad():
+                    outputs = model(batch_tensor)
+                    probabilities = torch.nn.functional.softmax(outputs, dim=1)
+                    confidence, predicted_indices = torch.max(probabilities, 1)
+                
+                # Store the full probabilities tensor for later processing
+                all_probabilities.append(probabilities.cpu())
+                
+                # Process each result
+                for j, (img_path, pred_idx, conf) in enumerate(zip(valid_paths, predicted_indices, confidence)):
+                    predicted_class = class_names[pred_idx.item()]
+                    
+                    # Get top-k predictions for this image
+                    k = min(3, len(class_names))
+                    topk_values, topk_indices = torch.topk(probabilities[j], k)
+                    topk_predictions = [
+                        (class_names[idx.item()], prob.item()) 
+                        for idx, prob in zip(topk_indices, topk_values)
+                    ]
+                    
+                    # Get image filename without extension for CSV
+                    filename = Path(img_path).stem
+                    
+                    # Add full probability distribution to results
+                    class_probs = {class_name: probabilities[j, idx].item() 
+                                  for idx, class_name in enumerate(class_names)}
+                    
+                    results.append({
+                        'image_path': str(img_path),
+                        'filename': filename,
+                        'class': predicted_class,
+                        'class_id': pred_idx.item(),
+                        'confidence': conf.item(),
+                        'top_predictions': topk_predictions,
+                        'class_probabilities': class_probs  # Store all class probabilities
+                    })
+                    processed_count += 1
             except Exception as e:
-                failed_count += 1
-                print(f"Error processing image {img_path}: {str(e)}")
-                # Continue to next image instead of failing entire batch
-        
-        if not valid_tensors:
-            print(f"No valid images in current batch, skipping")
-            continue
-        
-        # Stack successful tensors and run inference
-        try:
-            batch_tensor = torch.stack(valid_tensors).to(device)
-            with torch.no_grad():
-                outputs = model(batch_tensor)
-                probabilities = torch.nn.functional.softmax(outputs, dim=1)
-                confidence, predicted_indices = torch.max(probabilities, 1)
-            
-            # Store the full probabilities tensor for later processing
-            all_probabilities.append(probabilities.cpu())
-            
-            # Process each result
-            for j, (img_path, pred_idx, conf) in enumerate(zip(valid_paths, predicted_indices, confidence)):
-                predicted_class = class_names[pred_idx.item()]
-                
-                # Get top-k predictions for this image
-                k = min(3, len(class_names))
-                topk_values, topk_indices = torch.topk(probabilities[j], k)
-                topk_predictions = [
-                    (class_names[idx.item()], prob.item()) 
-                    for idx, prob in zip(topk_indices, topk_values)
-                ]
-                
-                # Get image filename without extension for CSV
-                filename = Path(img_path).stem
-                
-                # Add full probability distribution to results
-                class_probs = {class_name: probabilities[j, idx].item() 
-                              for idx, class_name in enumerate(class_names)}
-                
-                results.append({
-                    'image_path': str(img_path),
-                    'filename': filename,
-                    'class': predicted_class,
-                    'class_id': pred_idx.item(),
-                    'confidence': conf.item(),
-                    'top_predictions': topk_predictions,
-                    'class_probabilities': class_probs  # Store all class probabilities
-                })
-                processed_count += 1
-        except Exception as e:
-            print(f"Error during batch inference: {str(e)}")
-            # Continue to next batch
+                print(f"Error during batch inference: {str(e)}")
+                # Continue to next batch
     
     # Print summary
     print(f"Processed {processed_count} images successfully, {failed_count} images failed")
@@ -287,11 +387,26 @@ def run_inference(config, model_path, input_path, output_dir, device):
             print(f"Error: {input_path} is not a directory. Please provide a directory of images.")
             return [], None, None
         
+        # Check if TTA should be used (only for test set)
+        use_tta = getattr(config, 'use_tta', False)
+        is_test_set = not str(input_path).endswith('val')  # Simple heuristic to check if it's a test set
+        apply_tta = use_tta and is_test_set
+        
+        if apply_tta:
+            print(f"Applying Test Time Augmentation with {config.tta_transforms} transforms")
+            tta_merge_mode = getattr(config, 'tta_merge_mode', 'mean')
+        else:
+            if use_tta and not is_test_set:
+                print("TTA is enabled but not applied on validation set to save time")
+            tta_merge_mode = "mean"  # Default value
+        
         # Run batch inference
         print(f"Running batch inference on directory: {input_path}")
         results, all_probabilities, class_names = batch_inference(
             model, input_path, class_names, device, val_transform, 
-            batch_size=config.inference_batch_size
+            batch_size=config.inference_batch_size,
+            use_tta=apply_tta,
+            tta_merge_mode=tta_merge_mode
         )
         
         if not results or len(all_probabilities) == 0:

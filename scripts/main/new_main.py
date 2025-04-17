@@ -145,6 +145,12 @@ def main():
             else:
                 print("\n=== Starting Inference Phase ===")
                 
+                # Print TTA configuration
+                if getattr(config, 'use_tta', False):
+                    print(f"Test Time Augmentation (TTA) enabled with {config.tta_transforms} transforms and {config.tta_merge_mode} merge mode")
+                else:
+                    print("Test Time Augmentation (TTA) disabled")
+                
                 # Load class names from dataset
                 try:
                     dataset = MushroomDataset(config.csv_path, transform=None)
