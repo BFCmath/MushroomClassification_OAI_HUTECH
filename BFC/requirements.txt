@@ -1,0 +1,12 @@
+# Python: 3.12.3
+# Tensorflow: 2.19.0 / Keras: 3.9.0
+# PyTorch: 2.5.1+cu121
+# Scikit-Learn: 1.6.1
+# NumPy: 2.1.3
+# SciPy: 1.15.2
+# Seaborn: 0.13.2
+# Pandas: 2.2.3
+torchvision
+pillow
+opencv-python
+scipy
