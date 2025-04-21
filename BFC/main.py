@@ -8905,7 +8905,7 @@ class Config:
     version: str = "exp0.0"  # Version for organizing outputs
     data_dir: str = 'split_cv/'
     csv_path: str = os.path.join(data_dir, 'train_cv.csv')
-    output_dir: str = 'output'
+    output_dir: str = OUTPUT_DIR_PATH
     inference_input_path: str = TEST_DATA_DIR_PATH  # Directory or file for inference
     image_size: int = 32
     batch_size: int = 256  # Reduced from 512 for better generalization
@@ -9026,7 +9026,7 @@ class Config:
     version: str = "exp0.1"  # Version for organizing outputs
     data_dir: str = 'split_cv/'
     csv_path: str = os.path.join(data_dir, 'train_cv.csv')
-    output_dir: str = 'output'
+    output_dir: str = OUTPUT_DIR_PATH
     inference_input_path: str = TEST_DATA_DIR_PATH
     image_size: int = 32
     batch_size: int = 256  # Reduced from 512 for better generalization
